@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tu Solución · Diagnóstico Ejecutivo — Masesora</title>
+<meta name="description" content="Diagnóstico ejecutivo progresivo para micropymes y autónomos. Identifica en 15 minutos el problema principal, el secundario y la herramienta operativa concreta que tu negocio necesita.">
+<style>
+:root{
+  --navy:#0B2545; --navy-soft:#14335C; --gold:#C69749; --gold-soft:#E0BE84;
+  --cream:#F2EFEA; --cream-soft:#FAF7F2; --line:#D9D2C4; --text:#1A1A1A;
+  --muted:#4A4A4A; --white:#FFFFFF;
+  --ok:#2E7D4F; --warn:#C69749; --crit:#B8471F; --red:#7A1515;
+  --shadow:0 10px 40px -12px rgba(11,37,69,.25);
+  --shadow-soft:0 4px 20px -8px rgba(11,37,69,.12);
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--text);background:var(--cream);line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100vh}
+h1,h2,h3,h4{font-weight:700;color:var(--navy);letter-spacing:-0.01em;line-height:1.15;margin:0}
+h1{font-size:clamp(2rem,5vw,3.25rem)}
+h2{font-size:clamp(1.35rem,3vw,2rem)}
+h3{font-size:1.1rem;letter-spacing:.02em}
+p{margin:0 0 .9rem 0;color:var(--muted)}
+.container{max-width:880px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.topbar{background:var(--navy);color:var(--white);padding:.75rem 1.5rem;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--gold);gap:1rem}
+.topbar-brand{display:flex;align-items:center;gap:.75rem;flex-shrink:0;overflow:hidden}
+.topbar-brand img{height:30px;width:auto;flex-shrink:0;display:block}
+.topbar-brand .tagline{font-size:.78rem;color:rgba(255,255,255,.6);font-style:italic;white-space:nowrap}
+.topbar a{color:var(--gold-soft);text-decoration:none;font-size:.8rem;white-space:nowrap}
+
+.stepbar{background:var(--white);padding:.8rem 1.5rem;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50;box-shadow:var(--shadow-soft)}
+.stepbar-inner{max-width:880px;margin:0 auto;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.step{font-size:.7rem;letter-spacing:.15em;font-weight:700;color:var(--line);padding:.2rem .4rem;border-bottom:2px solid transparent;transition:all .2s}
+.step.active{color:var(--navy);border-bottom-color:var(--gold)}
+.step.done{color:var(--muted)}
+.step-sep{color:var(--line);font-size:.8rem}
+
+.screen{display:none;animation:fadeIn .4s ease}
+.screen.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+.hero{background:var(--navy);color:var(--white);padding:4rem 1.5rem;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;top:-50%;right:-20%;width:600px;height:600px;background:radial-gradient(circle,rgba(198,151,73,.15),transparent 70%)}
+.hero-inner{max-width:880px;margin:0 auto;position:relative}
+.hero .eyebrow{color:var(--gold);letter-spacing:0.2em;font-size:.8rem;font-weight:700;margin-bottom:1rem;text-transform:uppercase}
+.hero h1{color:var(--white);margin-bottom:1rem;font-size:clamp(2.2rem,6vw,3.75rem)}
+.hero h1 em{color:var(--gold);font-style:normal}
+.hero .lead{font-size:1.1rem;color:#D6D1C1;max-width:620px;margin-bottom:2rem}
+.hero .spec{display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:2.5rem;color:#B5B0A0;font-size:.85rem}
+.hero .spec div{display:flex;align-items:center;gap:.5rem}
+.hero .spec .dot{width:5px;height:5px;background:var(--gold);border-radius:50%}
+
+/* ── Caso Emilia ─────────────────────────────────────────── */
+.emilia-anchor{position:relative;background:linear-gradient(135deg,rgba(198,151,73,.13),rgba(198,151,73,.04));border:1.5px solid rgba(198,151,73,.45);border-radius:3px;padding:1.4rem 1.6rem;margin:2rem 0}
+.emilia-anchor::before{content:"CASO REAL";position:absolute;top:-.6rem;left:1.2rem;font-size:.62rem;font-weight:700;letter-spacing:.2em;color:var(--gold);background:var(--navy);padding:.1rem .55rem;border-radius:2px}
+.emilia-badge{font-size:.72rem;font-weight:700;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;margin-bottom:.55rem}
+.emilia-quote{font-size:.97rem;color:#D6D1C1;line-height:1.58;font-style:italic;margin-bottom:.75rem}
+.emilia-result{font-size:.84rem;color:var(--gold-soft);font-weight:600}
+.emilia-result::before{content:"→ "}
+
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.9rem 1.6rem;border:none;cursor:pointer;font-weight:600;font-size:.95rem;letter-spacing:.01em;border-radius:2px;transition:all .2s ease;text-decoration:none;font-family:inherit;line-height:1}
+.btn-primary{background:var(--gold);color:var(--navy)}
+.btn-primary:hover{background:var(--gold-soft);transform:translateY(-1px);box-shadow:var(--shadow)}
+.btn-primary:disabled{background:var(--line);color:var(--muted);cursor:not-allowed;transform:none}
+.btn-ghost{background:transparent;color:var(--navy);border:1.5px solid var(--line)}
+.btn-ghost:hover{border-color:var(--navy)}
+.btn-dark{background:var(--navy);color:var(--white)}
+.btn-dark:hover{background:var(--navy-soft)}
+.btn-row{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:2rem;align-items:center;justify-content:space-between}
+.btn-row-right{display:flex;gap:.6rem;flex-wrap:wrap}
+
+.eyebrow{color:var(--gold);letter-spacing:.2em;font-size:.75rem;font-weight:700;text-transform:uppercase;margin-bottom:.75rem}
+.lead-p{font-size:1.05rem;color:var(--muted);margin-bottom:2rem}
+.section-title{margin-bottom:.5rem}
+
+.card{background:var(--white);padding:2rem;border-radius:3px;box-shadow:var(--shadow-soft);margin-bottom:1.25rem}
+
+/* Level 0 — context */
+.ctx-field{margin-bottom:1.25rem}
+.ctx-field label{display:block;font-size:.75rem;font-weight:700;letter-spacing:.1em;color:var(--navy);margin-bottom:.5rem;text-transform:uppercase}
+.ctx-field .opts{display:flex;gap:.4rem;flex-wrap:wrap}
+.ctx-field .opt{padding:.55rem 1rem;border:1.5px solid var(--line);background:var(--white);font-family:inherit;font-size:.9rem;color:var(--muted);border-radius:2px;cursor:pointer;transition:all .15s;font-weight:500}
+.ctx-field .opt:hover{border-color:var(--navy);color:var(--navy)}
+.ctx-field .opt.selected{background:var(--navy);color:var(--white);border-color:var(--navy)}
+.ctx-field .ctx-other{display:block;margin-top:.6rem;width:100%;padding:.7rem 1rem;border:1.5px solid var(--gold);background:var(--cream-soft);font-family:inherit;font-size:.95rem;color:var(--text);border-radius:2px}
+.ctx-field .ctx-other:focus{outline:none;border-color:var(--navy);background:var(--white)}
+
+/* Level 1 — area selection: tarjetas simétricas */
+.area-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.6rem;margin-bottom:1rem;align-items:stretch}
+.area-card{padding:1.1rem 1.25rem;background:var(--white);border:1.5px solid var(--line);border-radius:2px;cursor:pointer;transition:all .15s;position:relative;display:flex;flex-direction:column}
+.area-card:hover{border-color:var(--navy)}
+.area-card.selected{border-color:var(--gold);background:var(--cream-soft);box-shadow:0 0 0 2px var(--gold) inset}
+.area-card .area-n{font-size:.75rem;color:var(--gold);font-weight:700;letter-spacing:.15em;margin-bottom:.25rem}
+.area-card .area-n-name{font-weight:700;color:var(--navy);font-size:.97rem;line-height:1.3;margin-bottom:.4rem}
+.area-card .area-desc{display:block;font-size:.82rem;color:var(--muted);line-height:1.45;flex:1}
+.area-card.disabled{opacity:.4;pointer-events:none}
+.check{position:absolute;top:.5rem;right:.6rem;width:18px;height:18px;border-radius:50%;border:1.5px solid var(--line);background:var(--white)}
+.area-card.selected .check{background:var(--gold);border-color:var(--gold)}
+.area-card.selected .check::after{content:"";position:absolute;top:3px;left:5px;width:4px;height:8px;border:solid var(--navy);border-width:0 2px 2px 0;transform:rotate(45deg)}
+.counter{font-size:.85rem;color:var(--muted);margin-bottom:1rem}
+.counter strong{color:var(--navy)}
+
+/* Level 2 — subareas multi-select */
+.sub-block{margin-bottom:1.5rem;background:var(--white);padding:1.5rem;border-radius:3px;border-left:3px solid var(--gold)}
+.sub-block .sub-area{font-size:.75rem;color:var(--gold);font-weight:700;letter-spacing:.15em;margin-bottom:.5rem}
+.sub-block h3{margin-bottom:.3rem}
+.sub-block .sub-hint{font-size:.8rem;color:var(--muted);margin-bottom:.9rem}
+.sub-opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.5rem}
+.sub-opt{padding:.9rem 1rem .9rem 2.5rem;background:var(--cream);border:1.5px solid transparent;border-radius:2px;cursor:pointer;font-size:.9rem;color:var(--text);transition:all .15s;font-weight:500;position:relative;text-align:left}
+.sub-opt::before{content:"";position:absolute;left:.75rem;top:50%;transform:translateY(-50%);width:14px;height:14px;border:1.5px solid var(--line);border-radius:2px;background:var(--white);transition:all .15s}
+.sub-opt:hover{background:var(--cream-soft);border-color:var(--line)}
+.sub-opt:hover::before{border-color:var(--navy)}
+.sub-opt.selected{background:var(--navy);color:var(--white);border-color:var(--navy)}
+.sub-opt.selected::before{background:var(--gold);border-color:var(--gold)}
+.sub-opt.selected::after{content:"";position:absolute;left:.75rem;top:50%;transform:translateY(-60%) rotate(45deg);width:4px;height:8px;border:solid var(--navy);border-width:0 2px 2px 0;margin-left:4px}
+.sub-opt.maxed{opacity:.38;cursor:not-allowed}
+.sub-max-note{margin-top:.6rem;font-size:.78rem;color:var(--gold);font-weight:600}
+
+/* Level 3 — questions */
+.sub-head{background:var(--navy);color:var(--white);padding:1.25rem 1.5rem;border-radius:3px 3px 0 0;margin-bottom:0;display:flex;gap:1rem;align-items:center}
+.sub-head .sub-n{font-size:1.5rem;font-weight:700;color:var(--gold);min-width:50px}
+.sub-head .sub-t{color:var(--white);font-weight:700;letter-spacing:.03em;font-size:1.05rem}
+.sub-head .sub-t small{display:block;color:var(--gold-soft);font-weight:400;font-style:italic;font-size:.8rem;margin-top:.15rem;letter-spacing:0}
+.q-list{background:var(--white);border-radius:0 0 3px 3px;padding:.5rem 1.5rem;margin-bottom:2rem}
+.q-row{padding:1.1rem 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr;gap:.75rem}
+.q-row:last-child{border-bottom:none}
+.q-text{color:var(--text);font-size:.95rem;font-weight:500}
+.q-text .q-dim{display:inline-block;margin-left:.4rem;font-size:.6rem;letter-spacing:.1em;color:var(--gold);font-weight:700;padding:.1rem .35rem;background:var(--cream-soft);border-radius:2px;vertical-align:middle}
+.q-anchors{display:grid;grid-template-columns:repeat(5,1fr);gap:.3rem}
+.q-anchor{padding:.5rem .5rem;border:1.5px solid var(--line);background:var(--white);font-family:inherit;font-size:.72rem;color:var(--muted);border-radius:2px;cursor:pointer;transition:all .12s;text-align:center;line-height:1.2;font-weight:500}
+.q-anchor:hover{border-color:var(--navy);color:var(--navy)}
+.q-anchor .v{display:block;font-size:.8rem;font-weight:700;color:var(--navy);margin-bottom:.15rem}
+.q-anchor.sel-1{background:#E1F4E8;border-color:var(--ok);color:var(--ok)}
+.q-anchor.sel-2{background:#EEF7E8;border-color:#5A9660;color:#3E7D4A}
+.q-anchor.sel-3{background:#FDF3E0;border-color:#B88830;color:#7A5820}
+.q-anchor.sel-4{background:#FCE7DE;border-color:#B8471F;color:#8A3416}
+.q-anchor.sel-5{background:#F5D4C7;border-color:var(--red);color:var(--red)}
+.q-anchor.sel-1 .v,.q-anchor.sel-2 .v{color:var(--ok)}
+.q-anchor.sel-3 .v{color:#8B6B20}
+.q-anchor.sel-4 .v,.q-anchor.sel-5 .v{color:var(--crit)}
+@media(max-width:640px){.q-anchor{font-size:.65rem;padding:.4rem .3rem}.q-anchor .v{font-size:.7rem}}
+
+/* ── Sección 4 — Evaluación de Daños ──────────────────────── */
+.damage-q-block{background:var(--white);padding:1.75rem;border-radius:3px;border-left:3px solid var(--gold);margin-bottom:1.25rem;box-shadow:var(--shadow-soft)}
+.damage-q-num{font-size:.68rem;letter-spacing:.18em;color:var(--gold);font-weight:700;text-transform:uppercase;margin-bottom:.5rem}
+.damage-q-text{font-size:1.05rem;font-weight:600;color:var(--navy);margin-bottom:1rem;line-height:1.4}
+.damage-opts{display:flex;flex-wrap:wrap;gap:.4rem}
+.damage-opt{padding:.55rem 1.05rem;border:1.5px solid var(--line);background:var(--white);font-family:inherit;font-size:.88rem;color:var(--muted);border-radius:2px;cursor:pointer;transition:all .15s;font-weight:500}
+.damage-opt:hover{border-color:var(--navy);color:var(--navy)}
+.damage-opt.selected{background:var(--navy);color:var(--white);border-color:var(--navy)}
+
+/* Result */
+.result-wrap{background:var(--white);padding:2.5rem;border-radius:3px;box-shadow:var(--shadow)}
+.res-block{padding:1.4rem 0;border-bottom:1px solid var(--line)}
+.res-block:first-child{padding-top:0}
+.res-block:last-child{border-bottom:none;padding-bottom:0}
+.res-label{font-size:.7rem;letter-spacing:.2em;color:var(--gold);font-weight:700;text-transform:uppercase;margin-bottom:.4rem}
+.res-problem .p-name{font-size:1.15rem;font-weight:700;color:var(--navy)}
+.res-meta .m-name{font-size:1.05rem;font-weight:700;color:var(--crit);margin-bottom:.25rem}
+.res-meta .m-detail{color:var(--muted);font-size:.92rem}
+.res-tool{background:var(--cream-soft);padding:1.5rem;border-left:3px solid var(--gold);margin-top:.5rem;border-radius:2px}
+.res-tool .t-name{font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:.75rem}
+.res-tool dl{margin:0}
+.res-tool dt{font-size:.7rem;letter-spacing:.15em;color:var(--gold);font-weight:700;text-transform:uppercase;margin-top:.7rem}
+.res-tool dt:first-child{margin-top:0}
+.res-tool dd{margin:.2rem 0 0 0;color:var(--text);font-size:.95rem}
+.res-just ol{margin:.4rem 0 0 0;padding-left:1.25rem}
+.res-just li{margin-bottom:.25rem;color:var(--muted);font-size:.93rem}
+
+.cta-block{background:var(--navy);color:var(--white);padding:2.5rem;border-radius:3px;margin-top:2rem;position:relative;overflow:hidden}
+.cta-block::before{content:"";position:absolute;top:-30%;right:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(198,151,73,.2),transparent 70%)}
+.cta-block h3{color:var(--white);margin-bottom:.5rem;font-size:1.3rem;position:relative}
+.cta-block p{color:#D6D1C1;margin-bottom:1.25rem;position:relative;max-width:520px}
+.cta-form{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;position:relative;margin-bottom:1rem}
+.cta-form .full{grid-column:1/-1}
+.cta-form input{width:100%;padding:.8rem 1rem;border:none;background:rgba(255,255,255,.1);color:var(--white);font-family:inherit;font-size:.95rem;border-radius:2px;border:1.5px solid rgba(255,255,255,.15)}
+.cta-form input::placeholder{color:#A0A198}
+.cta-form input:focus{outline:none;border-color:var(--gold);background:rgba(255,255,255,.15)}
+@media(max-width:640px){.cta-form{grid-template-columns:1fr}}
+.cta-consent{display:flex;gap:.6rem;align-items:flex-start;color:#D6D1C1;font-size:.78rem;line-height:1.4;padding:.3rem 0;cursor:pointer}
+.cta-consent input[type="checkbox"]{margin-top:.2rem;width:16px;height:16px;flex-shrink:0;accent-color:var(--gold)}
+.cta-consent a{color:var(--gold);text-decoration:underline}
+.cta-consent a:hover{color:var(--gold-soft)}
+.cta-consent-opt{color:#A8A495}
+.cta-consent-opt em{font-style:italic;color:var(--gold-soft)}
+
+.legal-footer{background:var(--navy);color:#A0A198;padding:1.5rem;text-align:center;font-size:.78rem;border-top:1px solid rgba(255,255,255,.08)}
+.legal-footer a{color:var(--gold-soft);text-decoration:none;margin:0 .5rem}
+.legal-footer a:hover{color:var(--gold)}
+.legal-footer .sep{color:#555;margin:0 .15rem}
+
+.lead-done{padding:1.5rem;background:var(--cream-soft);border-left:3px solid var(--ok);border-radius:2px;margin-top:1.5rem}
+.lead-done strong{color:var(--ok)}
+
+.team-panel{margin-top:2rem;background:var(--white);padding:2rem;border-radius:3px;border:1.5px dashed var(--line)}
+.team-panel h3{color:var(--navy);margin-bottom:.5rem;font-size:1rem;letter-spacing:.05em;text-transform:uppercase}
+.team-panel p{font-size:.9rem;margin-bottom:1rem}
+
+.err{color:var(--crit);font-size:.85rem;margin-top:.5rem}
+
+.hero-trust{margin-top:2.2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.12)}
+.hero-trust-item{font-size:.82rem;color:#C0BBA8;line-height:1.45}
+.hero-trust-item strong{color:var(--gold);font-weight:700;display:block;margin-bottom:.15rem;letter-spacing:.02em}
+
+.sub-block .sub-desc{font-size:.85rem;color:var(--muted);margin-bottom:.8rem;line-height:1.5}
+
+.no-fit-block{margin:1.5rem 0;padding:1rem 1.25rem;background:var(--cream-soft);border:1px dashed var(--line);border-radius:3px;font-size:.88rem;color:var(--muted)}
+.no-fit-block strong{color:var(--navy);display:block;margin-bottom:.2rem}
+.no-fit-block span{display:block;margin-bottom:.5rem}
+.btn-link{background:none;border:none;color:var(--gold);font-family:inherit;font-weight:600;font-size:.88rem;padding:0;cursor:pointer;text-decoration:underline}
+.btn-link:hover{color:var(--navy)}
+.no-fit-form{margin-top:.8rem;display:grid;gap:.5rem}
+.no-fit-form textarea{padding:.7rem 1rem;border:1.5px solid var(--line);background:var(--white);font-family:inherit;font-size:.9rem;color:var(--text);border-radius:2px;min-height:80px;resize:vertical}
+.no-fit-form input{padding:.7rem 1rem;border:1.5px solid var(--line);background:var(--white);font-family:inherit;font-size:.9rem;color:var(--text);border-radius:2px}
+.no-fit-form textarea:focus,.no-fit-form input:focus{outline:none;border-color:var(--gold)}
+.no-fit-msg{font-size:.85rem;color:var(--ok);font-weight:600}
+
+.resume-banner{margin:1rem auto 0;max-width:880px;padding:1rem 1.25rem;background:#FDF3E0;border-left:3px solid var(--gold);display:flex;justify-content:space-between;align-items:center;gap:1rem;font-size:.9rem;color:var(--text)}
+.resume-banner .resume-actions{display:flex;gap:.4rem;flex-shrink:0}
+.resume-banner button{padding:.4rem .8rem;font-size:.8rem;border-radius:2px;border:1.5px solid var(--navy);background:var(--white);color:var(--navy);cursor:pointer;font-family:inherit;font-weight:600}
+.resume-banner button.primary{background:var(--navy);color:var(--white)}
+
+.res-tool dd.res-meta-line{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.2rem}
+.res-tool .meta-pill{display:inline-block;padding:.15rem .55rem;background:var(--white);border:1px solid var(--line);border-radius:12px;font-size:.78rem;color:var(--navy);font-weight:600}
+.flag-warn{display:inline-block;padding:.15rem .5rem;background:#FCE7DE;color:var(--crit);font-size:.7rem;font-weight:700;border-radius:2px;letter-spacing:.05em;text-transform:uppercase;margin-left:.5rem}
+
+@media(max-width:640px){
+  .container{padding:1.5rem 1rem 3rem}
+  .hero{padding:2.5rem 1.25rem}
+  .hero h1{font-size:clamp(1.7rem,8vw,2.2rem)}
+  .hero .lead{font-size:.95rem}
+  .hero .spec{gap:.7rem;font-size:.78rem}
+  .area-grid{grid-template-columns:1fr}
+  .sub-opts{grid-template-columns:1fr}
+  .stepbar-inner{font-size:.65rem}
+  .step{font-size:.6rem;letter-spacing:.08em}
+  .stepbar{padding:.6rem 1rem}
+  .result-wrap{padding:1.5rem 1.25rem}
+  .cta-block{padding:1.5rem 1.25rem}
+  .sub-head{padding:.9rem 1rem}
+  .q-list{padding:.25rem 1rem}
+  .ctx-field .opts{gap:.3rem}
+  .ctx-field .opt{padding:.45rem .7rem;font-size:.82rem}
+  .res-block{padding:1rem 0}
+  .res-tool{padding:1rem}
+  .damage-opts{gap:.3rem}
+  .damage-opt{font-size:.82rem;padding:.45rem .75rem}
+}
+@media(max-width:380px){
+  .container{padding:1.25rem .75rem 2.5rem}
+  .hero{padding:2rem 1rem}
+  .hero h1{font-size:1.55rem}
+  .btn{padding:.75rem 1.1rem;font-size:.9rem}
+  .stepbar .step-sep{display:none}
+  .step{padding:.15rem .25rem}
+  .q-anchor{font-size:.6rem;padding:.35rem .2rem;line-height:1.15}
+  .q-anchor .v{font-size:.7rem}
+  .sub-head .sub-n{font-size:1.2rem;min-width:38px}
+  .sub-head .sub-t{font-size:.95rem}
+}
+@media print{
+  .topbar,.stepbar,.btn-row,.cta-block,.team-panel,.print-hide,.hero-trust,.no-fit-block{display:none !important}
+  body{background:white}
+  .result-wrap{box-shadow:none;padding:0;border:none}
+  .res-tool{break-inside:avoid;background:#FAF7F2 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .res-block{break-inside:avoid}
+  @page{margin:1.5cm}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">
+    <img src="assets/masesora-logo-navy.svg" alt="Masesora" onerror="this.style.display='none'">
+    <span class="tagline">Constructora de Sistemas y Soluciones</span>
+  </div>
+  <a href="https://www.masesora.com" target="_blank">www.masesora.com</a>
+</div>
+
+<div class="stepbar" id="stepbar" style="display:none">
+  <div class="stepbar-inner" id="stepbarInner"></div>
+</div>
+
+<!-- INTRO -->
+<section id="s-intro" class="screen active">
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">DIAGNÓSTICO EJECUTIVO · GRATUITO</div>
+      <h1>Sabes que algo no va. <em>Aquí lo nombramos.</em></h1>
+      <p class="lead">En 15 minutos te decimos exactamente qué frena tu negocio, qué problema lo amplifica y qué herramienta operativa concreta necesitas. No vendemos servicios genéricos: te entregamos la ficha técnica de tu solución.</p>
+      <div class="spec">
+        <div><span class="dot"></span>30 subáreas analizadas</div>
+        <div><span class="dot"></span>12 patrones cruzados detectados</div>
+        <div><span class="dot"></span>Resultado en 15 minutos</div>
+        <div><span class="dot"></span>Sin reuniones. Sin formularios trampa.</div>
+      </div>
+
+      <!-- CASO EMILIA -->
+      <div class="emilia-anchor">
+        <div class="emilia-badge">Costuras Emilia · Taller de confección, Madrid</div>
+        <div class="emilia-quote">
+          "Le construimos el <strong style="color:var(--gold-soft)">Sistema Base Costura</strong>: base de datos de patrones, ficha de medidas de cada clienta, agenda de pedidos e histórico de trabajos. El resultado fue tan sólido que en la segunda fase añadimos pagos automáticos y recordatorios de recogida. Ahora no pierde ni un pedido y sus clientas saben exactamente cuándo llegar."
+        </div>
+        <div class="emilia-result">Si esto te suena familiar, el diagnóstico es para ti.</div>
+      </div>
+
+      <button class="btn btn-primary" onclick="go('s-ctx')">Comenzar diagnóstico →</button>
+
+      <div class="hero-trust">
+        <div class="hero-trust-item"><strong>Auditable</strong> — al final puedes descargar la trazabilidad completa de tus respuestas.</div>
+        <div class="hero-trust-item"><strong>Sin sorpresas</strong> — el email se pide solo al final, y solo si quieres recibir la ficha técnica.</div>
+        <div class="hero-trust-item"><strong>Determinista</strong> — mismo input, mismo output. No es un algoritmo opaco.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NIVEL 0 — CONTEXTO -->
+<section id="s-ctx" class="screen">
+  <div class="container">
+    <div class="eyebrow">NIVEL 0 · CONTEXTO OPERATIVO</div>
+    <h2 class="section-title">Contexto en 20 segundos.</h2>
+    <p class="lead-p">5 datos que adaptan los anclajes del diagnóstico y el lenguaje de la herramienta final.</p>
+    <div class="card" id="ctxCard"></div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="go('s-intro')">← Volver</button>
+      <button class="btn btn-primary" id="ctxNext" onclick="finishContext()" disabled>Continuar →</button>
+    </div>
+  </div>
+</section>
+
+<!-- NIVEL 1 — ÁREAS -->
+<section id="s-areas" class="screen">
+  <div class="container">
+    <div class="eyebrow">NIVEL 1 · ¿DÓNDE TE DUELE?</div>
+    <h2 class="section-title">Selecciona hasta 3 áreas a auditar.</h2>
+    <p class="lead-p">Elige las áreas donde más te reconoces. Pasa el cursor para ver el detalle exacto de cada una.</p>
+    <div class="counter"><strong id="areaCount">0</strong> de 3 áreas seleccionadas · mínimo 1</div>
+    <div class="area-grid" id="areaGrid"></div>
+    <div class="no-fit-block">
+      <strong>¿Tu caso no encaja en ninguna de estas áreas?</strong>
+      <span>Cuéntanoslo en una línea y un humano lo revisa. Sin compromiso.</span>
+      <button type="button" class="btn-link" onclick="toggleNoFit()">Mi caso no encaja →</button>
+      <div id="noFitForm" class="no-fit-form" style="display:none">
+        <textarea id="noFitText" placeholder="En 1–2 frases, ¿qué problema operativo tienes que no encaja en estas 10 áreas?" maxlength="400"></textarea>
+        <input type="email" id="noFitEmail" placeholder="Tu email (para responderte)">
+        <button type="button" class="btn btn-dark" onclick="sendNoFit()">Enviar a Masesora</button>
+        <div id="noFitMsg" class="no-fit-msg"></div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="go('s-ctx')">← Volver</button>
+      <button class="btn btn-primary" id="areasNext" onclick="goToSubareas()" disabled>Continuar →</button>
+    </div>
+  </div>
+</section>
+
+<!-- NIVEL 2 — SUBÁREAS -->
+<section id="s-subs" class="screen">
+  <div class="container">
+    <div class="eyebrow">NIVEL 2 · ¿QUÉ PASA EXACTAMENTE?</div>
+    <h2 class="section-title">¿Cuál de estas situaciones reconoces?</h2>
+    <p class="lead-p">Marca hasta 2 por área. En una micropyme los problemas no vienen de uno en uno.</p>
+    <div id="subsContainer"></div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="go('s-areas')">← Volver</button>
+      <button class="btn btn-primary" id="subsNext" onclick="goToQuestions()" disabled>Continuar →</button>
+    </div>
+  </div>
+</section>
+
+<!-- NIVEL 3 — PREGUNTAS -->
+<section id="s-qs" class="screen">
+  <div class="container">
+    <div class="eyebrow">NIVEL 3 · EVALUACIÓN</div>
+    <h2 class="section-title">5 preguntas por subárea.</h2>
+    <p class="lead-p">Escala 1–5 con anclajes concretos. Responde con honestidad clínica — el resultado depende de ello.</p>
+    <div id="qsContainer"></div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="go('s-subs')">← Volver</button>
+      <button class="btn btn-primary" id="qsNext" onclick="finishQuestions()" disabled>Continuar →</button>
+    </div>
+  </div>
+</section>
+
+<!-- NIVEL 4 — EVALUACIÓN DE DAÑOS -->
+<section id="s-damage" class="screen">
+  <div class="container">
+    <div class="eyebrow">NIVEL 4 · EVALUACIÓN DE DAÑOS</div>
+    <h2 class="section-title">3 preguntas sobre lo que te está costando.</h2>
+    <p class="lead-p">Sin cálculos, sin tecnicismos. Solo tu sensación real sobre lo que pierde el negocio.</p>
+    <div id="damageContainer"></div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="go('s-qs')">← Volver</button>
+      <button class="btn btn-primary" id="damageNext" onclick="finishDamage()" disabled>Generar diagnóstico →</button>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTADO -->
+<section id="s-result" class="screen">
+  <div class="container">
+    <div class="eyebrow">DIAGNÓSTICO EJECUTIVO</div>
+    <h2 class="section-title" style="margin-bottom:1.5rem">Tu diagnóstico está listo.</h2>
+    <div class="result-wrap" id="resultBox"></div>
+
+    <div class="cta-block" id="leadBlock">
+      <h3>Recibir la ficha técnica de tu herramienta</h3>
+      <p>Te enviamos por correo la ficha técnica detallada de la herramienta derivada, con alcance, entregables, plazo e inversión estimada. Sin reuniones, sin llamadas comerciales.</p>
+      <form class="cta-form" onsubmit="return captureLead(event)">
+        <input type="text" name="name" placeholder="Nombre completo" required>
+        <input type="email" name="email" placeholder="Email profesional" required>
+        <input type="text" name="company" class="full" placeholder="Nombre del negocio" required>
+        <label class="cta-consent full">
+          <input type="checkbox" name="consent" required>
+          <span>He leído y acepto la <a href="/privacidad" target="_blank">Política de Privacidad</a> y el <a href="/aviso-legal" target="_blank">Aviso Legal</a>. Consiento que Masesora trate mis datos para enviarme la ficha técnica. Puedo retirar este consentimiento escribiendo a <a href="mailto:info@masesora.com">info@masesora.com</a>.</span>
+        </label>
+        <label class="cta-consent full cta-consent-opt">
+          <input type="checkbox" name="consentComercial">
+          <span>Acepto que Masesora se ponga en contacto conmigo para explorar la implementación. <em>Opcional.</em></span>
+        </label>
+        <button type="submit" class="btn btn-primary full">Enviar ficha técnica a mi email →</button>
+      </form>
+    </div>
+
+    <div class="team-panel print-hide" id="teamPanel" style="display:none">
+      <h3>Panel interno del equipo</h3>
+      <p>Exportación de trazabilidad completa para el PRD. Solo visible tras captura del lead.</p>
+      <div class="btn-row-right">
+        <button class="btn btn-dark" onclick="sendTeamPrd()">Enviar PRD al equipo</button>
+        <button class="btn btn-ghost" onclick="downloadPDF()">📄 Descargar PDF</button>
+        <button class="btn btn-ghost" onclick="downloadJSON()">Descargar trazabilidad (.json)</button>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="resetAll()">↻ Nuevo diagnóstico</button>
+    </div>
+  </div>
+</section>
+
+<footer class="legal-footer print-hide">
+  © 2026 Masesora — María Teresa Cabezuelos Morcillo · NIF 74860612M
+  <br>
+  <a href="/privacidad" target="_blank">Política de Privacidad</a><span class="sep">·</span>
+  <a href="/aviso-legal" target="_blank">Aviso Legal</a><span class="sep">·</span>
+  <a href="/cookies" target="_blank">Política de Cookies</a><span class="sep">·</span>
+  <a href="/terminos" target="_blank">Términos y Condiciones</a>
+</footer>
+
+
+<script>
+/* ============================================================
+   MASESORA · TU SOLUCIÓN · v2 — con multiselect, daños y MongoDB
+   ============================================================ */
+
+const CONFIG = {
+  teamEmail: "direccionmasesora@gmail.com",
+  website: "www.masesora.com",
+  brand: "Masesora",
+  weights: { S: 0.5, E: 0.3, U: 0.2 },
+  metaThreshold: 3.0,
+  questionsPerSub: 5,
+  storageKey: "masesora_tu_solucion_v2",   // v2 por cambio de formato selectedSubs
+  storageTtlDays: 14,
+  leadsApiUrl: "/api/leads",               // endpoint FastAPI
+  freeEmailDomains: ["gmail.com","yahoo.com","yahoo.es","hotmail.com","hotmail.es","outlook.com","outlook.es","live.com","icloud.com","me.com","aol.com","mail.com","gmx.com","protonmail.com","proton.me","yandex.com","zoho.com"]
+};
+
+const PRIORITY_IDX = [0, 1, 4, 5, 7];
+
+const AREA_DESCRIPTIONS = {
+  1:"Pierdo llamadas, emails y/o contactos a lo largo del día que podrían ser posibles clientes.",
+  2:"Siento que el negocio me controla a mí; paso el día apagando fuegos y repitiendo cosas.",
+  3:"En cuanto el cliente sale por la puerta, me olvido de él. No tengo tiempo para el post-venta.",
+  4:"Cómo controlo el estado de cada cliente y cada trabajo en curso.",
+  5:"Saber en tiempo real qué entra, qué sale y dónde está el dinero del negocio.",
+  6:"Obligaciones fiscales, laborales y administrativas que se me pueden escapar.",
+  7:"Comunicación post-venta con el cliente: actualizaciones, recordatorios, postventa.",
+  8:"Qué pasa si el titular no está: dependencia, riesgo de bloqueo y continuidad.",
+  9:"Procesos internos documentados, reproducibles y delegables.",
+  10:"Capacidad real de atender más clientes sin que se rompa el sistema."
+};
+
+const SUB_DESCRIPTIONS = {
+  "1.1":"Atender llamadas, mensajes y solicitudes en horario operativo.",
+  "1.2":"Registrar y dar seguimiento a cada solicitud entrante hasta su cierre.",
+  "1.3":"Cualificar al cliente potencial antes de comprometer recursos.",
+  "2.1":"Tareas administrativas o repetitivas que consumen horas del titular.",
+  "2.2":"Reuniones, llamadas e interrupciones que rompen el ritmo de trabajo.",
+  "2.3":"Tiempo dedicado a buscar información, archivos o datos dispersos.",
+  "3.1":"Calendario operativo, citas y reservas con clientes.",
+  "3.2":"Coordinación de equipo, turnos y disponibilidad interna.",
+  "3.3":"Planificación de cargas de trabajo y plazos de entrega.",
+  "4.1":"Estado de cada cliente: dónde está, qué se le debe, qué le debes.",
+  "4.2":"Estado de cada trabajo o proyecto en curso.",
+  "4.3":"Histórico y postventa: qué le hiciste, qué falta, cuándo volver a contactar.",
+  "5.1":"Ingresos, cobros pendientes y previsión de tesorería.",
+  "5.2":"Costes reales, márgenes y rentabilidad por servicio o cliente.",
+  "5.3":"Fiscalidad y gestión administrativa con el asesor.",
+  "6.1":"Obligaciones fiscales: IVA, IRPF, modelos trimestrales y anuales.",
+  "6.2":"Obligaciones laborales: contratos, nóminas, prevención.",
+  "6.3":"Obligaciones sectoriales: licencias, normativas, certificaciones.",
+  "7.1":"Comunicación durante el servicio: avisos, recordatorios, hitos.",
+  "7.2":"Resolución de incidencias y reclamaciones.",
+  "7.3":"Postventa, fidelización y reactivación de clientes.",
+  "8.1":"Dependencia operativa del titular: qué se para si no está.",
+  "8.2":"Vacaciones, bajas y descansos sin que el negocio se resienta.",
+  "8.3":"Plan de continuidad a medio plazo: salida, traspaso, jubilación.",
+  "9.1":"Procesos clave documentados y al alcance del equipo.",
+  "9.2":"Estandarización de cómo se hacen las cosas (calidad reproducible).",
+  "9.3":"Capacidad de delegar y formar a quien se incorpora.",
+  "10.1":"Capacidad de atender más clientes sin colapsar el sistema actual.",
+  "10.2":"Inversión y capacidad de escalar (equipo, equipos, instalaciones).",
+  "10.3":"Estrategia de captación de clientes nuevos."
+};
+
+/* Evaluación de daños — Sección 4 */
+const DAMAGE_QS = [
+  {
+    key: "timeWasted",
+    q: "¿Cuánto tiempo pasas a la semana arreglando líos o repitiendo explicaciones porque no hay un sistema?",
+    opts: ["Menos de 1 hora", "1 a 3 horas", "3 a 5 horas", "5 a 10 horas", "Más de 10 horas"]
+  },
+  {
+    key: "moneyLeft",
+    q: "¿Cuánto dinero estimas que se queda 'en la mesa' por no responder a tiempo o no dar seguimiento?",
+    opts: ["No sabría decirlo", "Menos de 200 €/mes", "200 a 1.000 €/mes", "1.000 a 5.000 €/mes", "Más de 5.000 €/mes"]
+  },
+  {
+    key: "wouldCollapse",
+    q: "¿Tu sistema actual (cabeza/papel) aguantaría el doble de clientes sin que tú colapses?",
+    opts: ["Sí, aguantaría bien", "Probablemente sí", "Lo dudo mucho", "No, colapsaría", "Ya estoy al límite"]
+  }
+];
+
+function catalogMeta(areaId, isMeta){
+  const base = {
+    1:{tipo:"Sistema operativo de atención inicial", plazo:"3–5 semanas", entregables:"Protocolos de cobertura, plantillas de respuesta, panel de control, formación al equipo."},
+    2:{tipo:"Rediseño de bloques de tiempo y prioridades", plazo:"2–4 semanas", entregables:"Estructura horaria, criterios de priorización, panel semanal de seguimiento."},
+    3:{tipo:"Sistema de planificación operativa", plazo:"3–5 semanas", entregables:"Calendario operativo, agenda compartida, reglas de bloqueo y reasignación."},
+    4:{tipo:"Sistema de seguimiento de cliente y trabajo", plazo:"3–6 semanas", entregables:"Ficha única de cliente, historial de trabajos, panel de estado, alertas de seguimiento."},
+    5:{tipo:"Cuadro de mando financiero operativo", plazo:"3–5 semanas", entregables:"Indicadores clave, panel de seguimiento, rutinas de revisión semanal y mensual."},
+    6:{tipo:"Sistema de control de cumplimiento", plazo:"2–4 semanas", entregables:"Calendario de obligaciones, alertas anticipadas, registro de evidencias."},
+    7:{tipo:"Protocolo de comunicación con cliente", plazo:"2–3 semanas", entregables:"Plantillas, hitos de comunicación, reglas de escalado de incidencias."},
+    8:{tipo:"Plan de capacidad y continuidad operativa", plazo:"3–5 semanas", entregables:"Mapa de dependencias del titular, protocolo de cobertura, plan de salida progresiva."},
+    9:{tipo:"Mapeo y estandarización de procesos", plazo:"3–6 semanas", entregables:"Mapa de procesos críticos, instrucciones de trabajo documentadas, panel de seguimiento."},
+    10:{tipo:"Plan de capacidad de crecimiento", plazo:"4–6 semanas", entregables:"Diagnóstico de capacidad actual, plan de escalado por fases, métricas de control."}
+  };
+  const m = base[areaId] || base[1];
+  if(isMeta) return { tipo: m.tipo + " (versión integrada)", plazo:"5–8 semanas", entregables: m.entregables + " Diseñado como un único sistema que ataca los dos frentes simultáneamente." };
+  return m;
+}
+
+function getPriorityQs(qs){
+  if(!CONFIG.questionsPerSub || CONFIG.questionsPerSub >= qs.length) return qs.map((q,i)=>({q,origI:i}));
+  return PRIORITY_IDX.filter(i=>i<qs.length).slice(0, CONFIG.questionsPerSub).map(i=>({q:qs[i], origI:i}));
+}
+
+/* localStorage */
+function saveStateToStorage(){
+  try{
+    const payload = { v:2, ts:Date.now(), state:{ ctx:state.ctx, selectedAreas:state.selectedAreas, selectedSubs:state.selectedSubs, answers:state.answers, damage:state.damage, started:state.started } };
+    localStorage.setItem(CONFIG.storageKey, JSON.stringify(payload));
+  }catch(e){}
+}
+function loadStateFromStorage(){
+  try{
+    const raw = localStorage.getItem(CONFIG.storageKey);
+    if(!raw) return null;
+    const p = JSON.parse(raw);
+    if(!p || !p.ts) return null;
+    const ageDays = (Date.now()-p.ts)/(1000*60*60*24);
+    if(ageDays > CONFIG.storageTtlDays){ localStorage.removeItem(CONFIG.storageKey); return null; }
+    return p.state;
+  }catch(e){ return null; }
+}
+function clearStorage(){ try{ localStorage.removeItem(CONFIG.storageKey); }catch(e){} }
+function hasMeaningfulProgress(s){
+  if(!s) return false;
+  if(s.selectedAreas && s.selectedAreas.length>0) return true;
+  if(s.ctx && Object.keys(s.ctx).length>=3) return true;
+  if(s.answers && Object.keys(s.answers).length>0) return true;
+  return false;
+}
+
+function classifyEmail(email){
+  if(!email || !email.includes('@')) return { domain:"—", isFree:false };
+  const domain = email.split('@')[1].toLowerCase().trim();
+  return { domain, isFree: CONFIG.freeEmailDomains.includes(domain) };
+}
+
+
+/* ============================================================
+   DATOS: ÁREAS, SUBÁREAS, PREGUNTAS, HERRAMIENTAS, META-MATRIX
+   ============================================================ */
+const AREAS = [
+  /* ======== ÁREA 1 · GESTIÓN DE DEMANDA ENTRANTE ======== */
+  { id:1, name:"Demanda sin capturar", subs:[
+    { id:"1.1", name:"Disponibilidad",
+      tool:{ name:"Sistema de cobertura de atención inicial",
+        does:"Garantiza cobertura de atención a solicitudes entrantes durante el horario definido, con asignación de responsable y respaldo obligatorio cuando el titular no está disponible.",
+        solves:"Elimina llamadas y mensajes perdidos que se convierten en clientes que nunca vuelven a contactar.",
+        output:"Cobertura medida en porcentaje de contactos atendidos en el primer intento y tiempo máximo de descuelgue o respuesta inicial."
+      },
+      qs:[
+        {t:"Llamadas o solicitudes entrantes no atendidas al día.",d:"S",a:["Ninguna","1–2","3–5","6–10","+10"]},
+        {t:"Cobertura real del horario declarado al cliente.",d:"S",a:["100%","90%","75%","50%","<50%"]},
+        {t:"Dependencia de una sola persona para atender.",d:"S",a:["Nula","Baja","Media","Alta","Total"]},
+        {t:"Percepción del cliente sobre tu disponibilidad.",d:"S",a:["Excelente","Buena","Aceptable","Deficiente","Crítica"]},
+        {t:"Oportunidades comerciales perdidas al mes por no atender.",d:"E",a:["Ninguna","1–2","3–5","6–10","+10"]},
+        {t:"Ingresos estimados perdidos al mes por falta de cobertura.",d:"E",a:["0 €","<500 €","500–2.000 €","2.000–5.000 €","+5.000 €"]},
+        {t:"Clientes que se han ido por no poder contactar a tiempo.",d:"E",a:["Ninguno","Algún caso","Mensualmente","Frecuente","Crítico"]},
+        {t:"Tiempo medio en devolver una solicitud no atendida.",d:"U",a:["<1 h","<4 h","Mismo día","24–48 h","Rara vez"]},
+        {t:"Saturación estacional prevista en los próximos 90 días.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]},
+        {t:"Urgencia percibida de ampliar cobertura.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]},
+    { id:"1.2", name:"Registro y seguimiento",
+      tool:{ name:"Sistema de recepción y gestión de solicitudes entrantes",
+        does:"Recoge datos del cliente, clasifica urgencia, registra motivo de contacto y agenda el contacto siguiente según preferencia, con responsable y fecha asignados.",
+        solves:"Elimina las solicitudes que se pierden en notas sueltas, mensajes dispersos o memoria personal.",
+        output:"Registro único y trazable de toda solicitud entrante, con estado actualizado y seguimiento garantizado hasta cierre."
+      },
+      qs:[
+        {t:"Solicitudes entrantes sin registrar al día.",d:"S",a:["Ninguna","1–2","3–5","6–10","Mayoría"]},
+        {t:"Unificación del registro de solicitudes.",d:"S",a:["Único","Dos fuentes","Tres","Cuatro","Disperso"]},
+        {t:"Datos críticos del cliente que se omiten al registrar.",d:"S",a:["Ninguno","Raro","A veces","Frecuente","Siempre"]},
+        {t:"Seguimiento de solicitudes hasta cierre.",d:"S",a:["Siempre","Casi siempre","A veces","Rara vez","Nunca"]},
+        {t:"Solicitudes que nunca reciben respuesta al mes.",d:"E",a:["Ninguna","1–3","4–10","11–25","+25"]},
+        {t:"Ingresos no facturados por solicitudes no gestionadas.",d:"E",a:["0 €","<500 €","500–2.000 €","2.000–5.000 €","+5.000 €"]},
+        {t:"Reclamaciones por solicitudes no atendidas al mes.",d:"E",a:["Ninguna","1","2–3","4–6","+6"]},
+        {t:"Antigüedad de las solicitudes pendientes más antiguas.",d:"U",a:["<1 día","<3 días","<1 semana","<1 mes","+1 mes"]},
+        {t:"Riesgo de perder solicitudes esta semana.",d:"U",a:["Ninguno","Bajo","Medio","Alto","Crítico"]},
+        {t:"Urgencia percibida de centralizar el registro.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]},
+    { id:"1.3", name:"Velocidad de respuesta",
+      tool:{ name:"Sistema de respuesta acelerada al primer contacto",
+        does:"Fija un compromiso máximo de respuesta al primer contacto, con acuse inmediato automático y seguimiento en un plazo predefinido.",
+        solves:"Corta la fuga de oportunidades que se pierden mientras el cliente espera una respuesta que nunca llega o llega tarde.",
+        output:"Tiempo medio de primera respuesta medido y controlado, con compromiso visible para el cliente."
+      },
+      qs:[
+        {t:"Tiempo medio de primera respuesta a una solicitud.",d:"S",a:["<1 h","<4 h","Mismo día","24–48 h","+48 h"]},
+        {t:"Clientes que reciben acuse inmediato de recepción.",d:"S",a:["100%","75%","50%","25%","0%"]},
+        {t:"Solicitudes sin respuesta a las 24 h al día.",d:"S",a:["Ninguna","1–2","3–5","6–10","Mayoría"]},
+        {t:"Consistencia del tiempo de respuesta entre días.",d:"S",a:["Muy estable","Estable","Variable","Errática","Caótica"]},
+        {t:"Ventas perdidas por respuesta tardía al mes.",d:"E",a:["Ninguna","1–2","3–5","6–10","+10"]},
+        {t:"Ingresos perdidos estimados por demora al mes.",d:"E",a:["0 €","<500 €","500–2.000 €","2.000–5.000 €","+5.000 €"]},
+        {t:"Clientes que acudieron a competencia por tardanza.",d:"E",a:["Ninguno","Algún caso","Mensualmente","Frecuente","Crítico"]},
+        {t:"Espera máxima tolerable por tu tipo de cliente.",d:"U",a:["+48 h","24 h","Mismo día","<4 h","Inmediata"]},
+        {t:"Tendencia del tiempo de respuesta últimos 3 meses.",d:"U",a:["Mejora","Estable","Ligero deterioro","Deterioro","Colapso"]},
+        {t:"Urgencia de acelerar la respuesta inicial.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]}
+  ]},
+
+  /* ======== ÁREA 2 · TIEMPO IMPRODUCTIVO ======== */
+  { id:2, name:"Caos operativo", subs:[
+    { id:"2.1", name:"Tareas repetitivas",
+      tool:{ name:"Sistema de estandarización de tareas recurrentes",
+        does:"Identifica tareas repetidas semanalmente, las estructura en procedimientos fijos con pasos definidos y las reasigna a quien corresponde por rol.",
+        solves:"Elimina la reinvención diaria de tareas que deberían ejecutarse en piloto automático.",
+        output:"Catálogo operativo de tareas recurrentes con responsable, tiempo estándar y procedimiento fijo."
+      },
+      qs:[
+        {t:"Horas semanales dedicadas a tareas repetitivas sin revisar.",d:"S",a:["<2 h","2–5 h","6–10 h","11–20 h","+20 h"]},
+        {t:"Tareas que ejecutas «varias veces al día» por falta de proceso.",d:"S",a:["Ninguna","1–2","3–5","6–10","+10"]},
+        {t:"Variabilidad en cómo ejecutas la misma tarea.",d:"S",a:["Nula","Baja","Media","Alta","Crítica"]},
+        {t:"Procedimientos escritos de tareas recurrentes.",d:"S",a:["Todos","Mayoría","Mitad","Pocos","Ninguno"]},
+        {t:"Coste semanal en euros de tiempo improductivo (hora × horas).",d:"E",a:["<50 €","50–200 €","200–500 €","500–1.500 €","+1.500 €"]},
+        {t:"Errores mensuales atribuibles a falta de estándar.",d:"E",a:["Ninguno","1–2","3–5","6–10","+10"]},
+        {t:"Horas mensuales destinadas a corregir esos errores.",d:"E",a:["<2 h","2–5 h","6–15 h","16–30 h","+30 h"]},
+        {t:"Tendencia del volumen de tareas repetitivas.",d:"U",a:["Decrece","Estable","Crece leve","Crece","Desbordada"]},
+        {t:"Ventana para sistematizar antes de saturación.",d:"U",a:["+3 meses","2–3 meses","1–2 meses","Semanas","Agotada"]},
+        {t:"Urgencia percibida de estandarizar tareas.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]},
+    { id:"2.2", name:"Interrupciones",
+      tool:{ name:"Sistema de bloques de trabajo protegido",
+        does:"Reserva bloques diarios fijos de trabajo sin interrupciones, con protocolos de contención para contactos entrantes durante esos bloques.",
+        solves:"Detiene la fragmentación crónica del día que impide avanzar en lo importante.",
+        output:"Bloques productivos medibles con objetivos cerrados por sesión y ningún evento externo permitido dentro."
+      },
+      qs:[
+        {t:"Interrupciones recibidas por hora de trabajo.",d:"S",a:["<1","1–2","3–5","6–10","+10"]},
+        {t:"Bloques de trabajo sin interrupción que logras al día.",d:"S",a:["+4","2–3","1","<1","0"]},
+        {t:"Horas diarias en «modo reactivo» frente a producción real.",d:"S",a:["<1 h","1–2 h","3–4 h","5–6 h","Todo el día"]},
+        {t:"Capacidad de rechazar una interrupción no crítica.",d:"S",a:["Total","Alta","Media","Baja","Nula"]},
+        {t:"Tareas importantes aplazadas por interrupciones al día.",d:"E",a:["Ninguna","1","2–3","4–6","+6"]},
+        {t:"Ingresos aplazados por falta de foco operativo al mes.",d:"E",a:["0 €","<500 €","500–2.000 €","2.000–5.000 €","+5.000 €"]},
+        {t:"Proyectos retrasados por interrupciones últimos 3 meses.",d:"E",a:["Ninguno","1","2–3","4–6","+6"]},
+        {t:"Riesgo de saturación en próximas 2 semanas.",d:"U",a:["Ninguno","Bajo","Medio","Alto","Crítico"]},
+        {t:"Compromisos próximos que requieren foco prolongado.",d:"U",a:["Ninguno","Pocos","Algunos","Varios","Muchos"]},
+        {t:"Urgencia de proteger tiempo productivo.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]},
+    { id:"2.3", name:"Capacidad de foco",
+      tool:{ name:"Sistema de gestión del foco operativo",
+        does:"Establece un cierre diario con revisión de lo hecho y un arranque con las 3 prioridades del día, eliminando decisiones dispersas.",
+        solves:"Recupera el foco perdido en microdecisiones y saltos entre tareas sin cerrar.",
+        output:"Cierre diario con tareas completadas medidas y prioridades del día siguiente definidas."
+      },
+      qs:[
+        {t:"Capacidad de concentrarte 90 min seguidos sin distracción.",d:"S",a:["Siempre","Casi siempre","A veces","Rara vez","Nunca"]},
+        {t:"Tareas abiertas simultáneas en tu cabeza.",d:"S",a:["<3","3–5","6–10","11–20","+20"]},
+        {t:"Días que terminas con las prioridades cumplidas.",d:"S",a:["Siempre","Casi siempre","Mitad","Rara vez","Nunca"]},
+        {t:"Fatiga mental al final del día.",d:"S",a:["Baja","Moderada","Alta","Muy alta","Extrema"]},
+        {t:"Proyectos clave estancados por falta de foco.",d:"E",a:["Ninguno","1","2–3","4–6","+6"]},
+        {t:"Coste estimado de decisiones aplazadas al mes.",d:"E",a:["<200 €","200–1.000 €","1.000–3.000 €","3.000–10.000 €","+10.000 €"]},
+        {t:"Reprocesos por decisiones tomadas sin atención.",d:"E",a:["Ninguno","Raro","A veces","Frecuente","Constante"]},
+        {t:"Señales de agotamiento recientes (últimos 30 días).",d:"U",a:["Ninguna","Leves","Varias","Muchas","Críticas"]},
+        {t:"Tolerancia a sostener el ritmo actual 90 días más.",d:"U",a:["Alta","Suficiente","Justa","Baja","Insostenible"]},
+        {t:"Urgencia de recuperar foco operativo.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]}
+  ]},
+
+  /* ======== ÁREA 3 · PLANIFICACIÓN Y AGENDA ======== */
+  { id:3, name:"Olvido del cliente", subs:[
+    { id:"3.1", name:"Estructura semanal",
+      tool:{ name:"Sistema de planificación semanal estructurada",
+        does:"Define una plantilla semanal con bloques fijos por tipo de actividad, revisión de lunes y cierre de viernes.",
+        solves:"Sustituye la improvisación diaria por una estructura repetible que protege el tiempo clave del negocio.",
+        output:"Semana planificada antes de empezar, con hueco reservado para comercial, operativo, administrativo y revisión."
+      },
+      qs:[
+        {t:"Planificación semanal hecha antes del lunes.",d:"S",a:["Siempre","Casi siempre","A veces","Rara vez","Nunca"]},
+        {t:"Estabilidad de la estructura semanal entre semanas.",d:"S",a:["Muy estable","Estable","Variable","Errática","Caótica"]},
+        {t:"Horas improvisadas al día fuera de lo planificado.",d:"S",a:["<1 h","1–2 h","3–4 h","5–6 h","Todo"]},
+        {t:"Bloques fijos reservados por tipo de actividad.",d:"S",a:["Todos","Mayoría","Algunos","Pocos","Ninguno"]},
+        {t:"Tareas clave que se aplazan por mala planificación.",d:"E",a:["Ninguna","1–2","3–5","6–10","+10"]},
+        {t:"Coste semanal de trabajo reorganizado sobre la marcha.",d:"E",a:["<100 €","100–500 €","500–1.500 €","1.500–3.000 €","+3.000 €"]},
+        {t:"Compromisos incumplidos por mala planificación al mes.",d:"E",a:["Ninguno","1","2–3","4–6","+6"]},
+        {t:"Presión próxima: entregas acumuladas previstas.",d:"U",a:["Ninguna","Ligera","Media","Alta","Crítica"]},
+        {t:"Capacidad de absorber la semana siguiente sin ajuste.",d:"U",a:["Alta","Suficiente","Justa","Baja","Nula"]},
+        {t:"Urgencia de estructurar la semana.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]},
+    { id:"3.2", name:"Priorización de tareas",
+      tool:{ name:"Sistema de priorización por impacto",
+        does:"Clasifica tareas por impacto real en el negocio y urgencia, forzando el orden de ejecución según criterios predefinidos, no intuición.",
+        solves:"Elimina la pérdida de tiempo en lo urgente-no-importante y protege lo estratégico.",
+        output:"Lista diaria ordenada por impacto con tareas de bajo valor excluidas o delegadas."
+      },
+      qs:[
+        {t:"Tareas ejecutadas al día sin criterio de prioridad claro.",d:"S",a:["Ninguna","1–3","4–6","7–10","+10"]},
+        {t:"Claridad de los 3 objetivos críticos del mes.",d:"S",a:["Total","Alta","Media","Baja","Nula"]},
+        {t:"Ejecutas tareas urgentes-no-importantes antes que las clave.",d:"S",a:["Nunca","Rara vez","A veces","Frecuente","Constante"]},
+        {t:"Criterios escritos para priorizar.",d:"S",a:["Sí claros","Sí parciales","Vagos","Mentales","Ninguno"]},
+        {t:"Horas semanales en tareas de bajo valor.",d:"E",a:["<2 h","2–5 h","6–10 h","11–20 h","+20 h"]},
+        {t:"Proyectos de alto retorno aplazados al trimestre.",d:"E",a:["Ninguno","1","2","3","+3"]},
+        {t:"Coste de oportunidad mensual por mala priorización.",d:"E",a:["<500 €","500–2.000 €","2.000–5.000 €","5.000–15.000 €","+15.000 €"]},
+        {t:"Presión inmediata para entregar lo importante.",d:"U",a:["Ninguna","Baja","Media","Alta","Crítica"]},
+        {t:"Dependencia de recordar qué es prioritario.",d:"U",a:["Nula","Baja","Media","Alta","Total"]},
+        {t:"Urgencia de ordenar por impacto.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]},
+    { id:"3.3", name:"Control de citas",
+      tool:{ name:"Sistema de gestión de citas y agenda",
+        does:"Centraliza todas las citas del negocio con confirmación, recordatorio y política clara de cancelación o cambio.",
+        solves:"Elimina huecos muertos, solapamientos y ausencias no comunicadas que vacían la agenda.",
+        output:"Agenda única, ocupación medida y tasa de ausencias controlada."
+      },
+      qs:[
+        {t:"Solapamientos o huecos por mala agenda al mes.",d:"S",a:["Ninguno","1–2","3–5","6–10","+10"]},
+        {t:"Canales distintos por los que llegan citas.",d:"S",a:["1","2","3","4","+4"]},
+        {t:"Ausencias o cancelaciones de última hora al mes.",d:"S",a:["0","1–3","4–8","9–15","+15"]},
+        {t:"Política clara de confirmación previa.",d:"S",a:["Aplicada","Casi siempre","A veces","Rara vez","Inexistente"]},
+        {t:"Ingresos perdidos por huecos muertos al mes.",d:"E",a:["0 €","<300 €","300–1.000 €","1.000–3.000 €","+3.000 €"]},
+        {t:"Coste mensual de ausencias no compensadas.",d:"E",a:["0 €","<300 €","300–1.000 €","1.000–3.000 €","+3.000 €"]},
+        {t:"Quejas por errores de agenda al trimestre.",d:"E",a:["Ninguna","1–2","3–5","6–10","+10"]},
+        {t:"Previsión de saturación las próximas 4 semanas.",d:"U",a:["Ninguna","Baja","Media","Alta","Crítica"]},
+        {t:"Dependencia de memoria o papel para las citas.",d:"U",a:["Nula","Baja","Media","Alta","Total"]},
+        {t:"Urgencia de centralizar la agenda.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]}
+  ]},
+
+  /* ======== ÁREA 4 · SEGUIMIENTO DE CLIENTES Y TRABAJOS ======== */
+  { id:4, name:"Seguimiento de clientes y trabajos", subs:[
+    { id:"4.1", name:"Pipeline comercial",
+      tool:{ name:"Sistema de pipeline comercial con seguimiento obligatorio",
+        does:"Registra todas las oportunidades abiertas con fase, valor estimado, próxima acción y fecha, con revisión semanal obligatoria.",
+        solves:"Elimina las oportunidades olvidadas y muestra tasa de conversión real, no sensación.",
+        output:"Pipeline visible, tasa de conversión medida, oportunidades sin movimiento marcadas."
+      },
+      qs:[
+        {t:"Presupuestos abiertos sin respuesta >7 días.",d:"S",a:["0","1–3","4–8","9–15","+15"]},
+        {t:"Oportunidades sin próxima acción registrada.",d:"S",a:["Ninguna","1–2","3–5","6–10","Mayoría"]},
+        {t:"Tasa de conversión conocida y medida.",d:"S",a:["Exacta","Aproximada","Intuición","Vaga","Desconocida"]},
+        {t:"Seguimiento sistemático a cada oportunidad.",d:"S",a:["Siempre","Casi","A veces","Rara vez","Nunca"]},
+        {t:"Valor estimado del pipeline abandonado al mes.",d:"E",a:["0 €","<1.000 €","1.000–5.000 €","5.000–20.000 €","+20.000 €"]},
+        {t:"Ventas perdidas por olvido al trimestre.",d:"E",a:["Ninguna","1–2","3–5","6–10","+10"]},
+        {t:"Motivos de pérdida registrados al cerrar.",d:"E",a:["Siempre","Casi","A veces","Rara vez","Nunca"]},
+        {t:"Urgencia: facturación próxima dependiente de pipeline.",d:"U",a:["Ninguna","Baja","Media","Alta","Crítica"]},
+        {t:"Tendencia del pipeline últimos 3 meses.",d:"U",a:["Crece","Estable","Ligera caída","Caída","Vacío"]},
+        {t:"Urgencia de estructurar el seguimiento comercial.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]},
+    { id:"4.2", name:"Seguimiento post-venta",
+      tool:{ name:"Sistema de postventa y retención estructurada",
+        does:"Dispara acciones de seguimiento fijas tras cada entrega: confirmación de satisfacción, recogida de feedback y detección de señales de abandono.",
+        solves:"Detiene la sangría silenciosa de clientes que no vuelven por falta de contacto posterior.",
+        output:"Tasa de repetición medida, feedback sistemático y señales de abandono detectadas antes del cierre."
+      },
+      qs:[
+        {t:"Clientes contactados tras la entrega.",d:"S",a:["100%","75%","50%","25%","0%"]},
+        {t:"Recogida sistemática de feedback.",d:"S",a:["Siempre","Casi","A veces","Rara vez","Nunca"]},
+        {t:"Tasa de repetición conocida.",d:"S",a:["Exacta","Aproximada","Intuición","Vaga","Desconocida"]},
+        {t:"Detección de señales de abandono antes de perder cliente.",d:"S",a:["Siempre","Casi","A veces","Rara vez","Nunca"]},
+        {t:"Clientes perdidos al trimestre por silencio postventa.",d:"E",a:["Ninguno","1–3","4–8","9–15","+15"]},
+        {t:"Valor anualizado de la rotación no gestionada.",d:"E",a:["<1.000 €","1.000–5.000 €","5.000–15.000 €","15.000–50.000 €","+50.000 €"]},
+        {t:"Recomendaciones generadas y medidas.",d:"E",a:["Sistemáticas","Frecuentes","A veces","Raras","Ninguna"]},
+        {t:"Riesgo próximo de caída de recurrencia.",d:"U",a:["Ninguno","Bajo","Medio","Alto","Crítico"]},
+        {t:"Tendencia de la tasa de repetición.",d:"U",a:["Crece","Estable","Ligera caída","Caída","Colapso"]},
+        {t:"Urgencia de activar seguimiento postventa.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]},
+    { id:"4.3", name:"Control de trabajos en curso",
+      tool:{ name:"Sistema de control de trabajos en ejecución",
+        does:"Visibiliza el estado de cada trabajo con responsable, fase, fecha comprometida y alertas de desviación.",
+        solves:"Elimina trabajos olvidados, compromisos incumplidos y descontrol del estado real.",
+        output:"Panel único de trabajos en curso con desviaciones marcadas y responsables claros."
+      },
+      qs:[
+        {t:"Trabajos abiertos sin saber su estado exacto hoy.",d:"S",a:["0","1–2","3–5","6–10","+10"]},
+        {t:"Visibilidad del responsable de cada trabajo.",d:"S",a:["Total","Alta","Media","Baja","Nula"]},
+        {t:"Fechas comprometidas registradas.",d:"S",a:["Todas","Mayoría","Mitad","Pocas","Ninguna"]},
+        {t:"Consistencia entre lo prometido y lo entregado.",d:"S",a:["Alta","Buena","Variable","Baja","Crítica"]},
+        {t:"Retrasos mensuales en entregas comprometidas.",d:"E",a:["0","1–2","3–5","6–10","+10"]},
+        {t:"Penalizaciones o pérdidas por retrasos al trimestre.",d:"E",a:["0 €","<500 €","500–2.000 €","2.000–10.000 €","+10.000 €"]},
+        {t:"Reprocesos por descontrol de trabajos al mes.",d:"E",a:["Ninguno","1–2","3–5","6–10","+10"]},
+        {t:"Trabajos críticos próximos a vencer sin control.",d:"U",a:["Ninguno","1","2–3","4–6","+6"]},
+        {t:"Riesgo próximo de incumplimiento.",d:"U",a:["Ninguno","Bajo","Medio","Alto","Crítico"]},
+        {t:"Urgencia de visibilizar trabajos en curso.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]}
+  ]},
+
+  /* ======== ÁREA 5 · CONTROL DE GASTOS ======== */
+  { id:5, name:"Control de gastos", subs:[
+    { id:"5.1", name:"Visibilidad de gastos",
+      tool:{ name:"Sistema de visibilidad y control de gastos operativos",
+        does:"Categoriza todos los gastos mensuales, identifica recurrentes innecesarios y fija umbrales de alerta.",
+        solves:"Elimina la fuga silenciosa de gastos recurrentes no revisados ni justificados.",
+        output:"Cuadro de gastos por categoría, variación mensual y alertas ante desvíos."
+      },
+      qs:[
+        {t:"Conocimiento exacto de tus gastos recurrentes.",d:"S",a:["Total","Alto","Medio","Bajo","Nulo"]},
+        {t:"Revisión mensual de gastos.",d:"S",a:["Siempre","Casi","A veces","Rara vez","Nunca"]},
+        {t:"Gastos duplicados o innecesarios detectados al trimestre.",d:"S",a:["Ninguno","1–2","3–5","6–10","+10"]},
+        {t:"Categorización clara de los gastos.",d:"S",a:["Total","Alta","Media","Baja","Nula"]},
+        {t:"Coste mensual en gastos innecesarios identificados.",d:"E",a:["0 €","<100 €","100–500 €","500–2.000 €","+2.000 €"]},
+        {t:"Desviación mensual sobre presupuesto previsto.",d:"E",a:["<5%","5–10%","10–20%","20–40%","+40%"]},
+        {t:"Márgen perdido por gastos sin control al año.",d:"E",a:["<500 €","500–2.000 €","2.000–10.000 €","10.000–30.000 €","+30.000 €"]},
+        {t:"Riesgo próximo de tensión de tesorería por gastos.",d:"U",a:["Ninguno","Bajo","Medio","Alto","Crítico"]},
+        {t:"Cambios fiscales o de costes inminentes relevantes.",d:"U",a:["Ninguno","Bajos","Medios","Altos","Críticos"]},
+        {t:"Urgencia de visibilizar los gastos.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]},
+    { id:"5.2", name:"Rentabilidad por servicio",
+      tool:{ name:"Sistema de cálculo de rentabilidad por servicio",
+        does:"Calcula el margen real de cada servicio o producto considerando coste directo, tiempo dedicado y coste indirecto imputado.",
+        solves:"Elimina la percepción errónea sobre qué servicios son rentables y cuáles drenan el negocio.",
+        output:"Ficha de margen por servicio y ranking de rentabilidad para decisiones de precio o eliminación."
+      },
+      qs:[
+        {t:"Conocimiento del margen real por servicio.",d:"S",a:["Exacto","Aproximado","Intuición","Vago","Nulo"]},
+        {t:"Servicios que sospechas deficitarios y no sabes.",d:"S",a:["0","1","2","3","+3"]},
+        {t:"Cálculo del tiempo imputado a cada servicio.",d:"S",a:["Siempre","Casi","A veces","Rara vez","Nunca"]},
+        {t:"Revisión periódica del precio por margen.",d:"S",a:["Anual","Cada 2 años","Rara","Nunca","Nunca"]},
+        {t:"Servicios probablemente deficitarios activos.",d:"E",a:["Ninguno","1","2","3","+3"]},
+        {t:"Margen global que podrías recuperar al año.",d:"E",a:["<1.000 €","1.000–5.000 €","5.000–15.000 €","15.000–50.000 €","+50.000 €"]},
+        {t:"Clientes grandes con margen real negativo.",d:"E",a:["0","1","2","3","+3"]},
+        {t:"Presión próxima para subir precios o ajustar cartera.",d:"U",a:["Ninguna","Baja","Media","Alta","Crítica"]},
+        {t:"Subidas de costes previstas próximos 6 meses.",d:"U",a:["Ninguna","Bajas","Medias","Altas","Críticas"]},
+        {t:"Urgencia de medir rentabilidad por servicio.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]},
+    { id:"5.3", name:"Control de cobros",
+      tool:{ name:"Sistema de control de cobros y morosidad",
+        does:"Vigila vencimientos de facturas, dispara recordatorios en fechas predefinidas y escala impagos según política clara.",
+        solves:"Elimina la morosidad silenciosa que deteriora la tesorería mientras el negocio sigue entregando.",
+        output:"Antigüedad de cobros visible, recordatorios automáticos y morosidad decreciente."
+      },
+      qs:[
+        {t:"Facturas vencidas sin cobrar hoy.",d:"S",a:["0","1–2","3–5","6–10","+10"]},
+        {t:"Plazo medio real de cobro.",d:"S",a:["<30 d","30–45 d","45–60 d","60–90 d","+90 d"]},
+        {t:"Política clara de recordatorio de impago.",d:"S",a:["Aplicada","Casi","A veces","Rara vez","Inexistente"]},
+        {t:"Importe total pendiente de cobro.",d:"S",a:["<1.000 €","1.000–5.000 €","5.000–15.000 €","15.000–50.000 €","+50.000 €"]},
+        {t:"Impagos definitivos anuales.",d:"E",a:["0 €","<500 €","500–3.000 €","3.000–10.000 €","+10.000 €"]},
+        {t:"Coste financiero de los desfases de cobro al mes.",d:"E",a:["<50 €","50–200 €","200–500 €","500–2.000 €","+2.000 €"]},
+        {t:"Tesorería afectada por morosidad.",d:"E",a:["Nada","Poco","Moderado","Mucho","Crítico"]},
+        {t:"Riesgo próximo de tensión de tesorería.",d:"U",a:["Ninguno","Bajo","Medio","Alto","Crítico"]},
+        {t:"Clientes con pagos recurrentes deteriorados.",d:"U",a:["Ninguno","1","2–3","4–6","+6"]},
+        {t:"Urgencia de controlar cobros.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]}
+  ]},
+
+  /* ======== ÁREA 6 · DOCUMENTACIÓN Y OBLIGACIONES ======== */
+  { id:6, name:"Documentación y obligaciones", subs:[
+    { id:"6.1", name:"Organización documental",
+      tool:{ name:"Sistema de organización documental unificada",
+        does:"Estructura todos los documentos clave en una ubicación única, con nomenclatura fija y versión actualizada identificable.",
+        solves:"Elimina duplicados, versiones confusas y búsquedas infinitas de documentos que deberían estar a mano.",
+        output:"Documento clave encontrable en menos de dos minutos con versión correcta garantizada."
+      },
+      qs:[
+        {t:"Tiempo medio para encontrar un documento clave.",d:"S",a:["<1 min","1–2 min","3–5 min","5–15 min","+15 min"]},
+        {t:"Duplicados o versiones incorrectas detectados al mes.",d:"S",a:["0","1–2","3–5","6–10","+10"]},
+        {t:"Nomenclatura consistente de los documentos.",d:"S",a:["Total","Alta","Media","Baja","Nula"]},
+        {t:"Ubicación única para cada tipo de documento.",d:"S",a:["Total","Mayoría","Mitad","Pocos","Dispersa"]},
+        {t:"Horas mensuales en buscar documentos.",d:"E",a:["<1 h","1–3 h","4–8 h","9–15 h","+15 h"]},
+        {t:"Errores por usar versión incorrecta al trimestre.",d:"E",a:["0","1–2","3–5","6–10","+10"]},
+        {t:"Coste estimado del desorden documental al mes.",d:"E",a:["<100 €","100–300 €","300–800 €","800–2.000 €","+2.000 €"]},
+        {t:"Riesgo próximo de perder un documento crítico.",d:"U",a:["Ninguno","Bajo","Medio","Alto","Crítico"]},
+        {t:"Compromisos próximos que requieren documentación específica.",d:"U",a:["Ninguno","Pocos","Algunos","Varios","Muchos"]},
+        {t:"Urgencia de unificar documentación.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]},
+    { id:"6.2", name:"Obligaciones fiscales y legales",
+      tool:{ name:"Sistema de control de obligaciones periódicas",
+        does:"Registra todas las obligaciones fiscales, laborales y legales con fecha fija, responsable y alerta anticipada.",
+        solves:"Elimina el riesgo de incumplimiento, sanciones y recargos por olvido de plazos.",
+        output:"Calendario único de obligaciones cumplidas en fecha con trazabilidad completa."
+      },
+      qs:[
+        {t:"Retrasos o incumplimientos en obligaciones al año.",d:"S",a:["0","1","2","3","+3"]},
+        {t:"Dependencia de memoria para recordar plazos.",d:"S",a:["Nula","Baja","Media","Alta","Total"]},
+        {t:"Calendario único y centralizado de obligaciones.",d:"S",a:["Sí","Parcial","Disperso","Vago","No"]},
+        {t:"Anticipación con que trabajas los plazos.",d:"S",a:["+15 días","7–15 días","<7 días","Último día","Tarde"]},
+        {t:"Sanciones o recargos anuales acumulados.",d:"E",a:["0 €","<200 €","200–1.000 €","1.000–5.000 €","+5.000 €"]},
+        {t:"Coste asesor adicional por gestión reactiva.",d:"E",a:["0 €","<200 €","200–600 €","600–2.000 €","+2.000 €"]},
+        {t:"Exposición legal real estimada.",d:"E",a:["Nula","Baja","Media","Alta","Crítica"]},
+        {t:"Obligaciones próximas en las siguientes 4 semanas.",d:"U",a:["Ninguna","1","2–3","4–6","+6"]},
+        {t:"Cambios normativos recientes relevantes.",d:"U",a:["Ninguno","Menores","Medios","Altos","Críticos"]},
+        {t:"Urgencia de controlar obligaciones.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]},
+    { id:"6.3", name:"Contratos y acuerdos",
+      tool:{ name:"Sistema de gestión de contratos y acuerdos",
+        does:"Centraliza contratos con cliente, proveedor y colaborador, con fechas de vencimiento, cláusulas clave y renovaciones marcadas.",
+        solves:"Elimina contratos vencidos, renovaciones automáticas no deseadas y cláusulas olvidadas.",
+        output:"Repositorio único de contratos con alertas de vencimiento y renovación."
+      },
+      qs:[
+        {t:"Contratos vigentes cuya fecha de vencimiento desconoces.",d:"S",a:["0","1","2","3","+3"]},
+        {t:"Claridad de cláusulas clave por contrato.",d:"S",a:["Total","Alta","Media","Baja","Nula"]},
+        {t:"Renovaciones automáticas no revisadas.",d:"S",a:["Ninguna","1","2","3","+3"]},
+        {t:"Contratos sin actualizar hace +12 meses.",d:"S",a:["0","1–2","3–5","6–10","+10"]},
+        {t:"Coste anual por condiciones desfasadas.",d:"E",a:["0 €","<500 €","500–2.000 €","2.000–10.000 €","+10.000 €"]},
+        {t:"Riesgo legal por contratos mal redactados.",d:"E",a:["Nulo","Bajo","Medio","Alto","Crítico"]},
+        {t:"Acuerdos verbales sin soporte escrito.",d:"E",a:["0","1","2","3","+3"]},
+        {t:"Contratos próximos a vencer en 90 días.",d:"U",a:["Ninguno","1","2–3","4–6","+6"]},
+        {t:"Conflictos activos con cliente o proveedor.",d:"U",a:["Ninguno","1","2","3","+3"]},
+        {t:"Urgencia de revisar contratos.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]}
+  ]},
+
+  /* ======== ÁREA 7 · COMUNICACIÓN CON CLIENTES ======== */
+  { id:7, name:"Comunicación con clientes", subs:[
+    { id:"7.1", name:"Claridad y consistencia",
+      tool:{ name:"Sistema de comunicación consistente con cliente",
+        does:"Define los mensajes clave en cada fase del ciclo del cliente y garantiza que todos los puntos de contacto emitan la misma información.",
+        solves:"Elimina contradicciones e inconsistencias que deterioran la percepción de profesionalidad.",
+        output:"Guion base por fase del cliente, aplicado por todos los canales y personas."
+      },
+      qs:[
+        {t:"Contradicciones entre lo prometido y lo entregado al mes.",d:"S",a:["0","1–2","3–5","6–10","+10"]},
+        {t:"Consistencia del mensaje entre personas del equipo.",d:"S",a:["Total","Alta","Media","Baja","Nula"]},
+        {t:"Información crítica que solo tú conoces.",d:"S",a:["Nada","Poco","Moderado","Mucho","Todo"]},
+        {t:"Estándar de respuesta escrita al cliente.",d:"S",a:["Fijado","Casi","Variable","Vago","Inexistente"]},
+        {t:"Pérdida de clientes por falta de claridad al trimestre.",d:"E",a:["0","1–2","3–5","6–10","+10"]},
+        {t:"Horas mensuales corrigiendo malentendidos.",d:"E",a:["<1 h","1–3 h","4–8 h","9–15 h","+15 h"]},
+        {t:"Reclamaciones atribuibles a comunicación deficiente.",d:"E",a:["0","1–2","3–5","6–10","+10"]},
+        {t:"Lanzamiento o cambio próximo que requiere alineación.",d:"U",a:["Ninguno","Menor","Medio","Alto","Crítico"]},
+        {t:"Riesgo próximo de crisis reputacional por malentendido.",d:"U",a:["Nulo","Bajo","Medio","Alto","Crítico"]},
+        {t:"Urgencia de unificar el mensaje al cliente.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]},
+    { id:"7.2", name:"Respuesta ante incidencias",
+      tool:{ name:"Sistema de respuesta a incidencias",
+        does:"Define protocolo estándar para quejas, incidencias y errores: qué decir, cuándo responder, cómo escalar y cuándo compensar.",
+        solves:"Elimina respuestas improvisadas que convierten un error pequeño en pérdida de cliente.",
+        output:"Incidencias gestionadas en tiempo y forma con ratio de recuperación del cliente medido."
+      },
+      qs:[
+        {t:"Tiempo medio de respuesta a una queja.",d:"S",a:["<2 h","<1 día","1–2 días","3–5 días","+5 días"]},
+        {t:"Protocolo escrito de gestión de incidencias.",d:"S",a:["Aplicado","Parcial","Vago","Mental","Inexistente"]},
+        {t:"Consistencia entre respuestas ante casos similares.",d:"S",a:["Total","Alta","Media","Baja","Nula"]},
+        {t:"Registro de cada incidencia y resolución.",d:"S",a:["Siempre","Casi","A veces","Rara vez","Nunca"]},
+        {t:"Clientes perdidos por mala gestión de incidencia al trimestre.",d:"E",a:["0","1–2","3–5","6–10","+10"]},
+        {t:"Coste anual estimado de incidencias mal resueltas.",d:"E",a:["<500 €","500–2.000 €","2.000–10.000 €","10.000–30.000 €","+30.000 €"]},
+        {t:"Reseñas negativas recibidas al trimestre.",d:"E",a:["0","1–2","3–5","6–10","+10"]},
+        {t:"Incidencias abiertas sin resolver hoy.",d:"U",a:["0","1","2","3","+3"]},
+        {t:"Probabilidad de nueva incidencia esta semana.",d:"U",a:["Mínima","Baja","Media","Alta","Certeza"]},
+        {t:"Urgencia de profesionalizar respuesta.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]},
+    { id:"7.3", name:"Información recurrente",
+      tool:{ name:"Sistema de información recurrente al cliente",
+        does:"Agrupa la información que los clientes piden repetidamente (horarios, precios, condiciones, procesos) en un punto accesible con respuestas listas.",
+        solves:"Libera horas semanales dedicadas a responder las mismas preguntas una y otra vez.",
+        output:"Ahorro medible de horas en comunicación y mayor autonomía del cliente."
+      },
+      qs:[
+        {t:"Preguntas idénticas recibidas al día.",d:"S",a:["<3","3–5","6–10","11–20","+20"]},
+        {t:"Horas semanales respondiendo lo mismo.",d:"S",a:["<1 h","1–3 h","4–8 h","9–15 h","+15 h"]},
+        {t:"Respuestas base preparadas.",d:"S",a:["Todas","Mayoría","Algunas","Pocas","Ninguna"]},
+        {t:"Autonomía del cliente para resolver dudas básicas.",d:"S",a:["Alta","Buena","Media","Baja","Nula"]},
+        {t:"Coste mensual estimado de horas repetitivas.",d:"E",a:["<100 €","100–300 €","300–800 €","800–2.000 €","+2.000 €"]},
+        {t:"Otras tareas aplazadas por volumen de consultas.",d:"E",a:["Ninguna","1–2","3–5","6–10","+10"]},
+        {t:"Clientes frustrados por lentitud de respuesta básica.",d:"E",a:["Ninguno","1–2","3–5","6–10","+10"]},
+        {t:"Picos previstos de consultas próximos 60 días.",d:"U",a:["Ninguno","Leve","Medio","Alto","Crítico"]},
+        {t:"Dependencia de tu atención personal para dudas básicas.",d:"U",a:["Nula","Baja","Media","Alta","Total"]},
+        {t:"Urgencia de sistematizar información recurrente.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]}
+  ]},
+
+  /* ======== ÁREA 8 · DEPENDENCIA DEL PROPIETARIO ======== */
+  { id:8, name:"Dependencia del propietario", subs:[
+    { id:"8.1", name:"Conocimiento único",
+      tool:{ name:"Sistema de traspaso de conocimiento crítico",
+        does:"Documenta los saberes clave que solo residen en el propietario y los convierte en procedimientos consultables por cualquier persona.",
+        solves:"Elimina el riesgo de parálisis operativa ante la ausencia del propietario.",
+        output:"Saberes críticos documentados y accesibles, independientes de una persona."
+      },
+      qs:[
+        {t:"Saberes críticos que solo conoces tú.",d:"S",a:["0","1–2","3–5","6–10","+10"]},
+        {t:"Información crítica sin respaldo escrito.",d:"S",a:["Nada","Poco","Medio","Mucho","Todo"]},
+        {t:"Capacidad de alguien para reemplazarte en una tarea clave.",d:"S",a:["Total","Alta","Media","Baja","Nula"]},
+        {t:"Frecuencia con la que alguien te pregunta «cómo hago esto».",d:"S",a:["Nunca","Rara","A veces","Frecuente","Constante"]},
+        {t:"Pérdida económica si estuvieras una semana fuera.",d:"E",a:["0 €","<500 €","500–2.000 €","2.000–10.000 €","+10.000 €"]},
+        {t:"Retrasos causados por depender de tu intervención.",d:"E",a:["Ninguno","Pocos","Algunos","Frecuentes","Constantes"]},
+        {t:"Coste anual del cuello de botella personal.",d:"E",a:["<1.000 €","1.000–5.000 €","5.000–20.000 €","20.000–60.000 €","+60.000 €"]},
+        {t:"Riesgo personal (salud, imprevisto) próximo.",d:"U",a:["Nulo","Bajo","Medio","Alto","Crítico"]},
+        {t:"Plan de continuidad ante tu ausencia imprevista.",d:"U",a:["Sólido","Parcial","Vago","Inexistente","Nulo"]},
+        {t:"Urgencia de documentar saberes críticos.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]},
+    { id:"8.2", name:"Tareas exclusivas",
+      tool:{ name:"Sistema de liberación de tareas del propietario",
+        does:"Mapea las tareas que ejecuta el propietario, clasifica cuáles son delegables y asigna responsable alternativo con instrucciones fijas.",
+        solves:"Elimina el atasco de tareas que solo el propietario hace por costumbre, no por necesidad real.",
+        output:"Carga horaria del propietario reducida en tareas delegables con responsable asignado."
+      },
+      qs:[
+        {t:"Horas semanales en tareas que podrías delegar hoy.",d:"S",a:["<2 h","2–5 h","6–10 h","11–20 h","+20 h"]},
+        {t:"Tareas exclusivas por costumbre, no por necesidad.",d:"S",a:["0","1–2","3–5","6–10","+10"]},
+        {t:"Confianza en delegar tareas operativas.",d:"S",a:["Total","Alta","Media","Baja","Nula"]},
+        {t:"Instrucciones claras para delegar cuando intentas hacerlo.",d:"S",a:["Siempre","Casi","A veces","Rara vez","Nunca"]},
+        {t:"Coste por hora que te estás pagando en tareas delegables.",d:"E",a:["<10 €","10–25 €","25–50 €","50–100 €","+100 €"]},
+        {t:"Proyectos estratégicos aplazados por exceso de operativo.",d:"E",a:["Ninguno","1","2","3","+3"]},
+        {t:"Coste mensual de no delegar.",d:"E",a:["<500 €","500–2.000 €","2.000–5.000 €","5.000–15.000 €","+15.000 €"]},
+        {t:"Ritmo sostenible con la carga actual.",d:"U",a:["Sostenible","Ajustado","Justo","Insostenible","Roto"]},
+        {t:"Señales de agotamiento en el propietario.",d:"U",a:["Ninguna","Leves","Varias","Muchas","Críticas"]},
+        {t:"Urgencia de liberar tareas del propietario.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]},
+    { id:"8.3", name:"Capacidad de ausencia",
+      tool:{ name:"Sistema de continuidad operativa ante ausencia",
+        does:"Prepara al negocio para operar con normalidad durante la ausencia del propietario: responsables temporales, protocolos y criterios de decisión.",
+        solves:"Elimina la parálisis o colapso que ocurre cuando el propietario no está.",
+        output:"El negocio soporta ausencias planificadas sin caída operativa medible."
+      },
+      qs:[
+        {t:"Días seguidos que podrías ausentarte sin intervenir.",d:"S",a:["+10 d","5–10 d","2–4 d","1 d","Ninguno"]},
+        {t:"Protocolo claro para tu ausencia.",d:"S",a:["Sólido","Parcial","Vago","Mental","Inexistente"]},
+        {t:"Responsables designados durante tu ausencia.",d:"S",a:["Todos","Mayoría","Algunos","Pocos","Ninguno"]},
+        {t:"Criterios de decisión delegables en tu ausencia.",d:"S",a:["Claros","Parciales","Vagos","Nulos","Ninguno"]},
+        {t:"Pérdida económica por tu última ausencia significativa.",d:"E",a:["0 €","<500 €","500–2.000 €","2.000–10.000 €","+10.000 €"]},
+        {t:"Clientes perdidos por interrupción en tu ausencia.",d:"E",a:["0","1","2","3","+3"]},
+        {t:"Ritmo de crecimiento limitado por tu presencia obligada.",d:"E",a:["Nulo","Bajo","Medio","Alto","Total"]},
+        {t:"Ausencia inevitable prevista próximos 90 días.",d:"U",a:["Ninguna","Posible","Probable","Segura","Imprescindible"]},
+        {t:"Riesgo personal que obligue a ausencia forzada.",d:"U",a:["Nulo","Bajo","Medio","Alto","Crítico"]},
+        {t:"Urgencia de preparar continuidad operativa.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]}
+  ]},
+
+  /* ======== ÁREA 9 · CLARIDAD DE PROCESOS ======== */
+  { id:9, name:"Claridad de procesos", subs:[
+    { id:"9.1", name:"Documentación de procesos",
+      tool:{ name:"Sistema de documentación de procesos críticos",
+        does:"Describe paso a paso los procesos críticos del negocio con responsable, tiempo estándar y resultado esperado en cada paso.",
+        solves:"Elimina la variabilidad y la dependencia de memoria personal al ejecutar lo esencial.",
+        output:"Procesos críticos documentados, ejecutables por cualquier persona del equipo."
+      },
+      qs:[
+        {t:"Procesos críticos documentados por escrito.",d:"S",a:["Todos","Mayoría","Algunos","Pocos","Ninguno"]},
+        {t:"Variabilidad al ejecutar un mismo proceso.",d:"S",a:["Nula","Baja","Media","Alta","Crítica"]},
+        {t:"Tiempo estándar conocido por proceso.",d:"S",a:["Todos","Mayoría","Algunos","Pocos","Ninguno"]},
+        {t:"Responsable claro por proceso.",d:"S",a:["Todos","Mayoría","Algunos","Pocos","Ninguno"]},
+        {t:"Errores mensuales por falta de procedimiento claro.",d:"E",a:["0","1–2","3–5","6–10","+10"]},
+        {t:"Horas de rehacer por variabilidad al mes.",d:"E",a:["<2 h","2–5 h","6–15 h","16–30 h","+30 h"]},
+        {t:"Coste anual de no documentar procesos.",d:"E",a:["<1.000 €","1.000–5.000 €","5.000–20.000 €","20.000–60.000 €","+60.000 €"]},
+        {t:"Nuevas incorporaciones previstas próximos 6 meses.",d:"U",a:["Ninguna","1","2","3","+3"]},
+        {t:"Crecimiento previsto que requiere procesos claros.",d:"U",a:["Ninguno","Bajo","Medio","Alto","Crítico"]},
+        {t:"Urgencia de documentar.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]},
+    { id:"9.2", name:"Estandarización",
+      tool:{ name:"Sistema de estandarización operativa",
+        does:"Fija un único modo correcto de ejecutar cada proceso clave, con criterio de aceptación y formato unificado.",
+        solves:"Elimina la ejecución distinta según quién haga la tarea, garantizando calidad homogénea.",
+        output:"Calidad uniforme, tiempos predecibles y capacidad real de escalar sin romper el resultado."
+      },
+      qs:[
+        {t:"Procesos con un único modo definido de ejecución.",d:"S",a:["Todos","Mayoría","Mitad","Pocos","Ninguno"]},
+        {t:"Discrepancias de calidad entre ejecuciones del mismo servicio.",d:"S",a:["Nulas","Bajas","Medias","Altas","Críticas"]},
+        {t:"Criterios de aceptación definidos para cada entrega.",d:"S",a:["Todos","Mayoría","Algunos","Pocos","Ninguno"]},
+        {t:"Consistencia de formato y estética de entregables.",d:"S",a:["Total","Alta","Media","Baja","Nula"]},
+        {t:"Reclamaciones por calidad inconsistente al trimestre.",d:"E",a:["0","1–2","3–5","6–10","+10"]},
+        {t:"Horas mensuales reparando entregas defectuosas.",d:"E",a:["<2 h","2–5 h","6–15 h","16–30 h","+30 h"]},
+        {t:"Coste anual de no estandarizar.",d:"E",a:["<1.000 €","1.000–5.000 €","5.000–20.000 €","20.000–60.000 €","+60.000 €"]},
+        {t:"Nuevos servicios próximos que exigen estándar claro.",d:"U",a:["Ninguno","1","2","3","+3"]},
+        {t:"Proyectos grandes en los que la calidad desigual es inaceptable.",d:"U",a:["Ninguno","1","2","3","+3"]},
+        {t:"Urgencia de estandarizar.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]},
+    { id:"9.3", name:"Puntos de control",
+      tool:{ name:"Sistema de puntos de control de calidad",
+        does:"Inserta controles obligatorios en los procesos críticos antes de entregar, con criterios objetivos de paso/no paso.",
+        solves:"Evita que los errores lleguen al cliente y recuperar tarde es caro.",
+        output:"Errores interceptados antes de la entrega, no después."
+      },
+      qs:[
+        {t:"Procesos críticos con punto de control antes de entregar.",d:"S",a:["Todos","Mayoría","Algunos","Pocos","Ninguno"]},
+        {t:"Errores detectados por el cliente, no internamente.",d:"S",a:["Nunca","Rara vez","A veces","Frecuente","Siempre"]},
+        {t:"Criterios objetivos de paso/no paso definidos.",d:"S",a:["Todos","Mayoría","Algunos","Pocos","Ninguno"]},
+        {t:"Responsable del control distinto al del ejecutor.",d:"S",a:["Siempre","Casi","A veces","Rara vez","Nunca"]},
+        {t:"Reclamaciones por errores evitables al mes.",d:"E",a:["0","1–2","3–5","6–10","+10"]},
+        {t:"Coste mensual de recuperar errores tras entrega.",d:"E",a:["<100 €","100–500 €","500–2.000 €","2.000–5.000 €","+5.000 €"]},
+        {t:"Clientes perdidos por errores críticos al trimestre.",d:"E",a:["0","1–2","3–5","6–10","+10"]},
+        {t:"Entregas críticas próximas sin control definido.",d:"U",a:["Ninguna","1","2","3","+3"]},
+        {t:"Riesgo de error grave próximo.",d:"U",a:["Nulo","Bajo","Medio","Alto","Crítico"]},
+        {t:"Urgencia de instaurar puntos de control.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]}
+  ]},
+
+  /* ======== ÁREA 10 · CAPACIDAD DE CRECIMIENTO ======== */
+  { id:10, name:"Capacidad de crecimiento", subs:[
+    { id:"10.1", name:"Sistema sin propietario",
+      tool:{ name:"Sistema de autonomía operativa del negocio",
+        does:"Identifica qué decisiones requieren al propietario y cuáles se pueden delegar a criterios fijos o a otra persona.",
+        solves:"Transforma un negocio-persona en un negocio con sistema propio.",
+        output:"Decisiones operativas resueltas sin intervención del propietario en el día a día."
+      },
+      qs:[
+        {t:"Decisiones operativas tomadas sin ti a la semana.",d:"S",a:["+20","10–20","5–10","1–5","0"]},
+        {t:"Cuellos de botella por depender de tu validación.",d:"S",a:["Ninguno","1","2","3","+3"]},
+        {t:"Capacidad del negocio de operar una semana sin ti.",d:"S",a:["Total","Alta","Media","Baja","Nula"]},
+        {t:"Criterios de decisión escritos para tu equipo.",d:"S",a:["Claros","Parciales","Vagos","Mentales","Ninguno"]},
+        {t:"Coste mensual de tu dependencia operativa.",d:"E",a:["<500 €","500–2.000 €","2.000–5.000 €","5.000–15.000 €","+15.000 €"]},
+        {t:"Clientes que exigen tratar solo contigo.",d:"E",a:["0","1–2","3–5","6–10","+10"]},
+        {t:"Margen perdido por cuellos de botella personales.",d:"E",a:["<1.000 €","1.000–5.000 €","5.000–20.000 €","20.000–60.000 €","+60.000 €"]},
+        {t:"Ritmo de crecimiento posible con tu dependencia actual.",d:"U",a:["Alto","Medio","Bajo","Nulo","Retroceso"]},
+        {t:"Riesgo de saturación personal próximo.",d:"U",a:["Nulo","Bajo","Medio","Alto","Crítico"]},
+        {t:"Urgencia de desacoplarte del día a día.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]},
+    { id:"10.2", name:"Escalado operativo",
+      tool:{ name:"Sistema de escalado sin ruptura",
+        does:"Identifica los cuellos que aparecen al duplicar volumen y los resuelve antes de que saturen la operación.",
+        solves:"Evita el colapso operativo cuando el negocio crece sin preparación.",
+        output:"Capacidad real de duplicar clientes o facturación sin romper procesos."
+      },
+      qs:[
+        {t:"Capacidad de duplicar clientes sin romper operación.",d:"S",a:["Total","Alta","Media","Baja","Nula"]},
+        {t:"Cuellos visibles al aumentar volumen 50%.",d:"S",a:["Ninguno","1","2","3","+3"]},
+        {t:"Procesos preparados para mayor volumen.",d:"S",a:["Todos","Mayoría","Algunos","Pocos","Ninguno"]},
+        {t:"Experiencias pasadas de saturación al crecer.",d:"S",a:["Ninguna","Leve","Moderada","Fuerte","Crítica"]},
+        {t:"Clientes rechazados por falta de capacidad al trimestre.",d:"E",a:["0","1–2","3–5","6–10","+10"]},
+        {t:"Ingresos dejados sobre la mesa por no poder atender.",d:"E",a:["0 €","<2.000 €","2.000–10.000 €","10.000–30.000 €","+30.000 €"]},
+        {t:"Crecimiento bloqueado por miedo a romper la operación.",d:"E",a:["Nulo","Bajo","Medio","Alto","Total"]},
+        {t:"Plan de crecimiento declarado próximos 12 meses.",d:"U",a:["Ambicioso","Claro","Tibio","Vago","Inexistente"]},
+        {t:"Oportunidades próximas que exigen mayor capacidad.",d:"U",a:["Ninguna","1","2","3","+3"]},
+        {t:"Urgencia de prepararse para escalar.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]},
+    { id:"10.3", name:"Indicadores de rendimiento",
+      tool:{ name:"Sistema de indicadores de rendimiento operativo",
+        does:"Define los 3 a 5 indicadores que reflejan la salud real del negocio y fuerza su revisión periódica con umbrales claros.",
+        solves:"Sustituye la gestión por sensación por una basada en datos medibles.",
+        output:"Cuadro de mando con indicadores críticos y decisiones disparadas por datos, no por intuición."
+      },
+      qs:[
+        {t:"Claridad de los 3 números que definen la salud del negocio.",d:"S",a:["Total","Alta","Media","Baja","Nula"]},
+        {t:"Frecuencia de revisión de indicadores.",d:"S",a:["Semanal","Quincenal","Mensual","Trimestral","Nunca"]},
+        {t:"Umbrales de alerta definidos.",d:"S",a:["Todos","Mayoría","Algunos","Pocos","Ninguno"]},
+        {t:"Decisiones tomadas por datos vs intuición.",d:"S",a:["Siempre datos","Mayoría","Mitad","Rara vez","Solo intuición"]},
+        {t:"Decisiones erróneas al trimestre por falta de datos.",d:"E",a:["0","1–2","3–5","6–10","+10"]},
+        {t:"Desviación anual sobre previsiones por ausencia de datos.",d:"E",a:["<5%","5–10%","10–20%","20–40%","+40%"]},
+        {t:"Oportunidades de mejora que descubres tarde.",d:"E",a:["Ninguna","1–2","3–5","6–10","+10"]},
+        {t:"Cambios estratégicos próximos que exigen datos.",d:"U",a:["Ninguno","Menor","Medio","Alto","Crítico"]},
+        {t:"Incertidumbre actual sobre el rumbo.",d:"U",a:["Nula","Baja","Media","Alta","Crítica"]},
+        {t:"Urgencia de instalar indicadores.",d:"U",a:["Ninguna","Baja","Media","Alta","Inmediata"]}
+      ]}
+  ]}
+];
+
+/* ============================================================
+   NIVEL 4.5 · META-PROBLEMAS (matriz cerrada, 12 pares)
+   ============================================================ */
+const META_MATRIX = [
+  { pair:["1.1","7.1"], name:"Cuello de contacto inicial",
+    desc:"El problema raíz no son dos fallos separados sino un único punto de fuga: la puerta de entrada del cliente al negocio está rota.",
+    tool:{ name:"Sistema integral de contacto y atención al cliente",
+      does:"Unifica la puerta de entrada del cliente con cobertura de atención, mensaje consistente y seguimiento obligatorio hasta primera respuesta efectiva.",
+      solves:"Detiene la fuga simultánea de disponibilidad y claridad que deteriora la percepción desde el primer segundo.",
+      output:"Tasa de contactos atendidos y convertidos medida, sin inconsistencias entre canales."
+    }},
+  { pair:["3.1","4.1"], name:"Pipeline ciego",
+    desc:"Sin estructura semanal ni pipeline, las oportunidades se evaporan antes de ser trabajadas.",
+    tool:{ name:"Sistema de pipeline con agenda integrada",
+      does:"Enlaza el pipeline comercial con la planificación semanal, obligando a reservar tiempo específico de seguimiento y cierre.",
+      solves:"Corta la sangría de oportunidades que mueren por falta de tiempo protegido para trabajarlas.",
+      output:"Pipeline activo con tasa de conversión y tiempo de ciclo medidos."
+    }},
+  { pair:["8.1","9.1"], name:"Negocio-persona",
+    desc:"El conocimiento crítico sin documentar y los procesos sin escribir convierten al negocio en una extensión del propietario.",
+    tool:{ name:"Sistema de desacoplamiento del propietario",
+      does:"Documenta los saberes críticos y los procesos clave al mismo tiempo, creando un manual operativo único.",
+      solves:"Libera al propietario del papel de único soporte del negocio.",
+      output:"Manual operativo consultable, con capacidad real de que otra persona opere sin ti."
+    }},
+  { pair:["2.1","9.2"], name:"Operación improvisada",
+    desc:"Las tareas recurrentes sin estandarizar se multiplican en horas improductivas de ejecución inconsistente.",
+    tool:{ name:"Sistema operativo estándar del negocio",
+      does:"Fija el modo correcto de ejecutar cada tarea recurrente y los criterios de calidad que debe cumplir.",
+      solves:"Elimina la combinación de repetición inútil y variabilidad en el resultado.",
+      output:"Tiempos predecibles, calidad homogénea y horas recuperadas medibles."
+    }},
+  { pair:["5.2","4.3"], name:"Rentabilidad no trazada",
+    desc:"Sin trazar rentabilidad por servicio ni controlar trabajos en curso, el margen real es invisible.",
+    tool:{ name:"Sistema de trazabilidad económica por trabajo",
+      does:"Asocia cada trabajo a su coste real y compara con el precio facturado, marcando desviaciones al cerrar.",
+      solves:"Revela qué trabajos son rentables y cuáles drenan el negocio silenciosamente.",
+      output:"Margen real por trabajo medido y decisiones de precio o cartera basadas en datos."
+    }},
+  { pair:["6.1","9.1"], name:"Memoria sin respaldo",
+    desc:"La documentación dispersa y los procesos no escritos dependen exclusivamente de la memoria del propietario.",
+    tool:{ name:"Sistema documental operativo",
+      does:"Une la documentación unificada con los procesos escritos en una estructura única consultable.",
+      solves:"Sustituye la dependencia de memoria personal por un archivo vivo del negocio.",
+      output:"Conocimiento del negocio respaldado fuera del cerebro del propietario."
+    }},
+  { pair:["8.3","10.2"], name:"Techo de capacidad personal",
+    desc:"La incapacidad de ausentarte sumada a la incapacidad de escalar marca un techo inmóvil.",
+    tool:{ name:"Sistema de crecimiento desacoplado",
+      does:"Diseña responsables temporales, criterios de decisión delegables y capacidad operativa adicional preactivada.",
+      solves:"Rompe simultáneamente el techo de ausencia y el techo de escalado.",
+      output:"El negocio crece y soporta ausencias planificadas sin caída operativa."
+    }},
+  { pair:["7.1","4.2"], name:"Cliente desatendido",
+    desc:"Comunicación inconsistente más postventa ausente igual a clientes que se marchan en silencio.",
+    tool:{ name:"Sistema integral de relación con cliente",
+      does:"Unifica mensaje consistente por fase y protocolo de postventa con recogida de feedback sistemática.",
+      solves:"Detiene el abandono silencioso causado por la combinación de mensajes contradictorios y falta de seguimiento.",
+      output:"Tasa de repetición medida y señales de abandono detectadas antes del cierre."
+    }},
+  { pair:["1.2","3.3"], name:"Agenda saturada sin control",
+    desc:"Las solicitudes entran sin registro unificado y la agenda no las absorbe: el negocio opera sobre una base inestable.",
+    tool:{ name:"Sistema de absorción y organización de demanda",
+      does:"Conecta el registro de solicitudes entrantes con la agenda, clasificando urgencia y reservando hueco según criterio.",
+      solves:"Evita huecos muertos y saturaciones simultáneas provocadas por flujo no gestionado.",
+      output:"Ocupación real de agenda medida y solicitudes absorbidas sin fuga."
+    }},
+  { pair:["2.1","8.2"], name:"Fundador atrapado",
+    desc:"Tareas repetitivas sin delegar mantienen al propietario ejecutando operación en vez de liderarla.",
+    tool:{ name:"Sistema de liberación del propietario",
+      does:"Mapea tareas delegables, las estandariza y reasigna con instrucciones claras a responsable alternativo.",
+      solves:"Corta la trampa operativa que consume las horas estratégicas del propietario.",
+      output:"Horas semanales del propietario liberadas y asignadas a tareas de impacto estratégico."
+    }},
+  { pair:["5.1","6.2"], name:"Ceguera administrativa",
+    desc:"Sin visibilidad de gastos ni control de obligaciones, la exposición económica y legal es desconocida.",
+    tool:{ name:"Sistema de control administrativo y financiero",
+      does:"Unifica visibilidad de gastos con calendario de obligaciones y alertas anticipadas en ambos frentes.",
+      solves:"Elimina la ceguera combinada sobre coste real del negocio y riesgo normativo.",
+      output:"Gastos bajo control y cumplimiento de obligaciones trazable."
+    }},
+  { pair:["9.2","10.1"], name:"Negocio no escalable",
+    desc:"Sin estandarización ni autonomía operativa, crecer significa multiplicar dependencia, no capacidad.",
+    tool:{ name:"Sistema de arquitectura operativa escalable",
+      does:"Fija estándares y criterios de decisión que permiten crecer sin multiplicar la intervención del propietario.",
+      solves:"Convierte el crecimiento en una operación repetible, no en una excepción heroica.",
+      output:"Capacidad real de absorber más volumen sin más dependencia personal."
+    }}
+];
+
+/* ── ESTADO ─────────────────────────────────────────────────── */
+const state = {
+  ctx: {},
+  selectedAreas: [],
+  selectedSubs: {},   // { areaId: [subId, ...] }  — máx 2 por área
+  answers: {},        // { "subId-qIdx": 1..5 }
+  damage: {},         // { timeWasted, moneyLeft, wouldCollapse }
+  started: null,
+  finished: null,
+  analysis: null,
+  lead: null
+};
+
+/* ── STEPS ──────────────────────────────────────────────────── */
+const STEPS = [
+  { id:"s-ctx",    label:"CONTEXTO" },
+  { id:"s-areas",  label:"ÁREAS" },
+  { id:"s-subs",   label:"SUBÁREAS" },
+  { id:"s-qs",     label:"EVALUACIÓN" },
+  { id:"s-damage", label:"DAÑOS" },
+  { id:"s-result", label:"DIAGNÓSTICO" }
+];
+
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  renderStepbar(id);
+  if(id==='s-ctx')    renderContext();
+  if(id==='s-areas')  renderAreas();
+  if(id==='s-subs')   renderSubs();
+  if(id==='s-qs')     renderQuestions();
+  if(id==='s-damage') renderDamage();
+}
+
+function renderStepbar(currentId){
+  const bar = document.getElementById('stepbar');
+  const inner = document.getElementById('stepbarInner');
+  if(currentId==='s-intro'){ bar.style.display='none'; return; }
+  bar.style.display='block';
+  const idx = STEPS.findIndex(s=>s.id===currentId);
+  inner.innerHTML = STEPS.map((s,i)=>{
+    const cls = i===idx?'active':(i<idx?'done':'');
+    return `<span class="step ${cls}">${i+1}. ${s.label}</span>` + (i<STEPS.length-1?'<span class="step-sep">›</span>':'');
+  }).join('');
+}
+
+/* ── NIVEL 0 ────────────────────────────────────────────────── */
+const CONTEXT_QS = [
+  { key:"sector", label:"Sector", opts:["Servicios profesionales","Comercio/Retail","Hostelería","Salud y bienestar","Construcción/Reformas","Formación","Creativo/Agencia","Industrial/Producción","Consultoría","Otro"] },
+  { key:"size",   label:"Tamaño del equipo", opts:["Autónomo (sin equipo)","2 a 5 personas","6 a 15 personas","16 o más"] },
+  { key:"hours",  label:"Horario operativo", opts:["Diurno (8h)","Extendido (10-12h)","Continuo (24h / turnos)","Estacional"] },
+  { key:"volume", label:"Volumen de clientes al mes", opts:["Menos de 20","20 a 100","100 a 500","Más de 500"] },
+  { key:"channel",label:"Canal principal de entrada de clientes", opts:["Teléfono","Web/formulario","Recomendación","Presencial","Múltiples canales"] }
+];
+
+function renderContext(){
+  if(!state.started) state.started = new Date().toISOString();
+  const c = document.getElementById('ctxCard');
+  c.innerHTML = CONTEXT_QS.map(q=>{
+    const isSectorOther = (q.key==='sector' && state.ctx.sector==='Otro');
+    return `<div class="ctx-field">
+      <label>${q.label}</label>
+      <div class="opts">${q.opts.map(o=>`<button type="button" class="opt ${state.ctx[q.key]===o?'selected':''}" onclick="setCtx('${q.key}',this.textContent)">${o}</button>`).join('')}</div>
+      ${isSectorOther?`<input type="text" class="ctx-other" placeholder="Escribe tu sector concreto" value="${state.ctx.sectorOther||''}" oninput="setCtxOther(this.value)" maxlength="60" autofocus>`:''}
+    </div>`;
+  }).join('');
+  checkContext();
+}
+function setCtx(key, val){ state.ctx[key]=val; if(key==='sector'&&val!=='Otro') delete state.ctx.sectorOther; saveStateToStorage(); renderContext(); }
+function setCtxOther(val){ state.ctx.sectorOther=val.trim(); saveStateToStorage(); checkContext(); }
+function checkContext(){
+  const allAnswered = CONTEXT_QS.every(q=>state.ctx[q.key]);
+  const sectorOk = state.ctx.sector!=='Otro' || (state.ctx.sectorOther && state.ctx.sectorOther.length>=2);
+  document.getElementById('ctxNext').disabled = !(allAnswered && sectorOk);
+}
+function finishContext(){ go('s-areas'); }
+
+/* ── NIVEL 1 ────────────────────────────────────────────────── */
+function renderAreas(){
+  const grid = document.getElementById('areaGrid');
+  grid.innerHTML = AREAS.map(a=>{
+    const sel = state.selectedAreas.includes(a.id);
+    const disabled = !sel && state.selectedAreas.length>=3;
+    const desc = AREA_DESCRIPTIONS[a.id] || "";
+    return `<div class="area-card ${sel?'selected':''} ${disabled?'disabled':''}" onclick="toggleArea(${a.id})">
+      <div class="check"></div>
+      <div class="area-n">ÁREA ${String(a.id).padStart(2,'0')}</div>
+      <div class="area-n-name">${a.name}</div>
+      ${desc?`<div class="area-desc">${desc}</div>`:''}
+    </div>`;
+  }).join('');
+  document.getElementById('areaCount').textContent = state.selectedAreas.length;
+  document.getElementById('areasNext').disabled = state.selectedAreas.length === 0;
+}
+function toggleArea(id){
+  const i = state.selectedAreas.indexOf(id);
+  if(i>=0){ state.selectedAreas.splice(i,1); delete state.selectedSubs[id]; }
+  else if(state.selectedAreas.length<3) state.selectedAreas.push(id);
+  saveStateToStorage(); renderAreas();
+}
+function goToSubareas(){ go('s-subs'); }
+
+function toggleNoFit(){
+  const f = document.getElementById('noFitForm');
+  f.style.display = f.style.display==='none' ? 'grid' : 'none';
+  if(f.style.display==='grid') document.getElementById('noFitText').focus();
+}
+function sendNoFit(){
+  const txt = (document.getElementById('noFitText').value||'').trim();
+  const email = (document.getElementById('noFitEmail').value||'').trim();
+  const msg = document.getElementById('noFitMsg');
+  if(txt.length < 10){ msg.style.color='var(--crit)'; msg.textContent='Cuéntanos un poco más (mínimo 10 caracteres).'; return; }
+  if(!email.includes('@')){ msg.style.color='var(--crit)'; msg.textContent='Necesitamos un email válido para responderte.'; return; }
+  const subject = encodeURIComponent('[NO ENCAJA] Caso fuera de las 10 áreas — Tu Solución');
+  const ctxLine = CONTEXT_QS.map(q=>`${q.label}: ${state.ctx[q.key]||'—'}`).join(' · ');
+  const body = encodeURIComponent(`Caso reportado desde el diagnóstico Tu Solución:\n\nMI CASO:\n${txt}\n\nEMAIL DE CONTACTO:\n${email}\n\nCONTEXTO:\n${ctxLine}\n\n— Enviado desde www.masesora.com/tu-solucion`);
+  window.location.href = `mailto:${CONFIG.teamEmail}?subject=${subject}&body=${body}`;
+  msg.style.color='var(--ok)'; msg.textContent='✓ Abriendo tu cliente de correo. Si no se abre, escribe a info@masesora.com.';
+}
+
+/* ── NIVEL 2 — multi-select máx 2 por área ──────────────────── */
+function renderSubs(){
+  const c = document.getElementById('subsContainer');
+  c.innerHTML = state.selectedAreas.map(aid=>{
+    const a = AREAS.find(x=>x.id===aid);
+    const aDesc = AREA_DESCRIPTIONS[a.id] || "";
+    const sel = state.selectedSubs[aid] || [];
+    return `<div class="sub-block">
+      <div class="sub-area">ÁREA ${String(a.id).padStart(2,'0')} · ${a.name.toUpperCase()}</div>
+      ${aDesc?`<div class="sub-desc">${aDesc}</div>`:''}
+      <h3>¿Cuál de estas situaciones reconoces?</h3>
+      <p class="sub-hint">Selecciona hasta 2 — cuanto más concreto, más preciso el diagnóstico.</p>
+      <div class="sub-opts">
+        ${a.subs.map(s=>{
+          const isSel = sel.includes(s.id);
+          const isMaxed = !isSel && sel.length >= 2;
+          return `<button type="button" class="sub-opt ${isSel?'selected':''} ${isMaxed?'maxed':''}"
+            onclick="toggleSub(${aid},'${s.id}')"
+            title="${SUB_DESCRIPTIONS[s.id]||''}">${s.name}</button>`;
+        }).join('')}
+      </div>
+      ${sel.length===2?`<div class="sub-max-note">✓ Máximo alcanzado para esta área</div>`:''}
+    </div>`;
+  }).join('');
+  checkSubs();
+}
+function toggleSub(aid, sid){
+  if(!state.selectedSubs[aid]) state.selectedSubs[aid] = [];
+  const arr = state.selectedSubs[aid];
+  const idx = arr.indexOf(sid);
+  if(idx >= 0){ arr.splice(idx, 1); }
+  else if(arr.length < 2){ arr.push(sid); }
+  saveStateToStorage(); renderSubs();
+}
+function checkSubs(){
+  const ok = state.selectedAreas.every(a => state.selectedSubs[a] && state.selectedSubs[a].length > 0);
+  document.getElementById('subsNext').disabled = !ok;
+}
+function goToQuestions(){ go('s-qs'); }
+
+/* ── NIVEL 3 ────────────────────────────────────────────────── */
+function getSelectedSubObjects(){
+  const result = [];
+  state.selectedAreas.forEach(aid=>{
+    const a = AREAS.find(x=>x.id===aid);
+    (state.selectedSubs[aid] || []).forEach(sid=>{
+      const s = a.subs.find(x=>x.id===sid);
+      if(s) result.push({ area:a, sub:s });
+    });
+  });
+  return result;
+}
+
+function renderQuestions(){
+  const c = document.getElementById('qsContainer');
+  const subs = getSelectedSubObjects();
+  c.innerHTML = subs.map(({area,sub})=>{
+    const items = getPriorityQs(sub.qs);
+    return `<div class="sub-head">
+      <div class="sub-n">${sub.id}</div>
+      <div class="sub-t">${sub.name.toUpperCase()}<small>${area.name}</small></div>
+    </div>
+    <div class="q-list">
+      ${items.map(({q,origI})=>{
+        const key = `${sub.id}-${origI}`;
+        const cur = state.answers[key];
+        return `<div class="q-row">
+          <div class="q-text">${q.t}<span class="q-dim">${q.d}</span></div>
+          <div class="q-anchors">
+            ${q.a.map((anchor,ai)=>{
+              const v=ai+1; const selCls=cur===v?`sel-${v}`:'';
+              return `<button type="button" class="q-anchor ${selCls}" onclick="setAnswer('${key}',${v})"><span class="v">${v}</span>${anchor}</button>`;
+            }).join('')}
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }).join('');
+  checkQuestions();
+}
+function setAnswer(key, val){ state.answers[key]=val; saveStateToStorage(); renderQuestions(); }
+function checkQuestions(){
+  const subs = getSelectedSubObjects();
+  const required = subs.reduce((s,{sub})=>s+getPriorityQs(sub.qs).length, 0);
+  const done = subs.reduce((acc,{sub})=>acc+getPriorityQs(sub.qs).filter(({origI})=>state.answers[`${sub.id}-${origI}`]).length, 0);
+  document.getElementById('qsNext').disabled = done < required;
+}
+function finishQuestions(){ saveStateToStorage(); go('s-damage'); }
+
+/* ── NIVEL 4 — DAÑOS ────────────────────────────────────────── */
+function renderDamage(){
+  const c = document.getElementById('damageContainer');
+  c.innerHTML = DAMAGE_QS.map((dq, i)=>{
+    const cur = state.damage[dq.key];
+    return `<div class="damage-q-block">
+      <div class="damage-q-num">Pregunta ${i+1} de 3</div>
+      <div class="damage-q-text">${dq.q}</div>
+      <div class="damage-opts">
+        ${dq.opts.map(opt=>`<button type="button" class="damage-opt ${cur===opt?'selected':''}" onclick="setDamage('${dq.key}',this.textContent)">${opt}</button>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+  checkDamage();
+}
+function setDamage(key, val){ state.damage[key]=val; saveStateToStorage(); renderDamage(); }
+function checkDamage(){
+  const ok = DAMAGE_QS.every(dq => state.damage[dq.key]);
+  document.getElementById('damageNext').disabled = !ok;
+}
+function finishDamage(){
+  state.finished = new Date().toISOString();
+  state.analysis = computeAnalysis();
+  saveStateToStorage();
+  renderResult(state.analysis);
+  go('s-result');
+}
+
+/* ── CÁLCULO ─────────────────────────────────────────────────── */
+function computeAnalysis(){
+  const subs = getSelectedSubObjects();
+  const subScores = subs.map(({area,sub})=>{
+    const byDim = { S:[], E:[], U:[] };
+    const items = getPriorityQs(sub.qs);
+    items.forEach(({q,origI})=>{ const v=state.answers[`${sub.id}-${origI}`]; if(v) byDim[q.d].push(v); });
+    const avg = arr => arr.length ? arr.reduce((s,n)=>s+n,0)/arr.length : 0;
+    const S=+avg(byDim.S).toFixed(2), E=+avg(byDim.E).toFixed(2), U=+avg(byDim.U).toFixed(2);
+    const compound=+(CONFIG.weights.S*S+CONFIG.weights.E*E+CONFIG.weights.U*U).toFixed(2);
+    const allAnswers=items.map(({origI})=>state.answers[`${sub.id}-${origI}`]).filter(Boolean);
+    const flat=allAnswers.length>=4&&new Set(allAnswers).size===1;
+    const contradictory=(S>=4&&E<=1.5)||(E>=4&&S<=1.5);
+    const flags=[]; if(flat) flags.push("respuestas-planas"); if(contradictory) flags.push("S/E-incoherente");
+    return { area, sub, S, E, U, compound, flags };
+  });
+
+  const sorted = [...subScores].sort((a,b)=>b.compound-a.compound);
+  let primary, secondary, metaProblem=null;
+
+  if(sorted.length>=2){
+    primary=sorted[0]; secondary=sorted[1];
+    if(primary.compound>=CONFIG.metaThreshold && secondary.compound>=CONFIG.metaThreshold){
+      const pair=[primary.sub.id, secondary.sub.id].sort();
+      const match=META_MATRIX.find(m=>{ const s2=[...m.pair].sort(); return s2[0]===pair[0]&&s2[1]===pair[1]; });
+      if(match) metaProblem=match;
+    }
+  } else {
+    const only=sorted[0];
+    const dims=[{key:"Severidad operativa",val:only.S},{key:"Impacto económico",val:only.E},{key:"Urgencia",val:only.U}].sort((a,b)=>b.val-a.val);
+    primary={...only, label:`${only.sub.name} · ${dims[0].key}`};
+    secondary={...only, label:`${only.sub.name} · ${dims[1].key}`, compound:dims[1].val};
+  }
+
+  const avgCompound=+(sorted.reduce((s,x)=>s+x.compound,0)/sorted.length).toFixed(2);
+  const allFlags=sorted.flatMap(x=>x.flags.map(f=>`[${x.sub.id}] ${f}`));
+  return { subScores:sorted, primary, secondary, metaProblem, avgCompound, flags:allFlags };
+}
+
+/* ── HERRAMIENTA DERIVADA ───────────────────────────────────── */
+function deriveTool(analysis){
+  if(analysis.metaProblem) return { source:"meta", tool:analysis.metaProblem.tool, meta:catalogMeta(analysis.primary.area.id,true) };
+  return { source:"primary", tool:analysis.primary.sub.tool, meta:catalogMeta(analysis.primary.area.id,false) };
+}
+
+/* ── RESULTADO ──────────────────────────────────────────────── */
+function renderResult(a){
+  const toolRes=deriveTool(a);
+  const primaryName=a.primary.label||`${a.primary.sub.id} · ${a.primary.sub.name}`;
+  const secondaryName=a.secondary.label||`${a.secondary.sub.id} · ${a.secondary.sub.name}`;
+  const metaBlock=a.metaProblem?`<div class="res-block res-meta"><div class="res-label">Meta-diagnóstico</div><div class="m-name">${a.metaProblem.name}</div><div class="m-detail">${a.metaProblem.desc}</div></div>`:'';
+  const justifications=[
+    `El problema principal está en ${a.primary.sub.name.toLowerCase()} — es donde ahora mismo el negocio pierde más valor.`,
+    a.metaProblem
+      ? `La combinación con ${a.secondary.sub.name.toLowerCase()} refuerza el problema: no se resuelve atacando solo uno de los dos frentes.`
+      : `El problema secundario está en ${a.secondary.sub.name.toLowerCase()} — amplifica el principal pero se aborda en segunda fase.`,
+    a.metaProblem
+      ? `La herramienta derivada está diseñada para resolver los dos puntos en un único sistema, no como dos parches separados.`
+      : `La herramienta derivada ataca directamente el problema principal con una solución ya probada en casos similares.`
+  ];
+  document.getElementById('resultBox').innerHTML = `
+    <div class="res-block res-problem"><div class="res-label">Problema principal</div><div class="p-name">${a.primary.sub.name}</div></div>
+    <div class="res-block res-problem"><div class="res-label">Problema secundario</div><div class="p-name">${a.secondary.sub.name}</div></div>
+    ${metaBlock}
+    <div class="res-block"><div class="res-label">Herramienta operativa derivada</div>
+      <div class="res-tool"><div class="t-name">${toolRes.tool.name}</div><dl>
+        <dt>Qué hace</dt><dd>${toolRes.tool.does}</dd>
+        <dt>Qué problema resuelve</dt><dd>${toolRes.tool.solves}</dd>
+        <dt>Qué resultado operativo genera</dt><dd>${toolRes.tool.output}</dd>
+        <dt>Tipo de solución</dt><dd>${toolRes.meta.tipo}</dd>
+        <dt>Plazo orientativo</dt><dd>${toolRes.meta.plazo}</dd>
+        <dt>Entregables incluidos</dt><dd>${toolRes.meta.entregables}</dd>
+        <dt>Inversión</dt><dd>Detallada en la ficha técnica que recibirás por email.</dd>
+      </dl></div>
+    </div>
+    <div class="res-block res-just"><div class="res-label">Justificación operativa</div><ol>${justifications.map(j=>`<li>${j}</li>`).join('')}</ol></div>`;
+}
+
+/* ── LEAD + MONGODB ─────────────────────────────────────────── */
+async function saveLeadToMongo(payload){
+  try{
+    const res = await fetch(CONFIG.leadsApiUrl, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if(data.ok) console.log('[Masesora] Lead guardado en MongoDB:', data.id);
+    else console.warn('[Masesora] Respuesta inesperada del servidor:', data);
+  }catch(err){
+    console.warn('[Masesora] No se pudo guardar el lead (continúa sin bloquear):', err);
+  }
+}
+
+function captureLead(e){
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const email = fd.get('email').trim();
+  const cls = classifyEmail(email);
+  state.lead = {
+    name: fd.get('name').trim(),
+    email,
+    company: fd.get('company').trim(),
+    consent: fd.get('consent') ? true : false,
+    consentComercial: fd.get('consentComercial') ? true : false,
+    emailDomain: cls.domain,
+    emailIsFree: cls.isFree,
+    capturedAt: new Date().toISOString()
+  };
+  clearStorage();
+
+  const cta = document.getElementById('leadBlock');
+  cta.innerHTML = `<h3 style="color:var(--gold)">Ficha técnica enviada.</h3>
+    <p style="color:#D6D1C1">Te llegará en menos de 24 horas a <strong>${state.lead.email}</strong> con alcance detallado, entregables, plazo e inversión estimada.</p>
+    <button class="btn btn-primary" onclick="sendClientEmail()">📧 Enviar ahora al cliente</button>`;
+  document.getElementById('teamPanel').style.display = 'block';
+  setTimeout(sendTeamPrd, 400);
+
+  /* Guardar en MongoDB solo si hay consentimiento RGPD */
+  if(state.lead.consent){
+    saveLeadToMongo({
+      name: state.lead.name,
+      email: state.lead.email,
+      company: state.lead.company,
+      consent: state.lead.consent,
+      consentComercial: state.lead.consentComercial,
+      emailIsFree: state.lead.emailIsFree,
+      context: state.ctx,
+      diagnosis: {
+        primaryProblem: state.analysis?.primary?.sub?.name || '',
+        secondaryProblem: state.analysis?.secondary?.sub?.name || '',
+        tool: state.analysis ? deriveTool(state.analysis).tool.name : '',
+        areas: state.selectedAreas,
+        subs: Object.values(state.selectedSubs).flat()
+      },
+      damage: state.damage || {}
+    });
+  }
+  return false;
+}
+
+function buildClientEmailBody(){
+  const a=state.analysis, toolRes=deriveTool(a), lead=state.lead;
+  let body=`Hola ${lead.name.split(' ')[0]},\n\n`;
+  body+=`Aquí tienes la ficha técnica derivada directamente de lo que nos has contado en el diagnóstico.\n\n`;
+  body+=`────────────────────────────\nLO QUE HEMOS DETECTADO\n────────────────────────────\n\n`;
+  if(a.metaProblem){
+    body+=`El punto crítico es una combinación que se refuerza a sí misma entre «${a.primary.sub.name}» y «${a.secondary.sub.name}».\n\n${a.metaProblem.desc}\n\n`;
+  } else {
+    body+=`Problema principal: ${a.primary.sub.name}.\nProblema secundario: ${a.secondary.sub.name}.\n\n`;
+  }
+  body+=`────────────────────────────\nLA HERRAMIENTA QUE TU NEGOCIO NECESITA\n────────────────────────────\n\n`;
+  body+=`${toolRes.tool.name}\nTipo: ${toolRes.meta.tipo}\n\nQué hace\n${toolRes.tool.does}\n\nQué problema resuelve\n${toolRes.tool.solves}\n\nResultado operativo\n${toolRes.tool.output}\n\n`;
+  body+=`────────────────────────────\nSIGUIENTE PASO\n────────────────────────────\n\n`;
+  body+=`Si esto encaja con tu negocio, responde con la palabra «Adelante» a este correo. En 24 horas te enviamos el alcance completo, el plazo cerrado y la inversión.\n\nSin reuniones. Sin llamadas comerciales no solicitadas.\n\n—\nMasesora\n${CONFIG.website}`;
+  return body;
+}
+function sendClientEmail(){
+  const lead=state.lead;
+  window.location.href=`mailto:${lead.email}?subject=${encodeURIComponent(`Tu ficha técnica — ${lead.company}`)}&body=${encodeURIComponent(buildClientEmailBody())}`;
+}
+
+function buildTeamPrdBody(){
+  const a=state.analysis, toolRes=deriveTool(a), lead=state.lead, subs=getSelectedSubObjects();
+  let body=`[PRD] Nueva auditoría — ${lead.company}\n${'='.repeat(48)}\n\n`;
+  body+=`CLIENTE\nNombre: ${lead.name}\nEmail: ${lead.email}\nNegocio: ${lead.company}\n`;
+  body+=`Email: ${lead.emailIsFree?'GRATUITO ('+lead.emailDomain+')':'PROFESIONAL ('+lead.emailDomain+')'}\n`;
+  body+=`RGPD: ${lead.consent?'SÍ':'NO'} · Comercial: ${lead.consentComercial?'SÍ':'NO'}\n\n`;
+  body+=`CONTEXTO OPERATIVO\n`;
+  CONTEXT_QS.forEach(q=>{ let val=state.ctx[q.key]||'—'; if(q.key==='sector'&&val==='Otro'&&state.ctx.sectorOther) val=`Otro — ${state.ctx.sectorOther}`; body+=`${q.label}: ${val}\n`; });
+  body+=`\nEVALUACIÓN DE DAÑOS\n`;
+  body+=`Tiempo perdido/semana: ${state.damage?.timeWasted||'—'}\n`;
+  body+=`Dinero en la mesa: ${state.damage?.moneyLeft||'—'}\n`;
+  body+=`¿Aguantaría el doble?: ${state.damage?.wouldCollapse||'—'}\n\n`;
+  body+=`DIAGNÓSTICO\nScore compuesto: ${a.avgCompound}\n`;
+  body+=`Principal: ${a.primary.sub.id} ${a.primary.sub.name} · S ${a.primary.S} E ${a.primary.E} U ${a.primary.U} → ${a.primary.compound}\n`;
+  body+=`Secundario: ${a.secondary.sub.id} ${a.secondary.sub.name} · ${a.secondary.compound||'—'}\n`;
+  if(a.metaProblem) body+=`Meta: ${a.metaProblem.name}\n`;
+  if(a.flags?.length){ body+=`\n⚠ INCONSISTENCIAS\n`; a.flags.forEach(f=>body+=`- ${f}\n`); }
+  body+=`\nHERRAMIENTA (${toolRes.source.toUpperCase()})\n${toolRes.tool.name}\nTipo: ${toolRes.meta.tipo} · Plazo: ${toolRes.meta.plazo}\n`;
+  body+=`\nTRAZABILIDAD\n`;
+  subs.forEach(({sub})=>{
+    body+=`\n[${sub.id}] ${sub.name}\n`;
+    getPriorityQs(sub.qs).forEach(({q,origI})=>{ const v=state.answers[`${sub.id}-${origI}`]; body+=`${String(origI+1).padStart(2,'0')}. (${q.d}/${v||'—'}) ${q.t} → ${v?q.a[v-1]:'sin resp.'}\n`; });
+  });
+  body+=`\nInicio: ${state.started}\nFin: ${state.finished}\nGenerado: ${CONFIG.website}\n`;
+  return body;
+}
+function sendTeamPrd(){
+  const lead=state.lead;
+  window.location.href=`mailto:${CONFIG.teamEmail}?subject=${encodeURIComponent(`[PRD] Auditoría — ${lead?.company||'Cliente'}`)}&body=${encodeURIComponent(buildTeamPrdBody())}`;
+}
+
+function downloadJSON(){
+  const data={ context:state.ctx, selectedAreas:state.selectedAreas, selectedSubs:state.selectedSubs, answers:state.answers, damage:state.damage, analysis:{ primary:state.analysis?.primary?.sub?.name, secondary:state.analysis?.secondary?.sub?.name, avgCompound:state.analysis?.avgCompound }, lead:{ name:state.lead?.name, company:state.lead?.company }, started:state.started, finished:state.finished };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download=`masesora-diagnostico-${Date.now()}.json`; a.click(); URL.revokeObjectURL(url);
+}
+
+function downloadPDF(){ document.body.classList.add('printing'); setTimeout(()=>{ window.print(); document.body.classList.remove('printing'); },200); }
+
+function resetAll(){
+  if(!confirm('¿Iniciar un nuevo diagnóstico? Se perderán los datos actuales.')) return;
+  state.ctx={}; state.selectedAreas=[]; state.selectedSubs={}; state.answers={}; state.damage={};
+  state.started=null; state.finished=null; state.analysis=null; state.lead=null;
+  clearStorage(); go('s-intro');
+}
+
+/* ── AUTO-RESUME ─────────────────────────────────────────────── */
+function showResumeBanner(saved){
+  const banner=document.createElement('div'); banner.className='resume-banner';
+  const partial=saved.answers&&Object.keys(saved.answers).length;
+  const areas=saved.selectedAreas&&saved.selectedAreas.length;
+  banner.innerHTML=`<div><strong>Tienes un diagnóstico a medio hacer.</strong>${areas?` ${areas} área${areas>1?'s':''} elegida${areas>1?'s':''}.`:''}${partial?` ${partial} respuestas guardadas.`:''} ¿Lo retomamos?</div>
+    <div class="resume-actions"><button class="primary" onclick="resumeFromStorage()">Retomar →</button><button onclick="discardSaved()">Empezar de cero</button></div>`;
+  document.body.insertBefore(banner, document.querySelector('.stepbar'));
+}
+function resumeFromStorage(){
+  const saved=loadStateFromStorage();
+  if(!saved) return;
+  // Normaliza selectedSubs al nuevo formato array si viene del formato antiguo
+  const normalizedSubs={};
+  Object.entries(saved.selectedSubs||{}).forEach(([k,v])=>{ normalizedSubs[k]=Array.isArray(v)?v:(v?[v]:[]); });
+  Object.assign(state,{ ctx:saved.ctx||{}, selectedAreas:saved.selectedAreas||[], selectedSubs:normalizedSubs, answers:saved.answers||{}, damage:saved.damage||{}, started:saved.started||new Date().toISOString() });
+  document.querySelector('.resume-banner')?.remove();
+  const hasAnswers=Object.keys(state.answers).length>0;
+  const hasDamage=Object.keys(state.damage).length>0;
+  const hasSubs=state.selectedAreas.length>0&&state.selectedAreas.every(a=>state.selectedSubs[a]&&state.selectedSubs[a].length>0);
+  if(hasAnswers&&hasDamage) go('s-damage');
+  else if(hasAnswers) go('s-qs');
+  else if(hasSubs) go('s-subs');
+  else if(state.selectedAreas.length>0) go('s-areas');
+  else go('s-ctx');
+}
+function discardSaved(){ clearStorage(); document.querySelector('.resume-banner')?.remove(); }
+
+window.addEventListener('DOMContentLoaded',()=>{
+  const saved=loadStateFromStorage();
+  if(saved&&hasMeaningfulProgress(saved)) showResumeBanner(saved);
+});
+</script>
+
+</body>
+</html>
