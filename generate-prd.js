@@ -1,10 +1,10 @@
 /**
- * MASESORA · Endpoint de generación de PRD adaptativo en vivo con Claude
+ * MASESORA · Endpoint de generación de Tu Solución adaptativa en vivo con Claude
  * ========================================================================
  * POST /api/generate-prd
  *
  * Cuestionario adaptativo de 7 preguntas con ramificación según pieza.
- * Devuelve PRD en streaming SSE con DOS opciones (de 3 niveles posibles)
+ * Devuelve Tu Solución en streaming SSE con DOS opciones (de 3 niveles posibles)
  * ajustadas al perfil real del cliente y precios calculados en vivo.
  * Tras cerrar el streaming, envía email a info@masesora.com con todo.
  *
@@ -93,11 +93,11 @@ function getOptionsForProfile(ctx) {
 }
 
 // ============================================================
-// SYSTEM PROMPT MAS@FRAME®
+// SYSTEM PROMPT TU SOLUCIÓN
 // ============================================================
 const SYSTEM_PROMPT = `Formo parte del Equipo MASESORA · Constructores de Sistemas.
 Recibo los datos de un diagnóstico adaptativo completado por una empresa cliente.
-Mi objetivo es generar el PRD que se mostrará INMEDIATAMENTE en pantalla
+Mi objetivo es generar Tu Solución, que se mostrará INMEDIATAMENTE en pantalla
 al cliente, en streaming, con DOS alternativas adaptadas a su perfil real.
 
 # REGLAS DE TONO
@@ -107,12 +107,12 @@ al cliente, en streaming, con DOS alternativas adaptadas a su perfil real.
 - El cliente lee y siente: "esta gente sabe construir".
 
 # REGLAS DE FORMATO
-- Devuelve el PRD en MARKDOWN (con HTML literal donde se indique).
+- Devuelve Tu Solución en MARKDOWN (con HTML literal donde se indique).
 - Usa H2 para las secciones.
 - 900-1.400 palabras totales.
 - Si el cliente no aporta info, NO te la inventes — usa "se confirma en sesión".
-- NUNCA menciones marcas comerciales en el PRD (ni Notion, ni Trello, ni Make.com, ni HubSpot, ni Airtable, ni Sheets...). Usa categorías abstractas.
-- NUNCA menciones nombres concretos de herramientas en el PRD que ve el cliente · usa categorías abstractas (la construcción técnica detallada se afina en la sesión).
+- NUNCA menciones marcas comerciales en Tu Solución (ni Notion, ni Trello, ni Make.com, ni HubSpot, ni Airtable, ni Sheets...). Usa categorías abstractas.
+- NUNCA menciones nombres concretos de herramientas en Tu Solución que ve el cliente · usa categorías abstractas (la construcción técnica detallada se afina en la sesión).
 
 # OPCIONES SEGÚN PERFIL · NUNCA mostrar las 3, solo las 2 que encajan
 - Autónomo → LITE + PRO
@@ -122,7 +122,7 @@ al cliente, en streaming, con DOS alternativas adaptadas a su perfil real.
 El backend te pasa en el contexto las dos opciones que tocan + los precios calculados.
 USA EXACTAMENTE esos precios. NO inventes.
 
-# ESTRUCTURA OBLIGATORIA DEL PRD
+# ESTRUCTURA OBLIGATORIA DE TU SOLUCIÓN
 
 ## Pieza que frena tu negocio · [NOMBRE EXACTO DE LA PIEZA]
 Una frase con la causa raíz canónica de la pieza (te la doy en el contexto).
@@ -162,9 +162,9 @@ sustituyendo [PLACEHOLDERS] por contenido personalizado:
 </div>
 
 # REGLAS PARA LA DESCRIPCIÓN DEL STACK · IMPORTANTE
-NO menciones nombres exactos de herramientas tecnológicas en el PRD que ve el cliente.
+NO menciones nombres exactos de herramientas tecnológicas en Tu Solución que ve el cliente.
 La construcción técnica concreta (qué herramienta, qué reglas, qué integraciones) se afina
-en la sesión de validación de 20 minutos. El PRD da DIRECCIÓN, no plan de implementación.
+en la sesión de validación de 20 minutos. Tu Solución da DIRECCIÓN, no plan de implementación.
 
 Usa categorías abstractas según nivel:
 
@@ -251,7 +251,7 @@ ${diagnosis.intensity || 'N/A'} de 5
 
 USA estos precios EXACTOS en el HTML. NO inventes otros.
 
-Genera ahora el PRD MAS@FRAME® siguiendo la estructura obligatoria.`;
+Genera ahora Tu Solución siguiendo la estructura obligatoria.`;
 }
 
 // ============================================================
@@ -272,7 +272,7 @@ async function sendNotificationEmail({ payload, prdMarkdown, code, expiresAt }) 
   const html = `
 <!DOCTYPE html>
 <html><body style="font-family:system-ui,sans-serif;color:#1A1A1A;line-height:1.6">
-  <h2 style="color:#0F1A35;border-bottom:2px solid #B89D52;padding-bottom:8px">📋 Nuevo PRD generado · MASESORA</h2>
+  <h2 style="color:#0F1A35;border-bottom:2px solid #B89D52;padding-bottom:8px">📋 Nueva Tu Solución generada · MASESORA</h2>
 
   <h3 style="color:#0F1A35">Cliente</h3>
   <ul>
@@ -302,7 +302,7 @@ async function sendNotificationEmail({ payload, prdMarkdown, code, expiresAt }) 
     <div style="font-size:.9rem;color:#4A4A4A;margin-top:6px">Válido hasta: <strong>${new Date(expiresAt).toLocaleString('es-ES', { timeZone:'Europe/Madrid' })}</strong> · ${DISCOUNT_PCT}% descuento</div>
   </div>
 
-  <h3 style="color:#0F1A35">📄 PRD generado por la IA</h3>
+  <h3 style="color:#0F1A35">📄 Tu Solución generada por la IA</h3>
   <div style="background:#FAF7F2;padding:20px;border-radius:10px;border-left:4px solid #B89D52">
 ${prdMarkdown.replace(/\n/g, '<br>')}
   </div>
@@ -319,7 +319,7 @@ ${prdMarkdown.replace(/\n/g, '<br>')}
     await smtpTransporter.sendMail({
       from: `"Tu Solución · MASESORA" <${process.env.SMTP_USER}>`,
       to: NOTIFY_EMAIL,
-      subject: `📋 Nuevo PRD · ${client.name || 'cliente'} · ${PIECES[diagnosis.piece || 'P4']?.name} · código ${code}`,
+      subject: `📋 Nueva Tu Solución · ${client.name || 'cliente'} · ${PIECES[diagnosis.piece || 'P4']?.name} · código ${code}`,
       html
     });
     console.log(`[notify] Email enviado a ${NOTIFY_EMAIL} · código ${code}`);
@@ -388,7 +388,7 @@ app.post('/api/generate-prd', async (req, res) => {
 
   } catch (err) {
     console.error('[generate-prd] Error:', err);
-    sendEvent('error', { message: 'No hemos podido construir tu PRD ahora. Reserva igualmente y lo construimos en la reunión.' });
+    sendEvent('error', { message: 'No hemos podido construir Tu Solución ahora. Reserva igualmente y la construimos en la reunión.' });
     res.end();
   }
 });
