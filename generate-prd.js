@@ -28,13 +28,15 @@ const DISCOUNT_PCT = parseInt(process.env.DISCOUNT_PERCENT || '15', 10);
 const DISCOUNT_HOURS = parseInt(process.env.DISCOUNT_HOURS || '2', 10);
 const NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || 'info@masesora.com';
 
-// SMTP
+// SMTP · auto-detección SSL/STARTTLS según puerto
+const smtpPort = parseInt(process.env.SMTP_PORT || '587', 10);
 const smtpTransporter = (process.env.SMTP_HOST && process.env.SMTP_USER)
   ? nodemailer.createTransport({
       host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || '587', 10),
-      secure: false,
-      auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
+      port: smtpPort,
+      secure: smtpPort === 465,  // true para SSL (465) · false para STARTTLS (587)
+      auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+      tls: { rejectUnauthorized: false }  // tolerante con certificados de proveedores no-Big-Tech (Nominalia, Strato, etc.)
     })
   : null;
 
@@ -109,8 +111,8 @@ al cliente, en streaming, con DOS alternativas adaptadas a su perfil real.
 - Usa H2 para las secciones.
 - 900-1.400 palabras totales.
 - Si el cliente no aporta info, NO te la inventes — usa "se confirma en sesión".
-- NUNCA propongas Notion ni Trello (el cliente no los quiere).
-- Si el cliente ya tiene una herramienta, dilo: "tu HubSpot integrado", "tu ContaSimple aprovechado".
+- NUNCA menciones marcas comerciales en el PRD (ni Notion, ni Trello, ni Make.com, ni HubSpot, ni Airtable, ni Sheets...). Usa categorías abstractas.
+- NUNCA menciones nombres concretos de herramientas en el PRD que ve el cliente · usa categorías abstractas (la construcción técnica detallada se afina en la sesión).
 
 # OPCIONES SEGÚN PERFIL · NUNCA mostrar las 3, solo las 2 que encajan
 - Autónomo → LITE + PRO
@@ -137,15 +139,15 @@ sustituyendo [PLACEHOLDERS] por contenido personalizado:
     <div class="alt-tag">[NIVEL · ETIQUETA]</div>
     <h3 class="alt-name">[NOMBRE PERSONALIZADO DEL SISTEMA PARA ESTE CLIENTE]</h3>
     <p class="alt-desc">[2-3 líneas describiendo qué hace para él]</p>
-    <div class="alt-stack-label">Stack técnico</div>
+    <div class="alt-stack-label">Lo que vamos a construir</div>
     <ul class="alt-stack">
-      [3-4 ítems con herramientas reales adaptadas · usa <code> para nombres]
+      [3-4 ítems con CATEGORÍAS ABSTRACTAS · sin nombres comerciales · ej: "hub central operativo · automatizaciones de mensajes · agenda sincronizada · asistente IA conversacional" · NO uses <code>]
     </ul>
     <div class="alt-kpis-label">Lo que se mueve</div>
     <ul class="alt-kpis">
       [3-4 KPIs con valor actual → objetivo · usa <strong> para los números]
     </ul>
-    <p class="alt-roadmap">[<strong>X semanas</strong> · breve descripción de fases]</p>
+    <p class="alt-roadmap">[<strong>X semanas</strong> · 2-3 FASES abstractas tipo "Fase 1 · Mapeo · Fase 2 · Construcción · Fase 3 · Onboarding" · NUNCA describas qué pasa cada semana]</p>
     <div class="alt-price">
       <div class="alt-price-label">Inversión orientativa</div>
       <div class="alt-price-range"><span class="alt-price-from">Desde</span> <strong>[PRECIO €]</strong></div>
@@ -159,10 +161,29 @@ sustituyendo [PLACEHOLDERS] por contenido personalizado:
   </div>
 </div>
 
-# REGLAS PARA EL STACK TÉCNICO POR NIVEL
-- LITE: HTML5 + JS · Google Sheets · Apps Script · sin coste mensual
-- PRO: HTML personalizado o Craft · ContaSimple (si ya lo tiene, integramos) · Google Sheets/Calendly · WhatsApp Business
-- PREMIUM: Craft como hub · CRM existente o Brevo/Pipedrive · Make.com · Claude/GPT como asistente
+# REGLAS PARA LA DESCRIPCIÓN DEL STACK · IMPORTANTE
+NO menciones nombres exactos de herramientas tecnológicas en el PRD que ve el cliente.
+La construcción técnica concreta (qué herramienta, qué reglas, qué integraciones) se afina
+en la sesión de validación de 20 minutos. El PRD da DIRECCIÓN, no plan de implementación.
+
+Usa categorías abstractas según nivel:
+
+- LITE: "Mini-app personalizada en navegador · base de datos en cuenta del cliente · automatizaciones ligeras · sin coste mensual"
+- PRO: "Hub central operativo · gestor de facturación integrado (aprovechando lo que ya tiene si aplica) · canal de mensajería automatizada · agenda sincronizada"
+- PREMIUM: "Hub operativo central · CRM integrado (existente o nuevo según caso) · capa de automatizaciones encadenadas · asistente IA conversacional"
+
+Cuando el cliente diga que YA tiene una herramienta concreta, RECONOCE la categoría sin mencionar
+el nombre técnico: en vez de "tu HubSpot Free integrado", di "tu CRM actual aprovechado e integrado".
+
+# REGLAS PARA EL ROADMAP · SUSTITUIR DETALLE SEMANAL POR FASES
+NO des roadmap semana a semana detallado. Usa fases abstractas:
+
+- LITE: "Fase 1 · Mapeo del flujo actual · Fase 2 · Construcción y entrega"
+- PRO: "Fase 1 · Diagnóstico operativo · Fase 2 · Construcción del sistema · Fase 3 · Onboarding y ajuste"
+- PREMIUM: "Fase 1 · Mapeo y arquitectura · Fase 2 · Construcción modular · Fase 3 · Capa de IA y automatizaciones · Fase 4 · Onboarding 1:1"
+
+Indica plazos GENERALES ("2 semanas", "3-5 semanas", "5-8 semanas") sin detallar qué pasa
+en cada semana concreta. Eso se aterriza en la sesión.
 
 ## Acompañamiento incluido en ambas opciones · 3 meses sin coste post-entrega
 "Trabajamos contigo después de la entrega hasta que el sistema sea natural en tu día a día. Si en 30 días no está integrado en tu operativa, ajustamos sin coste."
