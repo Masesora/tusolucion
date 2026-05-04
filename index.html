@@ -146,7 +146,8 @@ h1 em, h2 em, h3 em{font-family:var(--font-italic);font-style:italic;font-weight
 .step-label strong{color:var(--navy);font-weight:800}
 
 /* ============ CUESTIONARIO ============ */
-.q-screen{padding:3.5rem 1.5rem 4rem;min-height:calc(100vh - 50px);display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+.q-screen{padding:3.5rem 1.5rem 4rem;min-height:calc(100vh - 50px)}
+.q-screen.active{display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
 .q-inner{width:100%;max-width:580px}
 
 .q-eyebrow{font-size:.65rem;letter-spacing:.32em;color:var(--gold);font-weight:700;text-transform:uppercase;margin-bottom:1.2rem;text-align:center}
@@ -200,7 +201,8 @@ h1 em, h2 em, h3 em{font-family:var(--font-italic);font-style:italic;font-weight
 @media(max-width:640px){.q-grid{grid-template-columns:1fr}.q-scale{flex-wrap:wrap}}
 
 /* ============ LOADING ============ */
-#screen-loading{justify-content:center;align-items:center;background:linear-gradient(180deg,var(--navy) 0%,var(--navy-deep) 100%);color:var(--cream);min-height:100vh}
+#screen-loading{background:linear-gradient(180deg,var(--navy) 0%,var(--navy-deep) 100%);color:var(--cream);min-height:100vh}
+#screen-loading.active{display:flex;flex-direction:column;justify-content:center;align-items:center}
 #screen-loading .q-text{color:var(--cream)}
 .loading-ecg{width:140px;height:80px;margin-bottom:2.5rem}
 .loading-ecg path{stroke:var(--gold);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-dasharray:300;stroke-dashoffset:300;animation:ecgRun 2.2s ease-in-out infinite}
