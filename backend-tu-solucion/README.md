@@ -1,126 +1,180 @@
-# Backend · Tu Solución con IA en vivo
+# Backend · Tu Solución MASESORA · v2 (Claude + email)
 
-Endpoint de generación de PRD MAS@FRAME® en streaming con OpenAI GPT-4o.
+Endpoint de generación de PRD adaptativo en streaming con **Claude (Anthropic)** + notificación por email a `info@masesora.com` con cada PRD generado.
 
 ---
 
 ## Qué hace
 
-1. Recibe del frontend los datos del cuestionario *(7 micropreguntas)*
-2. Inyecta esos datos en el prompt MAS@FRAME® definitivo
-3. Llama a OpenAI con `stream: true`
-4. Devuelve el PRD palabra por palabra al frontend usando **Server-Sent Events**
-5. Al final, envía un evento extra con el código descuento personalizado
-
-El cliente ve el PRD escribirse en pantalla en directo. Sensación: *"esta gente tiene una IA que está pensando en mí ahora mismo."*
+```
+Cliente termina cuestionario adaptativo (7 preguntas)
+        ↓
+POST /api/generate-prd
+        ↓
+Backend inyecta datos en SYSTEM_PROMPT MAS@FRAME®
+        ↓
+Llama a Claude Sonnet 4.6 con stream=true
+        ↓
+Devuelve PRD palabra por palabra al frontend (SSE)
+        ↓
+Genera código descuento DESC-XXXX (15% · 2h validez)
+        ↓
+Envía email a info@masesora.com con:
+  · Datos cliente · pieza detectada · opciones · precios
+  · Código descuento + caducidad
+  · PRD completo en HTML
+```
 
 ---
 
-## Setup paso a paso
+## Setup paso a paso · ~30-45 min
 
-### 1. Conseguir API key de OpenAI
+### 1. Anthropic API key
 
-- Ir a [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
-- Crear cuenta si no la tienes
-- Crear nueva clave secreta
-- Cargar saldo *(con 10€ aguanta ~50-200 PRDs según largura)*
+1. Crear cuenta en [console.anthropic.com](https://console.anthropic.com)
+2. Cargar saldo (con 10€ aguantas ~50-200 PRDs)
+3. Ir a [console.anthropic.com/settings/keys](https://console.anthropic.com/settings/keys)
+4. Crear nueva clave secreta (empieza por `sk-ant-`)
+5. **Cópiala y guárdala** — solo se ve una vez
 
-### 2. Configurar el proyecto
+### 2. App Password de Gmail (para `info@masesora.com`)
+
+Esto solo funciona si la cuenta tiene **Verificación en 2 pasos** activada.
+
+1. Activar 2FA en [myaccount.google.com/security](https://myaccount.google.com/security) si no está
+2. Ir a [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)
+3. Crear nueva: nombre *"MASESORA backend"*
+4. Google te da una contraseña de **16 caracteres** (sin espacios)
+5. **Cópiala y guárdala** — solo se ve una vez
+
+### 3. Subir el backend a tu repo
+
+Si ya tienes repo en GitHub para el backend:
 
 ```bash
 cd backend-tu-solucion
-npm install
-cp .env.example .env
-# Editar .env y poner tu OPENAI_API_KEY
+git init
+git add .
+git commit -m "v2 backend con Claude + email"
+git remote add origin <tu-repo-url>
+git push -u origin main
 ```
 
-### 3. Probar local
+Si no, créalo nuevo en GitHub con los 5 archivos:
+- `generate-prd.js`
+- `package.json`
+- `.env.example` *(no subas `.env` real al repo)*
+- `README.md`
+- `EJEMPLO-COMPLETO.md`
 
-```bash
-npm start
+### 4. Conectar a Render
+
+1. En Render dashboard → **New +** → **Web Service**
+2. Conecta el repo de GitHub
+3. Configura:
+   - **Build command:** `npm install`
+   - **Start command:** `npm start`
+   - **Region:** Frankfurt (más rápido para España)
+   - **Plan:** Free (suficiente para empezar)
+
+### 5. Variables de entorno en Render
+
+En el panel del Web Service → **Environment** → **Add Environment Variable**:
+
+| Key | Value |
+|---|---|
+| `ANTHROPIC_API_KEY` | `sk-ant-XXX...` *(de paso 1)* |
+| `ANTHROPIC_MODEL` | `claude-sonnet-4-6` |
+| `DISCOUNT_PERCENT` | `15` |
+| `DISCOUNT_HOURS` | `2` |
+| `NOTIFY_EMAIL` | `info@masesora.com` |
+| `SMTP_HOST` | `smtp.gmail.com` |
+| `SMTP_PORT` | `587` |
+| `SMTP_USER` | `info@masesora.com` |
+| `SMTP_PASS` | `xxxxxxxxxxxxxxxx` *(de paso 2 · 16 chars sin espacios)* |
+| `PORT` | `3001` |
+
+### 6. Deploy
+
+Render compila y despliega solo. Te da una URL del tipo:
+
+```
+https://masesora-backend.onrender.com
 ```
 
-Comprobar que arranca:
+### 7. Verificar que funciona
+
 ```bash
-curl http://localhost:3001/api/health
-# → {"ok":true,"model":"gpt-4o","discount_pct":15,"discount_hours":2,"has_api_key":true}
+curl https://masesora-backend.onrender.com/api/health
 ```
 
-### 4. Probar el endpoint con un caso real
+Esperado:
+```json
+{
+  "ok": true,
+  "model": "claude-sonnet-4-6",
+  "discount_pct": 15,
+  "discount_hours": 2,
+  "has_anthropic_key": true,
+  "has_smtp": true,
+  "notify_email": "info@masesora.com",
+  "pieces": 8
+}
+```
+
+Si todo es `true` y `pieces: 8` → **arriba**.
+
+---
+
+## Probar la generación de un PRD
 
 ```bash
-curl -N -X POST http://localhost:3001/api/generate-prd \
+curl -N -X POST https://masesora-backend.onrender.com/api/generate-prd \
   -H "Content-Type: application/json" \
   -d '{
     "client": {
-      "name": "María",
-      "activity": "Reiki y jabones artesanos",
-      "sector": "Salud y bienestar",
-      "size": "Autónomo"
+      "name": "Roberto",
+      "activity": "Despacho de abogados especializado en mercantil",
+      "sector": "Servicios profesionales",
+      "size": "6-15",
+      "volume": "100-500",
+      "email": "roberto@ejemplo.com"
     },
     "diagnosis": {
-      "areaId": 8,
-      "areaName": "Continuidad del titular",
-      "subareaId": "8.1",
-      "subareaName": "Dependencia operativa",
-      "observation": "Llevo dos negocios paralelos y la cabeza no me da",
-      "vision": "Cerrar el día sabiendo que no se me ha escapado nadie",
-      "intensity": 5
+      "piece": "P4",
+      "branchAnswer": "Tengo que mirar varios sitios",
+      "tools": ["contasimple", "crm", "whatsapp", "sheets"],
+      "vision": "Sabría en qué punto está cada caso sin pensarlo",
+      "intensity": 4
     }
   }'
 ```
 
-Deberías ver el PRD streamearse en tu terminal.
+Deberías ver:
+1. PRD streameándose en el terminal
+2. Email llegando a `info@masesora.com` con todo el detalle
 
 ---
 
-## Despliegue
+## Coste por sesión
 
-### Render.com *(igual que el resto de tus servicios)*
-
-1. **Subir este folder** a un repo nuevo de GitHub *(ej: `masesora-backend`)*
-2. **Render → New Web Service** → conectar al repo
-3. **Build command:** `npm install`
-4. **Start command:** `npm start`
-5. **Variables de entorno:** copiar las de `.env.example` con valores reales
-6. Deploy. Render te dará una URL del tipo `https://masesora-backend.onrender.com`
-
-### Conectar con tu-solucion.html
-
-En el frontend *(`tu-solucion.html`)*, cambiar la URL del fetch por la URL de Render:
-
-```js
-const API_BASE = 'https://masesora-backend.onrender.com';
-const response = await fetch(`${API_BASE}/api/generate-prd`, { ... });
-```
-
-Yo te dejo cableado el código del frontend en cuanto valides el mockup v3.
-
----
-
-## Coste estimado de OpenAI
-
-| Modelo | Por sesión | Para 100 sesiones/mes | Para 1.000/mes |
+| Modelo | Por sesión | 100/mes | 1.000/mes |
 |---|---|---|---|
-| **gpt-4o** *(recomendado)* | ~0.10-0.20€ | ~10-20€ | ~100-200€ |
-| **gpt-4o-mini** *(más barato)* | ~0.01-0.03€ | ~1-3€ | ~10-30€ |
+| **claude-sonnet-4-6** *(recomendado)* | ~0.05-0.20 € | ~5-20 € | ~50-200 € |
+| **claude-opus-4-6** *(más calidad)* | ~0.30-1.00 € | ~30-100 € | ~300-1.000 € |
+| **claude-haiku-4-5** *(más barato)* | ~0.005-0.02 € | ~0.5-2 € | ~5-20 € |
 
-OpenAI te avisa cuando el saldo baja. Puedes empezar con 20€ tranquilamente.
+Cambiar modelo: solo edita `ANTHROPIC_MODEL` en Render.
 
 ---
 
-## Rangos de precio de los servicios (PRO / PREMIUM)
+## Endpoints disponibles
 
-El prompt está configurado para que la IA proponga **dos alternativas** al cliente:
-
-| Opción | Stack | Plazo | Precio orientativo |
-|---|---|---|---|
-| **PRO** · El esencial | HTML + Google Sheets + Apps Script | 2 semanas | **Desde 600 €** |
-| **PREMIUM** · El completo | Notion + WhatsApp Business + Make.com + GPT-4o | 4 semanas | **Desde 1.800 €** |
-
-**Para ajustar los precios**, edita los bloques `<div class="alt-price">` en el `SYSTEM_PROMPT` del archivo `generate-prd.js`. Cambia *"Desde 600 €"* y *"Desde 1.800 €"* por las cifras que decidas.
-
-El descuento del 15% se aplica sobre la opción que el cliente elija al reservar (Cal.com recibe `?option=PRO` o `?option=PREMIUM` + el código).
+| Método | Endpoint | Para qué |
+|---|---|---|
+| `GET` | `/api/health` | Estado del servicio + check de configuración |
+| `POST` | `/api/generate-prd` | Genera PRD streaming (SSE) + envía email |
+| `POST` | `/api/calculate-price` | Calcula solo el precio sin llamar a Claude *(útil para previews internos)* |
 
 ---
 
@@ -128,10 +182,10 @@ El descuento del 15% se aplica sobre la opción que el cliente elija al reservar
 
 ```
 event: chunk
-data: {"markdown":"## Pieza que frena tu negocio · "}
+data: {"markdown":"## Pieza que frena tu negocio · Operativa..."}
 
 event: chunk
-data: {"markdown":"Cuello de botella fundacional\n\nTu negocio funciona porque tú estás..."}
+data: {"markdown":"...sin trazabilidad\n\nSabes que tienes..."}
 
 ... más chunks ...
 
@@ -145,39 +199,71 @@ data: {"ok":true}
 Si algo falla:
 ```
 event: error
-data: {"message":"No hemos podido construir tu PRD ahora. Reserva igualmente y lo construimos en la reunión."}
+data: {"message":"No hemos podido construir tu PRD ahora..."}
 ```
 
 ---
 
 ## Personalización del prompt
 
-El prompt MAS@FRAME® está en `generate-prd.js`, constante `SYSTEM_PROMPT`.
+`SYSTEM_PROMPT` está en `generate-prd.js`. Para ajustarlo:
 
-Para afinarlo:
-1. Editas el `SYSTEM_PROMPT` con el texto que quieras
-2. `npm start` recarga
-3. Pruebas con `curl` *(comando de arriba)*
-4. Iteras hasta que la IA devuelva PRDs como tú quieres
+1. Edita el bloque `const SYSTEM_PROMPT = ...`
+2. Commit + push
+3. Render redeploya solo en ~1 min
+4. Probar con `curl` el ejemplo de Roberto
+5. Iterar hasta que la voz/contenido te encajen
 
-**Recomendación:** prueba con 5-10 perfiles distintos de cliente *(autónomo, pyme, sector salud, sector comercio, etc.)* antes de poner en producción. Así detectas casos donde la IA inventa cosas raras.
+**Recomendación:** prueba con 5-10 perfiles distintos antes de poner en producción.
 
 ---
 
-## Próximos pasos *(opcionales)*
+## Tabla de precios (8 piezas × 3 niveles)
 
-- **Persistir sesiones en BBDD** *(Mongo, Postgres)* — descomentar el `saveSessionToDB()` al final del handler
-- **Webhook a Cal.com** cuando se aplique un código descuento — para que Maite vea automáticamente quién reservó con qué código
-- **Email recordatorio a 1h** si el cliente no ha reservado todavía y le quedan 60 min de descuento
-- **Rate limiting** *(express-rate-limit)* para evitar abuso
-- **Logging** con Sentry / LogRocket para detectar fallos del prompt en producción
+Está en `generate-prd.js` constante `PIECES`. Para ajustar precios:
+
+```js
+P1: { ..., bases: { LITE: 350, PRO: 800, PREMIUM: 1800 } }
+//          ↑ edita estos números
+```
+
+Multiplicadores (función `calculatePrice`):
+- 2-5p × 1.5 · 6-15p × 2.2
+- Volumen 100-500 × 1.1 · >500 × 1.3
+- Tiene CRM −10% · Sectorial +15% · Solo nada −5%
+
+Redondeo final a 50€.
+
+---
+
+## Estructura de archivos
+
+```
+backend-tu-solucion/
+├── generate-prd.js       ← código principal
+├── package.json          ← dependencias
+├── .env.example          ← plantilla env vars (NO subir .env real)
+├── README.md             ← este archivo
+└── EJEMPLO-COMPLETO.md   ← ejemplo del prompt + payload + respuesta
+```
 
 ---
 
 ## Soporte
 
 Si algo no funciona, revisa en este orden:
-1. `curl http://localhost:3001/api/health` → ¿devuelve `has_api_key: true`?
-2. ¿OpenAI tiene saldo?
-3. Logs del servidor → ¿error de OpenAI? ¿timeout?
-4. Si todo OK, abrir issue en el repo
+1. `curl /api/health` → ¿`has_anthropic_key: true` y `has_smtp: true`?
+2. ¿Anthropic tiene saldo? ([console.anthropic.com](https://console.anthropic.com))
+3. Logs del servicio en Render → ¿error de Anthropic? ¿error SMTP?
+4. ¿El App Password de Gmail está bien (16 chars sin espacios)?
+5. ¿Está activada la 2FA en la cuenta de Gmail?
+
+---
+
+## Próximos pasos (después de tener esto arriba)
+
+- [ ] Webhook de Cal.com → backend recibe la reserva con código y cierra el círculo automático
+- [ ] Persistir sesiones en Mongo/Postgres si quieres analítica
+- [ ] Rate limiting para evitar abuso
+- [ ] Logging con Sentry para detectar fallos del prompt en producción
+- [ ] A/B test de modelo *(Sonnet vs Opus)* para ver cuál convierte mejor
