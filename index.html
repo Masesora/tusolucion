@@ -562,21 +562,7 @@ p{margin:0 0 .9rem 0;color:var(--muted)}
 .week-plan-table .cell-margen{background:transparent;color:var(--muted);font-style:italic;font-size:.7rem}
 .week-plan-table .cell-empty{background:rgba(15,26,53,.02);color:#bdb6a3}
 
-/* ── Entregables ── */
-.deliverables-list{list-style:none;margin:.4rem 0 0 0;padding:0}
-.deliverables-list li{position:relative;padding:.5rem 0 .5rem 1.75rem;color:var(--text);font-size:.95rem;line-height:1.5;border-bottom:1px solid rgba(184,157,82,.12)}
-.deliverables-list li:last-child{border-bottom:none}
-.deliverables-list li::before{content:"";position:absolute;left:.25rem;top:1rem;width:6px;height:6px;border:1.5px solid var(--gold);border-bottom:none;border-left:none;transform:rotate(45deg);border-radius:1px}
 
-/* ── Nota humana de Maite ── */
-.res-maite-note{padding:1rem 0 0 0 !important;border-bottom:none}
-.maite-note-card{position:relative;background:linear-gradient(135deg,rgba(184,157,82,.10),rgba(184,157,82,.02));border:1.5px solid rgba(184,157,82,.35);border-radius:18px;padding:1.6rem 1.8rem;box-shadow:0 12px 32px -16px rgba(184,157,82,.4)}
-.maite-note-card::before{content:"✍";position:absolute;top:-.7rem;left:1.5rem;width:1.8rem;height:1.8rem;border-radius:50%;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:.95rem}
-.maite-note-label{font-size:.62rem;letter-spacing:.2em;color:var(--gold);font-weight:700;text-transform:uppercase;margin-bottom:.6rem;padding-left:1.5rem}
-.maite-note-text{font-family:var(--font-italic);font-style:italic;font-size:1.05rem;line-height:1.6;color:var(--navy);margin:0 0 .9rem 0}
-.maite-note-signature{font-family:var(--font-display);font-weight:700;font-size:.95rem;color:var(--navy);letter-spacing:.04em;margin-bottom:1.1rem;text-align:right}
-.maite-note-ctas{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;justify-content:flex-start;border-top:1px solid rgba(184,157,82,.25);padding-top:1.1rem}
-.maite-note-ctas .btn{font-size:.85rem;padding:.7rem 1.4rem}
 
 @media(max-width:640px){
   .res-header-name{font-size:1.15rem}
@@ -727,6 +713,87 @@ p{margin:0 0 .9rem 0;color:var(--muted)}
   .res-tool{break-inside:avoid;background:#FAF7F2 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .res-block{break-inside:avoid}
   @page{margin:1.5cm}
+}
+
+/* ============================================================
+   Tu Valoración · CSS del informe (Ronda H)
+   ============================================================ */
+
+/* Cabecera personalizada */
+.tv-header{padding:0 0 1.75rem 0;margin-bottom:1rem;border-bottom:2px solid var(--gold);position:relative}
+.tv-eyebrow{font-family:var(--font-display);font-weight:700;font-size:.7rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:.55rem}
+.tv-title{font-family:var(--font-display);font-weight:800;font-size:2rem;color:var(--navy);letter-spacing:-0.01em;line-height:1.1;margin:0;display:flex;align-items:baseline;flex-wrap:wrap;gap:.5rem}
+.tv-title .tv-name{color:var(--navy)}
+.tv-title em{color:var(--gold);font-family:var(--font-italic);font-style:italic;font-weight:500}
+.tv-meta{margin-top:.6rem;font-size:.85rem;color:var(--muted);font-weight:500;letter-spacing:.02em;line-height:1.45}
+.tv-meta strong{color:var(--navy);font-weight:700}
+.tv-stamp{position:absolute;top:0;right:0;font-size:.55rem;letter-spacing:.2em;color:var(--gold);font-weight:700;text-align:right;line-height:1.4;text-transform:uppercase}
+@media(max-width:640px){.tv-title{font-size:1.45rem}.tv-stamp{display:none}}
+
+/* Bloques del informe */
+.tv-block{padding:1.6rem 0;border-bottom:1px solid var(--line)}
+.tv-block:last-child{border-bottom:none}
+.tv-label{font-size:.7rem;letter-spacing:.2em;color:var(--gold);font-weight:700;text-transform:uppercase;margin-bottom:.55rem}
+
+/* Sherlock */
+.tv-sherlock{background:linear-gradient(135deg,rgba(15,26,53,.04),rgba(184,157,82,.04));margin:1rem 0;padding:1.4rem 1.6rem !important;border-radius:14px;border-left:3px solid var(--gold)}
+.tv-sherlock .tv-label{margin-bottom:.4rem}
+.tv-sherlock .sherlock-disclaimer{font-size:.85rem;color:var(--muted);margin-bottom:.85rem;font-weight:400}
+.tv-sherlock .sherlock-list{list-style:none;margin:0;padding:0}
+.tv-sherlock .sherlock-list li{position:relative;padding:.55rem 0 .55rem 1.6rem;color:var(--text);font-size:.95rem;line-height:1.5;border-bottom:1px dashed rgba(184,157,82,.18)}
+.tv-sherlock .sherlock-list li:last-child{border-bottom:none}
+.tv-sherlock .sherlock-list li::before{content:"";position:absolute;left:.2rem;top:1rem;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 3px rgba(184,157,82,.18)}
+.tv-sherlock .sherlock-list li strong{color:var(--navy);font-weight:700}
+
+/* Pieza que frena (sin etiqueta "problema principal") */
+.tv-failure .failure-name{font-family:var(--font-display);font-weight:800;font-size:1.55rem;color:var(--navy);line-height:1.2;margin-bottom:.5rem;letter-spacing:-0.01em}
+.tv-failure .failure-name::before{content:"·";color:var(--gold);margin-right:.55rem;font-weight:700}
+.tv-failure .failure-cause{font-family:var(--font-display);font-weight:500;font-size:1.05rem;color:var(--text);line-height:1.6;padding-left:.95rem;border-left:3px solid var(--gold);margin-top:.5rem}
+
+/* Lo que vas a recibir (sin chips técnicos) */
+.tv-system .system-card{background:var(--white);padding:1.5rem 1.7rem;border-radius:14px;border:1px solid rgba(184,157,82,.18);box-shadow:0 4px 18px -10px rgba(15,26,53,.15);margin-top:.5rem}
+.tv-system .system-summary{font-family:var(--font-display);font-weight:600;color:var(--navy);font-size:1.08rem;line-height:1.5;margin:0 0 1.1rem 0}
+.tv-system .system-summary strong{color:var(--gold);font-weight:800}
+.tv-prd-notice{font-size:.95rem;color:var(--muted);line-height:1.6;padding-top:.85rem;border-top:1px dashed rgba(184,157,82,.25);margin:0}
+.tv-prd-notice strong{color:var(--navy);font-weight:700}
+
+/* KPIs en tarjetas */
+.tv-kpis .kpis-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin-top:.6rem}
+.tv-kpis .kpi-card{background:var(--white);border:1px solid rgba(184,157,82,.2);border-left:4px solid var(--gold);border-radius:12px;padding:1rem 1.15rem;box-shadow:0 3px 12px -6px rgba(15,26,53,.12)}
+.tv-kpis .kpi-name{font-size:.65rem;letter-spacing:.13em;font-weight:700;color:var(--gold);text-transform:uppercase;margin-bottom:.35rem}
+.tv-kpis .kpi-value{font-family:var(--font-display);font-weight:600;color:var(--navy);font-size:.98rem;line-height:1.4;letter-spacing:-0.01em}
+.tv-kpis .kpi-value strong{font-weight:800;color:var(--gold)}
+.tv-kpis .kpi-when{margin-top:.45rem;font-size:.72rem;color:var(--muted);letter-spacing:.04em;font-weight:500}
+
+/* Acompañamiento incluido (Garantía E) */
+.tv-warranty .warranty-card{background:var(--white);border:1.5px solid var(--ok);border-radius:14px;padding:1.4rem 1.6rem;margin-top:.5rem;position:relative;overflow:hidden}
+.tv-warranty .warranty-card::before{content:"✓";position:absolute;top:1rem;right:1.3rem;width:2.2rem;height:2.2rem;border-radius:50%;background:var(--ok);color:var(--white);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.1rem}
+.tv-warranty .warranty-title{font-weight:800;color:var(--navy);font-size:1.05rem;margin-bottom:.55rem;padding-right:2.5rem}
+.tv-warranty .warranty-text{font-size:.95rem;color:var(--text);line-height:1.6}
+.tv-warranty .warranty-text strong{color:var(--ok);font-weight:700}
+
+/* Nota personalizada firmada por Maite */
+.tv-note{padding:1.6rem 0 1.2rem !important;border-bottom:none}
+.tv-note .note-card{position:relative;background:linear-gradient(135deg,rgba(184,157,82,.10),rgba(184,157,82,.02));border:1.5px solid rgba(184,157,82,.35);border-radius:18px;padding:1.7rem 1.9rem;box-shadow:0 12px 32px -16px rgba(184,157,82,.4)}
+.tv-note .note-card::before{content:"✍";position:absolute;top:-.7rem;left:1.6rem;width:1.8rem;height:1.8rem;border-radius:50%;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:.95rem;font-weight:700}
+.tv-note .note-eyebrow{font-size:.62rem;letter-spacing:.2em;color:var(--gold);font-weight:700;text-transform:uppercase;margin-bottom:.65rem;padding-left:1.5rem}
+.tv-note .note-text{font-family:var(--font-italic);font-style:italic;font-size:1.08rem;line-height:1.65;color:var(--navy);margin:0 0 1rem 0}
+.tv-note .note-sign{font-family:var(--font-display);font-weight:700;font-size:.95rem;color:var(--navy);text-align:right;letter-spacing:.02em;line-height:1.35}
+.tv-note .note-sign small{display:block;font-weight:500;font-size:.72rem;color:var(--muted);margin-top:.2rem;letter-spacing:.06em;text-transform:uppercase}
+
+/* CTA principal */
+.tv-cta{padding:2rem 0 1rem;text-align:center}
+.tv-cta .cta-main-button{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;padding:1.05rem 2.2rem;border-radius:999px;background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:var(--navy);font-family:var(--font-display);font-weight:700;font-size:1rem;letter-spacing:.04em;text-decoration:none;border:none;cursor:pointer;box-shadow:0 12px 32px -8px rgba(184,157,82,.6),inset 0 1px 0 rgba(255,255,255,.5);transition:transform .2s ease,box-shadow .2s ease,filter .2s ease;position:relative;overflow:hidden}
+.tv-cta .cta-main-button::before{content:'';position:absolute;top:0;left:0;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);transform:translateX(-100%);transition:transform .8s}
+.tv-cta .cta-main-button:hover{transform:translateY(-3px);box-shadow:0 18px 42px -10px rgba(184,157,82,.75);filter:brightness(1.08)}
+.tv-cta .cta-main-button:hover::before{animation:btnShimmer 1.2s ease forwards}
+.tv-cta .cta-claim{margin-top:1rem;font-size:.85rem;color:var(--muted);line-height:1.5}
+.tv-cta .cta-claim strong{color:var(--navy);font-weight:700}
+
+@media(max-width:640px){
+  
+  .tv-system .system-card,.tv-warranty .warranty-card,.tv-note .note-card{padding:1.25rem 1.35rem}
+  .tv-note .note-text{font-size:1rem}
 }
 </style>
 </head>
@@ -2017,7 +2084,7 @@ function renderSubs(){
       <div class="sub-area">ÁREA ${String(a.id).padStart(2,'0')} · ${a.name.toUpperCase()}</div>
       ${aDesc?`<div class="sub-desc">${aDesc}</div>`:''}
       <h3>¿Cuál de estas situaciones reconoces?</h3>
-      <p class="sub-hint">Selecciona hasta 2 — o cuéntalo en tus palabras al final.</p>
+      <p class="sub-hint">Selecciona la situación que más te suena — o cuéntalo en tus palabras al final.</p>
       <div class="sub-opts">
         ${a.subs.map(s=>{
           const isSel = sel.includes(s.id);
@@ -2030,7 +2097,7 @@ function renderSubs(){
           </button>`;
         }).join('')}
       </div>
-      ${sel.length===2?`<div class="sub-max-note">✓ Máximo alcanzado para esta área</div>`:''}
+      
       <div class="sub-custom ${customOpen?'open':''}">
         <button type="button" class="sub-custom-toggle" onclick="toggleCustomSub(${aid})">
           ${customOpen?'– Cerrar observación':'+ Otra situación · cuéntalo en tus palabras'}
@@ -2047,7 +2114,7 @@ function toggleSub(aid, sid){
   const arr = state.selectedSubs[aid];
   const idx = arr.indexOf(sid);
   if(idx >= 0){ arr.splice(idx, 1); }
-  else if(arr.length < 2){ arr.push(sid); }
+  else { state.selectedSubs[aid] = [sid]; } // máximo 1 subárea por área (H-E)
   saveStateToStorage(); renderSubs();
 }
 function toggleCustomSub(aid){
@@ -2098,26 +2165,26 @@ function getSelectedSubObjects(){
 function renderQuestions(){
   const c = document.getElementById('qsContainer');
   const subs = getSelectedSubObjects();
-  c.innerHTML = subs.map(({area,sub})=>{
-    const items = getPriorityQs(sub.qs);
-    return `<div class="sub-head">
-      <div class="sub-n">${sub.id}</div>
-      <div class="sub-t">${sub.name.toUpperCase()}<small>${area.name}</small></div>
-    </div>
-    <div class="q-list">
-      ${items.map(({q,origI})=>{
-        const key = `${sub.id}-${origI}`;
-        const cur = state.answers[key];
-        return `<div class="q-row">
-          <div class="q-text">${q.t}<span class="q-dim">${q.d}</span></div>
+  if(!subs.length){ c.innerHTML = ''; checkQuestions(); return; }
+  c.innerHTML = subs.map(({area, sub})=>{
+    const key = `${sub.id}-intensity`;
+    const cur = state.answers[key];
+    const anchors = ["Apenas me afecta","Lo noto a veces","Me molesta cada semana","Me frena cada día","Me está bloqueando ya"];
+    return `<div class="sub-block">
+      <div class="sub-area">ÁREA ${String(area.id).padStart(2,'0')} · ${area.name.toUpperCase()}</div>
+      <h3>${sub.name}</h3>
+      <p class="sub-hint">¿Cuánto te frena hoy en tu día a día?</p>
+      <div class="q-list">
+        <div class="q-row">
           <div class="q-anchors">
-            ${q.a.map((anchor,ai)=>{
-              const v=ai+1; const selCls=cur===v?`sel-${v}`:'';
+            ${anchors.map((anchor, ai)=>{
+              const v = ai+1;
+              const selCls = cur===v ? `sel-${v}` : '';
               return `<button type="button" class="q-anchor ${selCls}" onclick="setAnswer('${key}',${v})"><span class="v">${v}</span>${anchor}</button>`;
             }).join('')}
           </div>
-        </div>`;
-      }).join('')}
+        </div>
+      </div>
     </div>`;
   }).join('');
   checkQuestions();
@@ -2125,8 +2192,8 @@ function renderQuestions(){
 function setAnswer(key, val){ state.answers[key]=val; saveStateToStorage(); renderQuestions(); }
 function checkQuestions(){
   const subs = getSelectedSubObjects();
-  const required = subs.reduce((s,{sub})=>s+getPriorityQs(sub.qs).length, 0);
-  const done = subs.reduce((acc,{sub})=>acc+getPriorityQs(sub.qs).filter(({origI})=>state.answers[`${sub.id}-${origI}`]).length, 0);
+  const required = subs.length;
+  const done = subs.filter(({sub})=>state.answers[`${sub.id}-intensity`]).length;
   document.getElementById('qsNext').disabled = done < required;
 }
 function finishQuestions(){ saveStateToStorage(); go('s-damage'); }
@@ -2171,40 +2238,31 @@ function finishDamage(){
 /* ── CÁLCULO ─────────────────────────────────────────────────── */
 function computeAnalysis(){
   const subs = getSelectedSubObjects();
-  const subScores = subs.map(({area,sub})=>{
-    const byDim = { S:[], E:[], U:[] };
-    const items = getPriorityQs(sub.qs);
-    items.forEach(({q,origI})=>{ const v=state.answers[`${sub.id}-${origI}`]; if(v) byDim[q.d].push(v); });
-    const avg = arr => arr.length ? arr.reduce((s,n)=>s+n,0)/arr.length : 0;
-    const S=+avg(byDim.S).toFixed(2), E=+avg(byDim.E).toFixed(2), U=+avg(byDim.U).toFixed(2);
-    const compound=+(CONFIG.weights.S*S+CONFIG.weights.E*E+CONFIG.weights.U*U).toFixed(2);
-    const allAnswers=items.map(({origI})=>state.answers[`${sub.id}-${origI}`]).filter(Boolean);
-    const flat=allAnswers.length>=4&&new Set(allAnswers).size===1;
-    const contradictory=(S>=4&&E<=1.5)||(E>=4&&S<=1.5);
-    const flags=[]; if(flat) flags.push("respuestas-planas"); if(contradictory) flags.push("S/E-incoherente");
-    return { area, sub, S, E, U, compound, flags };
+  // Cada subárea tiene 1 pregunta única de intensidad (H-E)
+  const subScores = subs.map(({area, sub}, idx)=>{
+    const intensity = state.answers[`${sub.id}-intensity`] || 3;
+    // compound = intensidad. El orden de selección desempata si empate.
+    // Penalización ligera por orden (primero seleccionado = primero en prioridad)
+    const orderBonus = (subs.length - idx) * 0.01;
+    const compound = +(intensity + orderBonus).toFixed(2);
+    return { area, sub, S: intensity, E: intensity, U: intensity, compound, flags: [] };
   });
-
   const sorted = [...subScores].sort((a,b)=>b.compound-a.compound);
-  let primary, secondary, metaProblem=null;
-
-  if(sorted.length>=2){
-    primary=sorted[0]; secondary=sorted[1];
-    if(primary.compound>=CONFIG.metaThreshold && secondary.compound>=CONFIG.metaThreshold){
-      const pair=[primary.sub.id, secondary.sub.id].sort();
-      const match=META_MATRIX.find(m=>{ const s2=[...m.pair].sort(); return s2[0]===pair[0]&&s2[1]===pair[1]; });
-      if(match) metaProblem=match;
+  let primary, secondary, metaProblem = null;
+  if(sorted.length >= 2){
+    primary = sorted[0]; secondary = sorted[1];
+    if(primary.compound >= CONFIG.metaThreshold && secondary.compound >= CONFIG.metaThreshold){
+      const pair = [primary.sub.id, secondary.sub.id].sort();
+      const match = META_MATRIX.find(m=>{ const s2=[...m.pair].sort(); return s2[0]===pair[0]&&s2[1]===pair[1]; });
+      if(match) metaProblem = match;
     }
   } else {
-    const only=sorted[0];
-    const dims=[{key:"Severidad operativa",val:only.S},{key:"Impacto económico",val:only.E},{key:"Urgencia",val:only.U}].sort((a,b)=>b.val-a.val);
-    primary={...only, label:`${only.sub.name} · ${dims[0].key}`};
-    secondary={...only, label:`${only.sub.name} · ${dims[1].key}`, compound:dims[1].val};
+    const only = sorted[0];
+    primary = only;
+    secondary = { ...only, label:`${only.sub.name} (sin secundario)`, compound: only.compound };
   }
-
-  const avgCompound=+(sorted.reduce((s,x)=>s+x.compound,0)/sorted.length).toFixed(2);
-  const allFlags=sorted.flatMap(x=>x.flags.map(f=>`[${x.sub.id}] ${f}`));
-  return { subScores:sorted, primary, secondary, metaProblem, avgCompound, flags:allFlags };
+  const avgCompound = +(sorted.reduce((s,x)=>s+x.compound,0)/sorted.length).toFixed(2);
+  return { subScores: sorted, primary, secondary, metaProblem, avgCompound, flags: [] };
 }
 
 /* ── HERRAMIENTA DERIVADA ───────────────────────────────────── */
@@ -2316,57 +2374,7 @@ function getSherlock(ctx){
   return inferences.slice(0, 4);
 }
 
-/* ── 4) Tool name dinámico ───────────────────────────────────── */
-function buildToolNickname(ctx, baseToolName){
-  const v = getVocab(ctx);
-  const act = parseActivity(ctx.activity);
-  const base = (baseToolName || '').toLowerCase();
-  let core = "Foco operativo";
-  if(base.includes('foco')) core = "Foco";
-  else if(base.includes('captación') || base.includes('capta')) core = "Captación";
-  else if(base.includes('post-venta') || base.includes('postventa') || base.includes('seguimiento')) core = "Seguimiento";
-  else if(base.includes('agenda') || base.includes('agendado')) core = "Agenda";
-  else if(base.includes('control') || base.includes('estado')) core = "Control";
-  else if(base.includes('caja') || base.includes('financ') || base.includes('tesorer')) core = "Caja viva";
-  else if(base.includes('administra') || base.includes('fiscal') || base.includes('legal')) core = "Cumplimiento";
-  else if(base.includes('continuidad') || base.includes('depend')) core = "Continuidad";
-  else if(base.includes('proceso')) core = "Proceso operativo";
-  else if(base.includes('escalado') || base.includes('escalab') || base.includes('capacidad')) core = "Escalado";
 
-  let suffix;
-  if(act.parts.length >= 2){
-    suffix = act.parts.slice(0,2).map(p => cleanActivityLabel(p) || capitalize(p)).join(' + ');
-  } else if(act.main){
-    suffix = cleanActivityLabel(act.main) || capitalize(act.main);
-  } else {
-    suffix = capitalize(v.nick);
-  }
-  return `Tu Sistema de ${core} · ${suffix}`;
-}
-
-/* ── 5) Reescritura del problema con vocabulario ─────────────── */
-function rewriteProblem(subName, ctx){
-  if(!subName) return "";
-  const v = getVocab(ctx);
-  const s = subName.toString();
-  const translations = {
-    'Capacidad de foco':            `pierdes el foco entre microdecisiones — empiezas tres cosas y no cierras ninguna`,
-    'Control de trabajos en curso': `pierdes el rastro de qué ${v.encounters} están en curso, cuáles esperan respuesta y cuáles ya están listas`,
-    'Captación de clientes':        `${v.clientsF} potenciales se enfrían porque no llegas a contestarles a tiempo`,
-    'Pérdida de oportunidades':     `dejas que se enfríen ${v.clientsF} interesadas porque no tienes un sistema de seguimiento`,
-    'Post-venta':                   `tras cerrar la ${v.encounter}, ${v.clientsF} que podrían volver no vuelven porque no las acompañas`,
-    'Agenda y citas':               `${v.encounters} se solapan, se olvidan o se mueven sin que el sistema te avise`,
-    'Caja y tesorería':             `no sabes en tiempo real qué entra, qué sale y cuánto te queda`,
-    'Cumplimiento administrativo':  `obligaciones fiscales, laborales y legales que se te pueden colar entre las ${v.encounters} del día`,
-    'Procesos internos':            `cada ${v.encounter} la haces a tu manera — nadie más puede entrar a echar una mano sin que pares todo`,
-    'Continuidad del titular':      `si tú no estás un día, ${v.workspaceArt} se para — todo el conocimiento está en tu cabeza`,
-    'Escalabilidad':                `cada ${v.encounter} nueva añade caos en lugar de añadir margen — has tocado techo operativo`
-  };
-  for(const k in translations){
-    if(s.toLowerCase().includes(k.toLowerCase())) return translations[k];
-  }
-  return s.toLowerCase();
-}
 
 /* ── 6) Semana tipo visualizada ──────────────────────────────── */
 function buildWeekPlan(ctx){
@@ -2555,108 +2563,7 @@ function renderAdaptiveViz(ctx, primaryAreaId, toolName){
   }
 }
 
-/* ── 7) Entregables concretos por sector ─────────────────────── */
-function getDeliverables(ctx){
-  const v = getVocab(ctx);
-  const sector = ctx.sector || '';
-  const map = {
-    "Salud y bienestar": [
-      `Plantilla <strong>Bloques de ${v.encounter} / ${v.workspace} / Descanso</strong> (papel + móvil)`,
-      `Checklist de cierre diario (5 minutos)`,
-      `Vista semanal con balance entre tus actividades`,
-      `Recordatorios automáticos de preparativos pre-${v.encounter}`,
-      `Plantilla de respuesta rápida a ${v.clientsF} para no perderlas`
-    ],
-    "Comercio/Retail": [
-      `Sistema de control de stock en curso y pedidos pendientes`,
-      `Checklist de apertura y cierre de ${v.workspace}`,
-      `Plantilla de seguimiento de ${v.clientsF} habituales`,
-      `Vista semanal de ventas vs. objetivo`,
-      `Protocolo de respuesta a consultas fuera de horario`
-    ],
-    "Hostelería": [
-      `Plantilla de turnos con descansos visibles`,
-      `Checklist de apertura, transición de turno y cierre`,
-      `Sistema de control de comandas pendientes en cocina y sala`,
-      `Vista semanal de carga vs. equipo disponible`,
-      `Protocolo de imprevistos (bajas, picos, incidencias)`
-    ],
-    "Servicios profesionales": [
-      `Plantilla de bloques <strong>${v.encounter} / preparación / cierre</strong>`,
-      `Checklist de cierre diario por ${v.encounter}`,
-      `Vista semanal con balance horas facturables vs. internas`,
-      `Plantilla de seguimiento post-${v.encounter}`,
-      `Protocolo de captura de ${v.clientsF} entrantes`
-    ],
-    "Construcción/Reformas": [
-      `Cuadro maestro de ${v.encounters} en curso con estado real (no calendario teórico)`,
-      `Checklist de inicio y cierre de cada fase`,
-      `Plantilla de comunicación con ${v.clientsF} (fotos + avances semanales)`,
-      `Sistema de control de pedidos a proveedores`,
-      `Vista semanal de carga del equipo`
-    ],
-    "Formación": [
-      `Plantilla de bloques <strong>preparación / impartición / corrección</strong>`,
-      `Checklist de cierre por ${v.encounter}`,
-      `Vista semanal con horas visibles vs. invisibles`,
-      `Sistema de seguimiento de ${v.clientsF} con dudas pendientes`,
-      `Plantilla de comunicación con familias / responsables`
-    ],
-    "Creativo/Agencia": [
-      `Plantilla <strong>bloques de flow / reuniones / admin</strong>`,
-      `Checklist de cierre diario por proyecto`,
-      `Vista semanal de proyectos en curso con estado real`,
-      `Sistema de captura rápida de ideas e iteraciones`,
-      `Plantilla de entrega y feedback con ${v.clientsF}`
-    ],
-    "Industrial/Producción": [
-      `Cuadro de lotes en curso por estado`,
-      `Checklist de inicio y cierre de turno`,
-      `Sistema de control de incidencias en planta`,
-      `Vista semanal de producción vs. plan`,
-      `Plantilla de comunicación con clientes industriales`
-    ],
-    "Consultoría": [
-      `Plantilla de bloques <strong>${v.encounter} / análisis / entregable</strong>`,
-      `Checklist de cierre diario por caso activo`,
-      `Vista semanal con balance horas facturables / propuestas / formación`,
-      `Sistema de seguimiento de propuestas enviadas`,
-      `Plantilla de cierre y handover con ${v.clientsF}`
-    ]
-  };
-  return map[sector] || [
-    `Plantilla de bloques <strong>trabajo / pausa / cierre</strong>`,
-    `Checklist de cierre diario`,
-    `Vista semanal con tus 3 prioridades`,
-    `Sistema de captura rápida de ${v.clientsF} y pendientes`,
-    `Recordatorios automáticos para preparativos`
-  ];
-}
 
-/* ── 8) Nota humana firmada por Maite ────────────────────────── */
-function getMaiteNote(ctx){
-  const v = getVocab(ctx);
-  const act = parseActivity(ctx.activity);
-  const name = (ctx.firstName||'').trim();
-  const greeting = name ? `${name}, ` : '';
-  const sectorMap = {
-    "Salud y bienestar": `He visto antes a profesionales con tu mismo perfil — ${act.parts.length>=2? `${act.parts[0]} con un proyecto creativo paralelo` : 'salud y bienestar trabajando con el cuerpo y la presencia'}. Lo más común no es la clientela — es sentir que el día te come por las microdecisiones del día.`,
-    "Comercio/Retail": `He visto antes a comerciantes como tú. El problema casi nunca es la falta de venta — es la energía que se va en interrupciones que no llevas a cierre.`,
-    "Hostelería": `He visto antes locales con tu carga. El cuello de botella nunca está en el plato — está en cómo se arrancan y cierran los turnos sin que la fatiga te coma.`,
-    "Servicios profesionales": `He visto antes a profesionales con tu carga. El problema casi nunca es de capacidad — es de no tener los bloques bien dibujados.`,
-    "Construcción/Reformas": `He visto antes obras con tu nivel de simultaneidad. El caos no es del oficio — es de no tener el cuadro de obras bien visible cada lunes.`,
-    "Formación": `He visto antes a profesionales de la formación con tu carga. La preparación invisible se come la vida personal — y eso tiene solución estructural.`,
-    "Creativo/Agencia": `He visto antes a creativos con tu situación. El problema no es de talento — es de no proteger el flow de las microinterrupciones.`,
-    "Industrial/Producción": `He visto antes plantas con tu volumen. El caos casi nunca está en la línea — está en cómo se cierran los turnos y se traspasa la información.`,
-    "Consultoría": `He visto antes muchos casos como el tuyo en consultoría. El cuello de botella casi nunca es la clientela — es que las horas no facturables se comen las facturables sin que lo veas.`,
-    "Otro": `He visto antes a profesionales con tu perfil. El problema casi nunca es lo evidente — es lo invisible que va sumando.`
-  };
-  let intro = sectorMap[ctx.sector] || sectorMap["Otro"];
-  // Si hay nombre, baja a minúscula la primera letra del intro para que case con "Nombre, ..."
-  if(name && intro){ intro = intro.charAt(0).toLowerCase() + intro.slice(1); }
-  const closing = `Esta herramienta ataca exactamente eso. Si quieres que hablemos, te atiendo yo. 20 minutos. Sin compromiso.`;
-  return `${greeting}${intro} ${closing}`;
-}
 
 /* ── 9) CTAs precargados ─────────────────────────────────────── */
 function buildPersonalizedCtas(ctx, toolName){
@@ -2671,118 +2578,298 @@ function buildPersonalizedCtas(ctx, toolName){
   return { waUrl, calUrl };
 }
 
+
+/* ============================================================
+   MOTOR DE PIEZA ESTRUCTURAL + KPIs + INVERSIÓN
+   ============================================================ */
+
+/* ── 1) Catálogo de 8 piezas estructurales ──────────────────── */
+const STRUCTURAL_FAILURES = {
+  "P1": {
+    code: "P1",
+    name: "Pieza fundacional sin reemplazo",
+    rootCause: "Tu negocio funciona porque tú estás. Si tú no estás un día, todo se para. No es dependencia emocional — es ausencia de estructura paralela.",
+    triggerAreas: [8],
+    complexity: "alto"
+  },
+  "P2": {
+    code: "P2",
+    name: "Embudo con fugas",
+    rootCause: "Las personas que llegan interesadas no son el problema. El problema es lo que pasa entre que llegan y deciden. Ahí se enfrían.",
+    triggerAreas: [1, 2],
+    complexity: "medio"
+  },
+  "P3": {
+    code: "P3",
+    name: "Comunicación que se enfría",
+    rootCause: "Cierras un trabajo y el cliente desaparece de tu radar. Vuelves a captar desde cero cuando podrías estar volviendo a quien ya conoces.",
+    triggerAreas: [3, 7],
+    complexity: "medio"
+  },
+  "P4": {
+    code: "P4",
+    name: "Operativa sin trazabilidad",
+    rootCause: "Sabes que tienes trabajos en marcha, pero al detalle quién está dónde, qué falta y qué se prometió cuándo solo lo sabe tu cabeza.",
+    triggerAreas: [4],
+    complexity: "medio"
+  },
+  "P5": {
+    code: "P5",
+    name: "Caja opaca",
+    rootCause: "El dinero entra y sale, pero no sabes en tiempo real qué te queda, qué te deben ni qué te va a doler el mes que viene.",
+    triggerAreas: [5],
+    complexity: "medio"
+  },
+  "P6": {
+    code: "P6",
+    name: "Cumplimiento a ciegas",
+    rootCause: "Las obligaciones fiscales, laborales o sectoriales se llevan por inercia o las gestiona tu asesor. Si algo se cuela, te enteras tarde.",
+    triggerAreas: [6],
+    complexity: "ligero"
+  },
+  "P7": {
+    code: "P7",
+    name: "Cada cosa hecha de forma distinta",
+    rootCause: "El mismo trabajo se hace de tres formas según quién lo haga y según el día. No es desorden — es ausencia de estándar.",
+    triggerAreas: [9],
+    complexity: "medio"
+  },
+  "P8": {
+    code: "P8",
+    name: "Sistema que ha tocado techo",
+    rootCause: "No es que falte demanda. Es que para atender más tendrías que hacer lo mismo más veces, y ya no caben más horas en el día.",
+    triggerAreas: [10],
+    complexity: "alto"
+  }
+};
+
+/* ── 2) Mapeo determinista área → pieza ─────────────────────── */
+function getStructuralFailure(analysis){
+  if(!analysis || !analysis.primary) return STRUCTURAL_FAILURES["P4"];
+  const primaryArea = analysis.primary.area && analysis.primary.area.id;
+  for(const code in STRUCTURAL_FAILURES){
+    const f = STRUCTURAL_FAILURES[code];
+    if(f.triggerAreas.includes(primaryArea)) return f;
+  }
+  return STRUCTURAL_FAILURES["P4"];
+}
+
+/* ── 3) KPIs por pieza · plantillas tangibles ───────────────── */
+const KPI_TEMPLATES = {
+  "P1": [
+    { name: "Negocio funcionando si no estás", actual: "1 día como mucho", target: "7+ días", when: "A las 6-8 semanas" },
+    { name: "Decisiones que requieren tu OK", actual: "~12/día", target: "2-3/día", when: "A las 4 semanas" },
+    { name: "Operaciones rutinarias dependientes de ti", actual: "casi todas", target: "menos del 30%", when: "A los 2 meses" },
+    { name: "Tiempo de respuesta cuando estás fuera", actual: "se acumula hasta tu vuelta", target: "<24h con cobertura", when: "Inmediato tras puesta en marcha" }
+  ],
+  "P2": [
+    { name: "Tiempo medio de respuesta a contactos entrantes", actual: "horas o días", target: "<1h", when: "A las 2 semanas" },
+    { name: "Contactos interesados que se enfrían sin respuesta", actual: "frecuente", target: "0", when: "Inmediato" },
+    { name: "Tasa de conversión de contacto a cliente", actual: "intuición", target: "medible y subiendo 30-50%", when: "A los 2 meses" },
+    { name: "Trazabilidad de cada lead", actual: "memoria/notas", target: "100% registrado y con seguimiento", when: "A las 3 semanas" }
+  ],
+  "P3": [
+    { name: "Clientes que vuelven tras un primer trabajo", actual: "los que se acuerdan", target: "subida del 30-60% medible", when: "A los 2-3 meses" },
+    { name: "Tiempo entre cierre y siguiente contacto con cliente", actual: "indefinido", target: "<30 días con plan", when: "A las 4 semanas" },
+    { name: "Reclamaciones gestionadas con protocolo", actual: "improvisación", target: "100% con plantilla y cierre", when: "A las 3 semanas" }
+  ],
+  "P4": [
+    { name: "Tiempo para saber el estado de un trabajo", actual: "minutos buscando", target: "<10 segundos", when: "A las 3 semanas" },
+    { name: "Trabajos olvidados o duplicados", actual: "ocurre", target: "0", when: "A las 4 semanas" },
+    { name: "Tareas pendientes visibles para todos", actual: "en tu cabeza", target: "100% en panel compartido", when: "Inmediato" },
+    { name: "Plazos prometidos vs cumplidos", actual: "intuición", target: "métricas claras y mejora del 25-40%", when: "A los 2 meses" }
+  ],
+  "P5": [
+    { name: "Saber tu liquidez en tiempo real", actual: "consultando al asesor", target: "<10 segundos en pantalla", when: "A las 4 semanas" },
+    { name: "Cobros pendientes con seguimiento", actual: "manual", target: "100% automático con avisos", when: "A las 3 semanas" },
+    { name: "Margen real por servicio o cliente", actual: "no medido", target: "panel mensual claro", when: "A los 2 meses" },
+    { name: "Decisiones financieras informadas", actual: "intuición", target: "soportadas por dashboard", when: "A los 2 meses" }
+  ],
+  "P6": [
+    { name: "Obligaciones que se cuelan sin avisar", actual: "ocurre", target: "0", when: "Inmediato" },
+    { name: "Anticipación a obligaciones (días antes)", actual: "0-3 días", target: "15-30 días", when: "A las 2 semanas" },
+    { name: "Documentos justificativos centralizados", actual: "dispersos", target: "100% archivados con etiquetas", when: "A las 4 semanas" }
+  ],
+  "P7": [
+    { name: "Tiempo de formación a alguien nuevo", actual: "semanas-meses", target: "días", when: "A los 2-3 meses" },
+    { name: "Variabilidad en calidad según quien hace", actual: "alta", target: "estándar reproducible", when: "A los 2 meses" },
+    { name: "Procesos clave documentados", actual: "0-pocos", target: "los 5-10 críticos", when: "A las 6 semanas" },
+    { name: "Capacidad real de delegar", actual: "limitada", target: "delegable con confianza", when: "A los 3 meses" }
+  ],
+  "P8": [
+    { name: "Atender 2× más clientes sin colapsar", actual: "imposible hoy", target: "viable estructuralmente", when: "A los 2-3 meses" },
+    { name: "Horas extras del titular", actual: "muchas", target: "reducción del 40-60%", when: "A las 8 semanas" },
+    { name: "Cuellos de botella identificados y atacados", actual: "ninguno", target: "los 3 críticos resueltos", when: "A los 2 meses" }
+  ]
+};
+
+function buildKpis(failure, ctx, analysis){
+  const list = KPI_TEMPLATES[failure.code] || KPI_TEMPLATES["P4"];
+  return list.slice(0, 4);
+}
+
+/* ── 4) Inversión orientativa por complejidad ───────────────── */
+const INVESTMENT_RANGES = {
+  "ligero": { min: 500, max: 1500, justification: "Sistema centrado en estructurar lo existente con herramientas ligeras: Notion, Sheets, Make.com con automatizaciones simples. Sin asistencia de IA." },
+  "medio":  { min: 1500, max: 4000, justification: "Sistema multicanal con WhatsApp Business, Airtable, automatizaciones encadenadas y alertas contextuales. Construcción modular en 3-5 semanas." },
+  "alto":   { min: 4000, max: 10000, justification: "Sistema con asistencia de IA (GPT-4o), integraciones complejas, equipo y volumen significativos. Construcción en 5-8 semanas con acompañamiento intensivo." }
+};
+
+function buildInvestmentRange(failure, ctx, analysis){
+  let level = failure.complexity || "medio";
+  if(ctx){
+    if(ctx.size && ctx.size.startsWith('Autónomo') && level === 'alto') level = 'medio';
+    if(ctx.volume === 'Más de 500' && level === 'ligero') level = 'medio';
+  }
+  return Object.assign({ level }, INVESTMENT_RANGES[level]);
+}
+
+/* ── 5) Nota personalizada firmada por Maite ────────────────── */
+function getMaiteNote(ctx, failure){
+  const v = (typeof getVocab === 'function') ? getVocab(ctx) : null;
+  const act = (typeof parseActivity === 'function') ? parseActivity(ctx.activity) : { parts: [], main: '' };
+  const name = (ctx.firstName || '').trim();
+  const greeting = name ? `${name}, ` : '';
+  const failureMap = {
+    "P1": `cuando todo el negocio depende de una sola cabeza no es desorganización tuya — es que el sistema lo llevas tú. Y eso tiene solución estructural.`,
+    "P2": `los contactos que se enfrían no son culpa de no insistir más, son culpa de no tener un sistema que insista por ti.`,
+    "P3": `volver a captar a alguien que ya te conoce cuesta cinco veces menos que captar a alguien nuevo. Y casi nunca lo hacemos por falta de sistema.`,
+    "P4": `saber dónde está cada trabajo en cualquier momento del día no es lujo de empresa grande. Es lo que separa estar al mando de ir apagando fuegos.`,
+    "P5": `la liquidez no se gana ahorrando en gestoría — se gana viendo el dinero del negocio en tiempo real, sin tener que llamar a nadie.`,
+    "P6": `lo legal y lo fiscal pueden funcionar sin susto. La diferencia es tener un calendario propio que te avisa antes que el BOE.`,
+    "P7": `cuando cada persona hace las cosas a su manera, no puedes delegar nunca. Y sin delegar no escalas. Es así de simple.`,
+    "P8": `tocar techo no es señal de fracaso — es señal de éxito sin estructura. Lo que toca ahora es construir esa estructura, no trabajar más horas.`
+  };
+  const intro = failureMap[failure.code] || failureMap["P4"];
+  const visionLine = (ctx.vision && ctx.vision.text && ctx.vision.text.trim().length > 5)
+    ? ` Y lo que me dices que cambiaría — "${ctx.vision.text.trim()}" — es exactamente lo que esta herramienta te va a permitir.`
+    : '';
+  const closing = ` Si quieres que hablemos, te atiendo yo. 20 minutos sin compromiso.`;
+  return `${greeting}${intro}${visionLine}${closing}`;
+}
+
 /* ── RESULTADO ──────────────────────────────────────────────── */
 function escHtml(s){ return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 function renderResult(a){
   const ctx = state.ctx || {};
-  const v = getVocab(ctx);
-  const act = parseActivity(ctx.activity);
-  const name = (ctx.firstName||'').trim();
+  const v = (typeof getVocab === 'function') ? getVocab(ctx) : null;
+  const act = (typeof parseActivity === 'function') ? parseActivity(ctx.activity) : { parts:[], main:'', raw:'' };
+  const name = (ctx.firstName || '').trim();
   const toolRes = deriveTool(a);
+  const failure = getStructuralFailure(a);
+  const kpis = buildKpis(failure, ctx, a);
+  const maiteNote = getMaiteNote(ctx, failure);
+  const ctas = (typeof buildPersonalizedCtas === 'function') ? buildPersonalizedCtas(ctx, failure.name) : { calUrl: 'https://cal.com/masesora/reunion', waUrl: 'https://wa.me/34609987433' };
 
-  const sectorLine = (ctx.sector === 'Otro' && ctx.sectorOther)
-    ? escHtml(ctx.sectorOther)
-    : escHtml(ctx.sector || '');
+  // Cabecera personalizada
+  const sectorLine = (ctx.sector === 'Otro' && ctx.sectorOther) ? escHtml(ctx.sectorOther) : escHtml(ctx.sector || '');
   const sizeLine = escHtml(ctx.size || '');
   const channelLine = escHtml(ctx.channel || '');
-  const headerName = name ? `${escHtml(name).toUpperCase()} — ` : '';
+  const headerName = name ? `${escHtml(name).toUpperCase()},` : 'TU VALORACIÓN,';
   const headerSub = act.raw
-    ? `${escHtml(act.raw)} · ${sectorLine} · ${sizeLine} · ${channelLine}`
+    ? `<strong>${escHtml(act.raw)}</strong> · ${sectorLine} · ${sizeLine} · ${channelLine}`
     : `${sectorLine} · ${sizeLine} · ${channelLine}`;
 
-  const sherlock = getSherlock(ctx);
+  // Sherlock (lectura inicial)
+  const sherlock = (typeof getSherlock === 'function') ? getSherlock(ctx) : [];
   const sherlockBlock = sherlock.length ? `
-    <div class="res-block res-sherlock">
-      <div class="res-label">Lo que asumo de tu día a día</div>
-      <div class="sherlock-disclaimer">Si algo de esto no encaja, dímelo después — recalibramos.</div>
+    <section class="tv-sherlock">
+      <div class="tv-label">Lo que asumimos de tu día a día</div>
+      <div class="sherlock-disclaimer">Si algo de esto no encaja, dínoslo después — recalibramos.</div>
       <ul class="sherlock-list">${sherlock.map(s=>`<li>${s}</li>`).join('')}</ul>
-    </div>` : '';
+    </section>` : '';
 
-  const primaryRewrite = rewriteProblem(a.primary.sub.name, ctx);
-  const secondaryRewrite = rewriteProblem(a.secondary.sub.name, ctx);
-  const primaryBlock = `
-    <div class="res-block res-problem">
-      <div class="res-label">Tu problema principal · ${escHtml(a.primary.sub.name)}</div>
-      <div class="p-translation">En tu mundo eso significa: ${primaryRewrite}.</div>
-    </div>`;
-  const secondaryBlock = `
-    <div class="res-block res-problem">
-      <div class="res-label">Tu problema secundario · ${escHtml(a.secondary.sub.name)}</div>
-      <div class="p-translation">Y a la vez: ${secondaryRewrite}.</div>
-    </div>`;
+  // Visualización adaptativa (si la función existe la usamos como cómo será)
+  let vizBlock = '';
+  if(typeof renderAdaptiveViz === 'function' && a.primary && a.primary.area){
+    const viz = renderAdaptiveViz(ctx, a.primary.area.id, failure.name);
+    vizBlock = `
+      <section class="tv-block tv-viz">
+        <div class="tv-label">Cómo será tu día con esto funcionando</div>
+        ${viz.html}
+      </section>`;
+  }
 
-  const metaBlock = a.metaProblem
-    ? `<div class="res-block res-meta"><div class="res-label">Meta-diagnóstico</div><div class="m-name">${escHtml(a.metaProblem.name)}</div><div class="m-detail">${escHtml(a.metaProblem.desc)}</div></div>`
-    : '';
+  // KPIs
+  const kpisHtml = kpis.map(k => `
+    <div class="kpi-card">
+      <div class="kpi-name">${escHtml(k.name)}</div>
+      <div class="kpi-value">De <strong>${escHtml(k.actual)}</strong> a <strong>${escHtml(k.target)}</strong></div>
+      <div class="kpi-when">${escHtml(k.when)}</div>
+    </div>`).join('');
 
-  const customToolName = buildToolNickname(ctx, toolRes.tool.name);
+  // Inversión
 
-  // Visualización adaptativa: el motor elige según área principal
-  const adaptiveViz = renderAdaptiveViz(ctx, a.primary.area.id, customToolName);
-
-  const deliverables = getDeliverables(ctx);
-  const deliverablesHtml = `<ul class="deliverables-list">${deliverables.map(d=>`<li>${d}</li>`).join('')}</ul>`;
-
-  const maiteNote = getMaiteNote(ctx);
-
-  const ctas = buildPersonalizedCtas(ctx, customToolName);
+  // Mensaje de PRD inminente
+  const prdNotice = `
+    <p class="tv-prd-notice">
+      <strong>En 24 horas</strong> recibes por email o WhatsApp el <strong>PRD detallado</strong> de tu sistema, con la arquitectura técnica concreta, el roadmap semana a semana y la cifra cerrada — construido específicamente para tu caso por el Equipo MASESORA.
+    </p>`;
 
   const box = document.getElementById('resultBox');
   box.innerHTML = `
-    <div class="res-header">
-      <div class="res-header-name">${headerName}TU DIAGNÓSTICO</div>
-      <div class="res-header-sub">${headerSub}</div>
-    </div>
+    <header class="tv-header">
+      <div class="tv-stamp">EQUIPO MASESORA<br>CONSTRUCTORES DE SISTEMAS</div>
+      <div class="tv-eyebrow">Tu Valoración</div>
+      <h1 class="tv-title"><span class="tv-name">${headerName}</span> <em>esto es lo que vemos.</em></h1>
+      <div class="tv-meta">${headerSub}</div>
+    </header>
 
     ${sherlockBlock}
 
-    ${primaryBlock}
-    ${secondaryBlock}
-    ${metaBlock}
+    <section class="tv-block tv-failure">
+      <div class="tv-label">Pieza que frena tu negocio</div>
+      <h2 class="failure-name">${escHtml(failure.name)}</h2>
+      <div class="failure-cause">${escHtml(failure.rootCause)}</div>
+    </section>
 
-    <div class="res-block">
-      <div class="res-label">Tu sistema</div>
-      <div class="res-tool">
-        <div class="t-name">${escHtml(customToolName)}</div>
-        <dl>
-          <dt>Qué hace</dt><dd>${escHtml(toolRes.tool.does)}</dd>
-          <dt>Qué problema resuelve</dt><dd>${escHtml(toolRes.tool.solves)}</dd>
-          <dt>Qué resultado genera para ti</dt><dd>${escHtml(toolRes.tool.output)}</dd>
-          <dt>Tipo de solución</dt><dd>${escHtml(toolRes.meta.tipo)}</dd>
-          <dt>Plazo orientativo</dt><dd>${escHtml(toolRes.meta.plazo)}</dd>
-          <dt>Inversión</dt><dd>Detallada en la ficha técnica que recibirás por email.</dd>
-        </dl>
+    <section class="tv-block tv-system">
+      <div class="tv-label">Lo que vas a recibir</div>
+      <div class="system-card">
+        <p class="system-summary">Una herramienta a medida diseñada para tu caso que repara <strong>${escHtml(failure.name)}</strong>. Convierte lo que hoy depende de tu cabeza en un sistema que funciona contigo.</p>
+        ${prdNotice}
       </div>
-    </div>
+    </section>
 
-    <div class="res-block res-viz">
-      <div class="res-label">${adaptiveViz.title}</div>
-      ${adaptiveViz.html}
-    </div>
+    ${vizBlock}
 
-    <div class="res-block res-deliverables">
-      <div class="res-label">Lo que recibes</div>
-      ${deliverablesHtml}
-    </div>
+    <section class="tv-block tv-kpis">
+      <div class="tv-label">Lo que recibes</div>
+      <div class="kpis-grid">${kpisHtml}</div>
+    </section>
 
-    <div class="res-block res-maite-note">
-      <div class="maite-note-card">
-        <div class="maite-note-label">Una nota mía</div>
-        <p class="maite-note-text">${maiteNote}</p>
-        <div class="maite-note-signature">— Maite Cabezuelos</div>
-        <div class="maite-note-ctas">
-          <a class="btn btn-primary" href="${ctas.waUrl}" target="_blank" rel="noopener">Hablar con Maite por WhatsApp →</a>
-          <a class="btn btn-ghost" href="${ctas.calUrl}" target="_blank" rel="noopener">Agendar 20 min</a>
+    <section class="tv-block tv-warranty">
+      <div class="tv-label">Acompañamiento incluido</div>
+      <div class="warranty-card">
+        <div class="warranty-title">3 meses sin coste post-entrega</div>
+        <div class="warranty-text">El Equipo MASESORA trabaja contigo después de la entrega <strong>hasta que el sistema sea natural en tu día a día</strong>. No es servicio postventa — es parte del producto. Si en 30 días tras la entrega el sistema no está integrado en tu operativa, ajustamos sin coste hasta que lo esté.</div>
+      </div>
+    </section>
+
+    <section class="tv-block tv-note">
+      <div class="note-card">
+        <div class="note-eyebrow">Una nota mía</div>
+        <p class="note-text">${escHtml(maiteNote)}</p>
+        <div class="note-sign">
+          Maite Cabezuelos
+          <small>Equipo MASESORA · Constructores de Sistemas</small>
         </div>
       </div>
+    </section>
+
+    <div class="tv-cta">
+      <a href="${ctas.calUrl}" class="cta-main-button" target="_blank" rel="noopener">Reservar 20 min con Maite · sin compromiso →</a>
+      <p class="cta-claim"><strong>Sin coste · Sin compromiso.</strong> Confirmamos contigo el alcance del Sistema, los KPIs y la cifra cerrada. Si no encaja, nos despedimos amablemente.</p>
     </div>
   `;
 
+  // Reveal animation
   box.classList.remove('revealing');
   void box.offsetWidth;
   box.classList.add('revealing');
 
+  // Pre-rellenar formulario lead con datos ya capturados
   try{
     const leadForm = document.querySelector('.cta-form');
     if(leadForm){
@@ -2872,11 +2959,17 @@ function captureLead(e){
       diagnosis: {
         primaryProblem: state.analysis?.primary?.sub?.name || '',
         secondaryProblem: state.analysis?.secondary?.sub?.name || '',
+        primaryArea: state.analysis?.primary?.area?.name || '',
+        secondaryArea: state.analysis?.secondary?.area?.name || '',
+        primaryAreaId: state.analysis?.primary?.area?.id || null,
+        structuralFailure: state.analysis ? (typeof getStructuralFailure==='function' ? getStructuralFailure(state.analysis) : null) : null,
+        intensities: state.answers || {},
         tool: state.analysis ? deriveTool(state.analysis).tool.name : '',
         areas: state.selectedAreas,
         subs: Object.values(state.selectedSubs).flat(),
         customSubs: state.customSubs || {},
-        vision: state.vision || {}
+        vision: state.vision || {}, state.ctx, state.analysis) : null) : null,
+        kpis: state.analysis ? (typeof buildKpis==='function' ? buildKpis(getStructuralFailure(state.analysis), state.ctx, state.analysis) : []) : []
       }
     });
   }
