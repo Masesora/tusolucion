@@ -1,0 +1,18 @@
+{
+  "name": "masesora-tu-solucion-backend",
+  "version": "1.0.0",
+  "description": "Endpoint de generación de PRD en vivo con OpenAI para Tu Solución de MASESORA",
+  "main": "generate-prd.js",
+  "scripts": {
+    "start": "node generate-prd.js",
+    "dev": "node --watch generate-prd.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "openai": "^4.67.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
