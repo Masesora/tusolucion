@@ -154,7 +154,7 @@ h1 em, h2 em, h3 em{font-family:var(--font-italic);font-style:italic;font-weight
 .q-text{font-family:var(--font-display);font-weight:400;font-size:clamp(1.4rem,3.5vw,2rem);line-height:1.25;color:var(--navy);text-align:center;margin:0 0 2.2rem 0}
 .q-text em{font-family:var(--font-italic);font-style:italic;color:var(--gold);font-weight:400}
 .q-text strong{color:var(--gold);font-weight:600}
-.q-helper{text-align:center;color:var(--muted);font-size:.9rem;margin:-1.5rem 0 1.5rem;font-style:italic;font-family:var(--font-italic)}
+.q-helper{text-align:center;color:var(--muted);font-size:.9rem;margin:-1.5rem 0 1.5rem;font-family:var(--font-display);font-weight:500;line-height:1.5}
 
 .q-input{display:block;width:100%;padding:1rem 1.3rem;border:1.5px solid var(--line);background:var(--white);color:var(--text);font-family:inherit;font-size:1.1rem;border-radius:14px;transition:all .25s ease;font-weight:500}
 .q-input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 4px rgba(184,157,82,.15)}
@@ -172,7 +172,7 @@ h1 em, h2 em, h3 em{font-family:var(--font-italic);font-style:italic;font-weight
 .q-areas{display:grid;grid-template-columns:1fr;gap:.55rem}
 .q-area-group-label{font-size:.6rem;letter-spacing:.2em;color:var(--gold);font-weight:700;text-transform:uppercase;margin-top:.7rem;margin-bottom:.4rem;padding-left:.3rem}
 .q-area-group-label:first-child{margin-top:0}
-.q-area-card{padding:.85rem 1.05rem;border:1.5px solid var(--line);background:var(--white);color:var(--navy);font-family:inherit;border-radius:12px;cursor:pointer;transition:all .2s ease;text-align:left;font-family:var(--font-italic);font-style:italic;font-size:.93rem;line-height:1.4}
+.q-area-card{padding:.85rem 1.05rem;border:1.5px solid var(--line);background:var(--white);color:var(--navy);font-family:var(--font-display);font-weight:500;border-radius:12px;cursor:pointer;transition:all .2s ease;text-align:left;font-size:.93rem;line-height:1.45}
 .q-area-card:hover{border-color:var(--gold);background:rgba(184,157,82,.06);transform:translateX(3px)}
 .q-area-card.selected{border-color:var(--gold);background:linear-gradient(135deg,rgba(184,157,82,.15),rgba(184,157,82,.04));box-shadow:0 6px 20px -6px rgba(184,157,82,.3)}
 
@@ -242,7 +242,7 @@ h1 em, h2 em, h3 em{font-family:var(--font-italic);font-style:italic;font-weight
 .alt-card.recommended::before{content:"⭐ Recomendado para tu perfil";position:absolute;top:.85rem;right:.85rem;font-size:.55rem;letter-spacing:.16em;color:var(--gold);font-weight:800;text-transform:uppercase;background:rgba(184,157,82,.15);padding:.25rem .6rem;border-radius:999px;border:1px solid rgba(184,157,82,.3)}
 .alt-tag{font-size:.6rem;letter-spacing:.24em;color:var(--gold);font-weight:800;text-transform:uppercase;margin-bottom:.85rem}
 .alt-name{font-family:var(--font-display);font-weight:700;font-size:1.15rem;color:var(--navy);line-height:1.3;margin:0 0 .85rem 0;letter-spacing:-0.01em}
-.alt-desc{font-family:var(--font-italic);font-style:italic;font-size:.95rem;color:var(--text);line-height:1.55;margin:0 0 1.3rem 0}
+.alt-desc{font-family:var(--font-display);font-weight:500;font-size:.95rem;color:var(--text);line-height:1.55;margin:0 0 1.3rem 0}
 .alt-stack-label,.alt-kpis-label{font-size:.58rem;letter-spacing:.22em;color:var(--gold);font-weight:800;text-transform:uppercase;margin:1rem 0 .55rem 0}
 .alt-stack,.alt-kpis{list-style:none;margin:0 0 .7rem 0;padding:0}
 .alt-stack li,.alt-kpis li{padding:.35rem 0;color:var(--text);font-size:.86rem;line-height:1.5;border-bottom:1px dashed rgba(184,157,82,.18)}
@@ -389,6 +389,9 @@ h1 em, h2 em, h3 em{font-family:var(--font-italic);font-style:italic;font-weight
       <button class="q-chip" data-field="sector" data-value="Creativo">Creativo / Agencia</button>
       <button class="q-chip" data-field="sector" data-value="Otro">Otro</button>
     </div>
+    <div id="sector-other-wrap" style="display:none;margin-top:.7rem">
+      <input type="text" class="q-input" id="q-sector-other" placeholder="Escribe tu sector concreto (ej: terapias alternativas, repostería artesanal, asesoría energética...)" maxlength="80">
+    </div>
     <div class="q-section-label">Tamaño del equipo</div>
     <div class="q-grid">
       <button class="q-chip" data-field="size" data-value="Autónomo">Trabajo solo/a</button>
@@ -413,6 +416,7 @@ h1 em, h2 em, h3 em{font-family:var(--font-italic);font-style:italic;font-weight
   <div class="q-inner">
     <div class="q-eyebrow">Pregunta 3 de 7</div>
     <h2 class="q-text"><em>¿Dónde te duele</em> más en tu día a día?</h2>
+    <p class="q-helper">Marca <strong>hasta 3 áreas</strong> · cuanto más concreto, más afina tu PRD. <span style="display:inline-block;padding:.15rem .55rem;background:rgba(184,157,82,.12);border-radius:999px;color:var(--gold);font-weight:700;font-size:.78rem;letter-spacing:.04em;margin-left:.4rem"><span id="q3-counter">0</span>/3</span></p>
     <div class="q-areas">
       <div class="q-area-group-label">PULSO COMERCIAL</div>
       <button class="q-area-card" data-area="1" data-piece="P2">"Pierdo llamadas, emails y contactos que podrían ser clientes."</button>
@@ -429,6 +433,13 @@ h1 em, h2 em, h3 em{font-family:var(--font-italic);font-style:italic;font-weight
       <button class="q-area-card" data-area="7" data-piece="P3">"Comunicar con clientes de forma constante me cuesta."</button>
       <button class="q-area-card" data-area="8" data-piece="P1">"Si yo no estoy un día, todo se para."</button>
     </div>
+
+    <!-- Bloque "Mi caso no encaja" -->
+    <div class="no-fit-block" style="margin-top:1.5rem;padding:1.1rem 1.4rem;background:rgba(184,157,82,.05);border:1.5px dashed rgba(184,157,82,.4);border-radius:14px">
+      <div style="font-size:.78rem;color:var(--navy);font-weight:600;margin-bottom:.6rem">¿Tu caso no encaja en ninguna de estas?</div>
+      <textarea class="q-input q-textarea" id="q-no-fit" placeholder="Cuéntanos tu situación con tus palabras (1-3 frases). La IA lo lee y afina el diagnóstico." style="min-height:80px;font-size:.9rem"></textarea>
+    </div>
+
     <div class="q-actions">
       <button class="q-back" onclick="goStep(2)">← Volver</button>
       <button class="btn btn-primary" id="q3-next" disabled onclick="goStep(4)">Siguiente →</button>
@@ -467,6 +478,10 @@ h1 em, h2 em, h3 em{font-family:var(--font-italic);font-style:italic;font-weight
       <button class="q-tool" data-tool="slack">Slack / Teams / Discord</button>
       <button class="q-tool" data-tool="email">Email + Calendar</button>
       <button class="q-tool" data-tool="nada">Nada estructurado</button>
+    </div>
+    <div style="margin-top:1rem">
+      <label style="font-size:.78rem;color:var(--muted);font-weight:600;display:block;margin-bottom:.4rem">¿Otra herramienta clave que uses?</label>
+      <input type="text" class="q-input" id="q-tools-other" placeholder="Opcional · ej: Holded, Toggl, Airtable, Stripe..." style="font-size:.92rem;padding:.7rem 1rem">
     </div>
     <div class="q-actions">
       <button class="q-back" onclick="goStep(4)">← Volver</button>
@@ -534,6 +549,7 @@ h1 em, h2 em, h3 em{font-family:var(--font-italic);font-style:italic;font-weight
     <!-- Bloque descuento -->
     <div class="discount-block" id="discount-block">
       <div class="discount-eyebrow">Descuento por reserva inmediata</div>
+      <p style="font-size:.85rem;color:var(--text);margin:0 0 1.2rem 0;line-height:1.5"><strong style="color:var(--ok)">✓ Maite ya ha recibido tu PRD</strong> en su email. Puedes reservar tranquilamente.</p>
       <h3 class="discount-title">Si reservas tu sesión <strong>en las próximas 2 horas</strong>, aplicamos <strong>15% de descuento</strong> sobre la opción que elijas.</h3>
       <div class="discount-code-row">
         <div class="discount-code" id="discount-code">DESC-A8B3</div>
@@ -547,6 +563,11 @@ h1 em, h2 em, h3 em{font-family:var(--font-italic);font-style:italic;font-weight
           ¿Te encaja la idea pero no la cifra ahora? <strong>Hablamos de pago en cuotas →</strong>
         </a>
       </div>
+    </div>
+
+    <!-- D · Botón "empezar de nuevo" -->
+    <div style="margin-top:1rem;text-align:center">
+      <button onclick="resetAll()" style="background:none;border:none;color:var(--muted);font-family:inherit;font-size:.78rem;cursor:pointer;text-decoration:underline">↻ Empezar un diagnóstico nuevo</button>
     </div>
 
     <!-- Form lead secundario plegado -->
@@ -566,6 +587,19 @@ h1 em, h2 em, h3 em{font-family:var(--font-italic);font-style:italic;font-weight
     </div>
   </div>
 </section>
+
+
+<!-- C · CTA persistente flotante (visible durante el cuestionario) -->
+<a href="https://cal.com/masesora/reunion" target="_blank" rel="noopener" id="cta-flotante" style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:100;background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:var(--navy);padding:.85rem 1.4rem;border-radius:999px;font-family:inherit;font-weight:700;font-size:.82rem;letter-spacing:.04em;text-decoration:none;box-shadow:0 12px 32px -8px rgba(184,157,82,.6),inset 0 1px 0 rgba(255,255,255,.4);transition:all .25s ease;display:none;align-items:center;gap:.5rem">
+  💬 Hablar con Maite directamente →
+</a>
+<style>
+#cta-flotante.visible{display:inline-flex !important}
+#cta-flotante:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 18px 42px -10px rgba(184,157,82,.8)}
+@media(max-width:640px){
+  #cta-flotante{bottom:1rem;right:1rem;font-size:.75rem;padding:.7rem 1.1rem}
+}
+</style>
 
 <!-- ============ FOOTER ============ -->
 <footer class="legal-footer">
@@ -590,13 +624,20 @@ const API_BASE = 'https://tsm-awye.onrender.com'; // ← URL del backend Render
 // ============================================================
 const state = {
   step: 0, name: '', activity: '',
-  sector: '', size: '', volume: '',
-  area: null, piece: null,
+  sector: '', sectorOther: '', size: '', volume: '',
+  areas: [], pieces: [],   // multi-select hasta 3 áreas
+  noFitText: '',           // "mi caso no encaja" textarea
   branchAnswer: '',
+  branchOther: '',         // "otra situación" en Q4
   tools: [],
+  toolsOther: '',          // "otra herramienta" en Q5
   vision: '', intensity: null,
   discountCode: null
 };
+
+// area / piece (singulares) son derivados — la pieza dominante es la primera elegida
+Object.defineProperty(state, 'area', { get(){ return this.areas[0] || null } });
+Object.defineProperty(state, 'piece', { get(){ return this.pieces[0] || null } });
 
 // ============================================================
 // CATÁLOGO DE PIEZAS · solo para mostrar pregunta-clave correcta
@@ -645,6 +686,11 @@ function goStep(n) {
   }
   renderStepbar();
   window.scrollTo(0, 0);
+  // CTA flotante: visible durante cuestionario (steps 1-7), oculto en intro/loading/PRD
+  const cta = document.getElementById('cta-flotante');
+  if (cta) cta.classList.toggle('visible', n >= 1 && n <= 7);
+  // Guardar estado
+  if (typeof saveState === 'function') saveState();
 }
 
 // ============================================================
@@ -669,11 +715,22 @@ document.querySelectorAll('[data-field]').forEach(btn => {
     document.querySelectorAll(`[data-field="${field}"]`).forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
     state[field] = btn.dataset.value;
+    // Si elige "Otro" en sector → abre campo libre
+    if (field === 'sector') {
+      const wrap = document.getElementById('sector-other-wrap');
+      if (btn.dataset.value === 'Otro') wrap.style.display = 'block';
+      else { wrap.style.display = 'none'; state.sectorOther = ''; }
+    }
     checkQ2();
   });
 });
+document.getElementById('q-sector-other')?.addEventListener('input', e => {
+  state.sectorOther = e.target.value.trim();
+  checkQ2();
+});
 function checkQ2() {
-  document.getElementById('q2-next').disabled = !(state.sector && state.size && state.volume);
+  const sectorOk = state.sector && (state.sector !== 'Otro' || state.sectorOther.length >= 2);
+  document.getElementById('q2-next').disabled = !(sectorOk && state.size && state.volume);
 }
 
 // ============================================================
@@ -681,14 +738,36 @@ function checkQ2() {
 // ============================================================
 document.querySelectorAll('[data-area]').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('[data-area]').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-    state.area = parseInt(btn.dataset.area);
-    state.piece = btn.dataset.piece;
-    state.branchAnswer = '';
-    document.getElementById('q3-next').disabled = false;
+    const id = parseInt(btn.dataset.area);
+    const piece = btn.dataset.piece;
+    const idx = state.areas.indexOf(id);
+    if (idx >= 0) {
+      // ya seleccionada → la quitamos
+      state.areas.splice(idx, 1);
+      state.pieces.splice(idx, 1);
+      btn.classList.remove('selected');
+    } else if (state.areas.length < 3) {
+      // añadir si quedan slots
+      state.areas.push(id);
+      state.pieces.push(piece);
+      btn.classList.add('selected');
+    }
+    // resetear branch si cambió la pieza dominante
+    if (state.areas.length === 0) state.branchAnswer = '';
+    document.getElementById('q3-next').disabled = state.areas.length === 0;
+    // Actualizar contador si existe
+    const c = document.getElementById('q3-counter');
+    if (c) c.textContent = state.areas.length;
   });
 });
+// Listener para "mi caso no encaja" en Q3 · habilita el next si hay >=10 chars
+document.getElementById('q-no-fit').addEventListener('input', e => {
+  state.noFitText = e.target.value.trim();
+  // Si tiene texto significativo, habilita el next aunque no haya áreas
+  const ok = state.areas.length > 0 || state.noFitText.length >= 10;
+  document.getElementById('q3-next').disabled = !ok;
+});
+
 
 // ============================================================
 // Q4 (ramificada)
@@ -709,7 +788,11 @@ function renderBranchQuestion() {
   } else {
     optsContainer.innerHTML = `<div class="q-grid">${
       config.options.map(opt => `<button class="q-chip" data-branch="${opt.replace(/"/g, '&quot;')}">${opt}</button>`).join('')
-    }</div>`;
+    }</div>
+    <div style="margin-top:1.2rem;padding:1rem 1.2rem;background:rgba(184,157,82,.05);border:1.5px dashed rgba(184,157,82,.35);border-radius:12px">
+      <label style="font-size:.78rem;color:var(--navy);font-weight:600;display:block;margin-bottom:.4rem">¿Tu caso no encaja en ninguna de estas? · Cuéntalo:</label>
+      <textarea class="q-input q-textarea" id="q4-branch-other" placeholder="Opcional · si las opciones de arriba no capturan tu caso, descríbelo aquí" style="min-height:70px;font-size:.9rem"></textarea>
+    </div>`;
     optsContainer.querySelectorAll('[data-branch]').forEach(b => {
       b.addEventListener('click', () => {
         optsContainer.querySelectorAll('[data-branch]').forEach(x => x.classList.remove('selected'));
@@ -717,6 +800,14 @@ function renderBranchQuestion() {
         state.branchAnswer = b.dataset.branch;
         document.getElementById('q4-next').disabled = false;
       });
+    });
+    // Listener para "otra situación"
+    document.getElementById('q4-branch-other').addEventListener('input', e => {
+      state.branchOther = e.target.value.trim();
+      // Habilita el next si hay texto significativo, aunque no haya seleccionado opción
+      if (state.branchOther.length >= 5 && !state.branchAnswer) {
+        document.getElementById('q4-next').disabled = false;
+      }
     });
   }
   document.getElementById('q4-next').disabled = true;
@@ -737,6 +828,10 @@ document.querySelectorAll('[data-tool]').forEach(btn => {
     document.getElementById('q5-next').disabled = state.tools.length === 0;
   });
 });
+document.getElementById('q-tools-other')?.addEventListener('input', e => {
+  state.toolsOther = e.target.value.trim();
+});
+
 
 // ============================================================
 // Q6
@@ -769,7 +864,8 @@ async function generatePRD() {
     'Buscando patrones en tu sector…',
     'Identificando la pieza que frena tu negocio…',
     'Calculando precios según tu perfil…',
-    'Construyendo las opciones que sí encajan contigo…'
+    'Construyendo las opciones que sí encajan contigo…',
+    'Si llevas más de 30 segundos esperando, tranquilo · primera petición del día tarda algo más'
   ];
   let mi = 0;
   const sub = document.getElementById('loading-subtitle');
@@ -788,15 +884,21 @@ async function generatePRD() {
     client: {
       name: state.name,
       activity: state.activity,
-      sector: state.sector,
+      sector: state.sector === 'Otro' && state.sectorOther ? state.sectorOther : state.sector,
+      sectorRaw: state.sector,
       size: state.size,
       volume: state.volume
     },
     diagnosis: {
-      piece: state.piece,
-      areaId: state.area,
+      piece: state.piece,                  // pieza dominante (primera elegida)
+      areaId: state.area,                  // área dominante
+      areas: state.areas,                  // todas las áreas seleccionadas (hasta 3)
+      pieces: state.pieces,                // todas las piezas correspondientes
       branchAnswer: state.branchAnswer,
+      branchOther: state.branchOther,      // texto libre Q4
+      noFitText: state.noFitText,          // texto libre Q3 "no encaja"
       tools: state.tools,
+      toolsOther: state.toolsOther,        // texto libre herramienta extra
       vision: state.vision,
       intensity: state.intensity
     }
@@ -847,6 +949,8 @@ async function generatePRD() {
             } else if (currentEvent === 'done') {
               content.innerHTML = mdToHtml(fullText);
               connectAltButtons();
+              // Una vez generado el PRD, podemos limpiar el estado guardado
+              clearState();
             } else if (currentEvent === 'error') {
               throw new Error(data.message);
             }
@@ -862,10 +966,12 @@ async function generatePRD() {
     clearInterval(loadInterval);
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById('screen-prd').classList.add('active');
+    const errMsg = (err && err.message) ? err.message : 'Error desconocido';
     document.getElementById('prd-content').innerHTML = `
       <div class="error-box">
-        <strong>No hemos podido construir tu PRD ahora.</strong>
-        Reserva igualmente y lo construimos contigo en la reunión.
+        <strong>No hemos podido construir tu PRD ahora mismo.</strong>
+        <p style="margin:.5rem 0;font-size:.85rem;color:#888">Detalle técnico: ${errMsg}</p>
+        <p style="margin-top:1rem">Reserva igualmente y lo construimos contigo en la reunión.</p>
         <div style="margin-top:1rem">
           <a href="https://cal.com/masesora/reunion" target="_blank" rel="noopener" class="btn btn-primary">Reservar 20 min con Maite →</a>
         </div>
@@ -996,6 +1102,138 @@ async function submitLead() {
     </div>
   `;
 }
+
+// ============================================================
+// A · PERSISTENCIA · localStorage
+// ============================================================
+const STORAGE_KEY = 'masesora_tu_solucion_v3';
+function saveState() {
+  try {
+    const snapshot = {
+      v: 3, ts: Date.now(),
+      step: state.step,
+      name: state.name, activity: state.activity,
+      sector: state.sector, sectorOther: state.sectorOther,
+      size: state.size, volume: state.volume,
+      areas: state.areas, pieces: state.pieces,
+      noFitText: state.noFitText,
+      branchAnswer: state.branchAnswer, branchOther: state.branchOther,
+      tools: state.tools, toolsOther: state.toolsOther,
+      vision: state.vision, intensity: state.intensity
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot));
+  } catch (e) {}
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const s = JSON.parse(raw);
+    // Expira en 7 días
+    if (!s.ts || Date.now() - s.ts > 7 * 24 * 3600 * 1000) {
+      localStorage.removeItem(STORAGE_KEY);
+      return null;
+    }
+    return s;
+  } catch (e) { return null; }
+}
+function restoreState(s) {
+  if (!s) return;
+  Object.assign(state, {
+    name: s.name||'', activity: s.activity||'',
+    sector: s.sector||'', sectorOther: s.sectorOther||'',
+    size: s.size||'', volume: s.volume||'',
+    areas: s.areas||[], pieces: s.pieces||[],
+    noFitText: s.noFitText||'',
+    branchAnswer: s.branchAnswer||'', branchOther: s.branchOther||'',
+    tools: s.tools||[], toolsOther: s.toolsOther||'',
+    vision: s.vision||'', intensity: s.intensity||null
+  });
+  // Restaurar valores en inputs
+  const setVal = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val; };
+  setVal('q-name', state.name);
+  setVal('q-activity', state.activity);
+  setVal('q-sector-other', state.sectorOther);
+  setVal('q-no-fit', state.noFitText);
+  setVal('q-tools-other', state.toolsOther);
+  setVal('q-vision', state.vision);
+  // Restaurar selecciones visuales
+  document.querySelectorAll('[data-field]').forEach(b => {
+    if (b.dataset.value === state[b.dataset.field]) b.classList.add('selected');
+  });
+  if (state.sector === 'Otro') document.getElementById('sector-other-wrap').style.display = 'block';
+  document.querySelectorAll('[data-area]').forEach(b => {
+    if (state.areas.includes(parseInt(b.dataset.area))) b.classList.add('selected');
+  });
+  document.querySelectorAll('[data-tool]').forEach(b => {
+    if (state.tools.includes(b.dataset.tool)) b.classList.add('selected');
+  });
+  if (state.intensity) {
+    const sel = document.querySelector(`[data-intensity="${state.intensity}"]`);
+    if (sel) sel.classList.add('selected');
+  }
+  // Reactivar checks
+  if (typeof checkQ1 === 'function') checkQ1();
+  if (typeof checkQ2 === 'function') checkQ2();
+  if (state.areas.length > 0) document.getElementById('q3-next').disabled = false;
+  const counter = document.getElementById('q3-counter');
+  if (counter) counter.textContent = state.areas.length;
+}
+function clearState() { try { localStorage.removeItem(STORAGE_KEY); } catch (e) {} }
+
+// Guardar estado en cada interacción significativa
+['input', 'click'].forEach(evt => {
+  document.addEventListener(evt, e => {
+    if (e.target.matches('.q-input, .q-textarea, .q-chip, .q-area-card, .q-tool, .q-scale-btn')) {
+      setTimeout(saveState, 50);
+    }
+  });
+});
+
+// B · PRE-WARM del backend al cargar la página
+async function prewarmBackend() {
+  try {
+    await fetch(`${API_BASE}/api/health`, { mode: 'cors' });
+    console.log('[masesora] backend pre-warm OK');
+  } catch (e) { /* silencioso */ }
+}
+
+// D · botón "empezar de nuevo" en pantalla PRD
+function resetAll() {
+  if (!confirm('¿Empezar un diagnóstico nuevo? Se borrarán las respuestas actuales.')) return;
+  clearState();
+  // Reset state en memoria
+  Object.assign(state, {
+    step: 0, name: '', activity: '',
+    sector: '', sectorOther: '', size: '', volume: '',
+    areas: [], pieces: [],
+    noFitText: '', branchAnswer: '', branchOther: '',
+    tools: [], toolsOther: '',
+    vision: '', intensity: null, discountCode: null
+  });
+  // Reset DOM
+  document.querySelectorAll('.q-input, .q-textarea').forEach(i => i.value = '');
+  document.querySelectorAll('.selected').forEach(b => b.classList.remove('selected'));
+  document.getElementById('sector-other-wrap').style.display = 'none';
+  const c = document.getElementById('q3-counter'); if (c) c.textContent = '0';
+  document.querySelectorAll('.btn[id$="-next"]').forEach(b => b.disabled = true);
+  goStep(0);
+}
+
+// Init: cargar estado guardado y pre-warm
+document.addEventListener('DOMContentLoaded', () => {
+  const saved = loadState();
+  if (saved && (saved.name || saved.areas?.length || saved.activity)) {
+    // Hay progreso guardado · ofrecer retomar
+    if (confirm('Tienes un diagnóstico a medio hacer. ¿Lo retomamos?')) {
+      restoreState(saved);
+    } else {
+      clearState();
+    }
+  }
+  prewarmBackend();
+});
+
 </script>
 
 </body>
