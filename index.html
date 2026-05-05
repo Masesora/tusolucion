@@ -325,44 +325,8 @@ h1 em, h2 em, h3 em{font-family:var(--font-italic);font-style:italic;font-weight
 <!-- ============ STEPBAR ============ -->
 <div class="stepbar" id="stepbar"><div class="stepbar-inner" id="stepbarInner"></div></div>
 
-<!-- ============ HERO (intacto) ============ -->
-<section id="s-intro" class="screen active">
-  <div class="hero">
-    <div class="hero-inner">
-      <div class="eyebrow">DIAGNÓSTICO MAS@FRAME®</div>
-      <h1>
-      Sabes que tu negocio puede ir mejor.<br>
-      <em>Juntos decimos cómo.</em>
-      </h1>
-
-      <p class="lead">En 5 minutos te decimos exactamente qué frena tu negocio, qué problema lo amplifica y qué herramienta operativa concreta necesitas. Construimos un sistema personalizado y presupuestado <strong>en pantalla, ahora</strong>. Luego nos reunimos y matizamos. Sin formularios trampa.</p>
-      <div class="spec">
-        <div><span class="dot"></span>7 preguntas adaptativas</div>
-        <div><span class="dot"></span>Sistema personalizado para tu negocio</div>
-        <div><span class="dot"></span>Presupuesto en 5 minutos</div>
-      </div>
-
-      <div class="emilia-anchor">
-        <div class="emilia-badge">Costuras Emilia · Taller de confección, Altea</div>
-        <div class="emilia-quote">
-          "Le construimos el <strong style="color:var(--gold-soft)">Sistema Base Costura</strong>: base de datos de patrones, ficha de medidas de cada clienta, agenda de pedidos e histórico de trabajos. Ahora no pierde ni un pedido y sus clientas reconocen una experiencia única con su trato."
-        </div>
-        <div class="emilia-result">Si esto te suena familiar, el diagnóstico es para ti.</div>
-      </div>
-
-      <button class="btn btn-primary" onclick="goStep(1)">Quiero ver MI SOLUCIÓN →</button>
-
-      <div class="hero-trust">
-        <div class="hero-trust-item"><strong>Adaptativo</strong> — las preguntas cambian según lo que respondes. No hay 30 preguntas para todos.</div>
-        <div class="hero-trust-item"><strong>Sin compromiso</strong> — Sabemos lo que necesitas y queremos ayudarte de forma inmediata, -15 % DTO si reservas reunión hoy mismo. </div>
-        <div class="hero-trust-item"><strong>Pago en cuotas</strong> — Si te encaja la idea pero no la cifra ahora, hablamos y nos adaptamos a tus necesidades.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ Q1: Nombre + actividad ============ -->
-<section class="screen q-screen" id="screen-q1">
+<!-- ============ Q1: Nombre + actividad · pantalla inicial ============ -->
+<section class="screen q-screen active" id="screen-q1">
   <div class="q-inner">
     <div class="q-eyebrow">Pregunta 1 de 7</div>
     <h2 class="q-text">Antes de empezar —<br>
@@ -645,7 +609,7 @@ const API_BASE = 'https://tsm-awye.onrender.com'; // ← URL del backend Render
 // ESTADO
 // ============================================================
 const state = {
-  step: 0, name: '', activity: '',
+  step: 1, name: '', activity: '',
   sector: '', sectorOther: '', size: '', volume: '',
   areas: [], pieces: [],   // multi-select hasta 3 áreas
   noFitText: '',           // "mi caso no encaja" textarea
@@ -700,9 +664,7 @@ function renderStepbar(){
 function goStep(n) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   state.step = n;
-  if (n === 0) {
-    document.getElementById('s-intro').classList.add('active');
-  } else if (n <= 7) {
+  if (n >= 1 && n <= 7) {
     document.getElementById(`screen-q${n}`).classList.add('active');
     if (n === 4) renderBranchQuestion();
   }
@@ -1226,7 +1188,7 @@ function resetAll() {
   if (!confirm('¿Empezar un diagnóstico nuevo? Se borrarán las respuestas actuales.')) return;
   clearState();
   Object.assign(state, {
-    step: 0, name: '', activity: '',
+    step: 1, name: '', activity: '',
     sector: '', sectorOther: '', size: '', volume: '',
     areas: [], pieces: [],
     noFitText: '', branchAnswer: '', branchOther: '',
@@ -1239,7 +1201,7 @@ function resetAll() {
   if (wrap) wrap.style.display = 'none';
   const c = document.getElementById('q3-counter'); if (c) c.textContent = '0';
   document.querySelectorAll('.btn[id$="-next"]').forEach(b => b.disabled = true);
-  goStep(0);
+  goStep(1);
 }
 
 // Init
@@ -1250,7 +1212,10 @@ document.addEventListener('DOMContentLoaded', () => {
       restoreState(saved);
     } else {
       clearState();
+      goStep(1);
     }
+  } else {
+    goStep(1);
   }
   prewarmBackend();
 });
