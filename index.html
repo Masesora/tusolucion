@@ -6,6 +6,31 @@
 <title>Tu Solución · Diagnóstico Ejecutivo — Masesora</title>
 <meta name="description" content="Diagnóstico ejecutivo en 15 minutos. La IA construye tu PRD presupuestado en pantalla. Sin reuniones para verlo. Sin formularios trampa.">
 
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-62L9S89H53"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-62L9S89H53');
+
+  // Tracking de clicks delegados a CTAs principales
+  document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('click', function(e) {
+      var a = e.target.closest('a');
+      if (!a || !a.href) return;
+      var href = a.href;
+      var from = location.pathname || '/';
+      var label = (a.textContent || '').trim().slice(0,40);
+      if (href.indexOf('cal.com') !== -1) {
+        gtag('event','clic_agendar_reunion',{from:from});
+      } else if (href.indexOf('wa.me') !== -1) {
+        gtag('event','clic_whatsapp_avatar',{from:from});
+      }
+    });
+  });
+</script>
+
 <!-- FAVICON -->
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 
@@ -904,6 +929,17 @@ async function generatePRD() {
     const content = document.getElementById('prd-content');
     content.innerHTML = '<span class="prd-typing"></span>';
     let fullText = '';
+
+    // GA4 · evento clave de conversión: el visitante ha completado el cuestionario
+    if (typeof gtag === 'function') {
+      gtag('event', 'cuestionario_completado', {
+        piece: state.piece || 'unknown',
+        size: state.size || 'unknown',
+        volume: state.volume || 'unknown',
+        intensity: state.intensity || 0,
+        has_email: !!state.email
+      });
+    }
 
     // Procesar SSE
     const reader = response.body.getReader();
