@@ -317,7 +317,7 @@ ${prdMarkdown.replace(/\n/g, '<br>')}
 
   try {
     await smtpTransporter.sendMail({
-      from: `"Tu Solución · MASESORA" <${process.env.SMTP_USER}>`,
+      from: `"Tu Solución · MASESORA" <${process.env.FROM_EMAIL || process.env.SMTP_USER}>`,
       to: NOTIFY_EMAIL,
       subject: `📋 Nueva Tu Solución · ${client.name || 'cliente'} · ${PIECES[diagnosis.piece || 'P4']?.name} · código ${code}`,
       html
