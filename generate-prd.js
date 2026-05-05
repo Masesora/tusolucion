@@ -8,7 +8,7 @@
  * ajustadas al perfil real del cliente y precios calculados en vivo.
  * Tras cerrar el streaming, envía email a info@masesora.com con todo.
  *
- * Stack: Node.js + Express + Anthropic Claude SDK + nodemailer (SMTP Gmail)
+ * Stack: Node.js + Express + Anthropic Claude SDK + Resend HTTP API (email)
  * Modelo recomendado: claude-sonnet-4-6
  * Coste estimado por sesión: ~0.05-0.20 EUR
  */
@@ -16,7 +16,8 @@
 const express = require('express');
 const cors = require('cors');
 const Anthropic = require('@anthropic-ai/sdk');
-const nodemailer = require('nodemailer');
+// Nota: nodemailer ya no se usa · Render Free bloquea SMTP saliente.
+// El email se envía vía API HTTP de Resend (puerto 443, sin bloqueo).
 
 const app = express();
 app.use(cors());
@@ -28,17 +29,9 @@ const DISCOUNT_PCT = parseInt(process.env.DISCOUNT_PERCENT || '15', 10);
 const DISCOUNT_HOURS = parseInt(process.env.DISCOUNT_HOURS || '2', 10);
 const NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || 'info@masesora.com';
 
-// SMTP · auto-detección SSL/STARTTLS según puerto
-const smtpPort = parseInt(process.env.SMTP_PORT || '587', 10);
-const smtpTransporter = (process.env.SMTP_HOST && process.env.SMTP_USER)
-  ? nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: smtpPort,
-      secure: smtpPort === 465,  // true para SSL (465) · false para STARTTLS (587)
-      auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
-      tls: { rejectUnauthorized: false }  // tolerante con certificados de proveedores no-Big-Tech (Nominalia, Strato, etc.)
-    })
-  : null;
+// Email · vía API HTTPS de Resend (smtp outbound bloqueado en Render Free)
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const FROM_EMAIL = process.env.FROM_EMAIL || 'info@masesora.com';
 
 // ============================================================
 // CATÁLOGO DE 8 PIEZAS · precios base (bajados 25% adicional)
@@ -258,8 +251,8 @@ Genera ahora Tu Solución siguiendo la estructura obligatoria.`;
 // Email a info@masesora.com con todo el registro
 // ============================================================
 async function sendNotificationEmail({ payload, prdMarkdown, code, expiresAt }) {
-  if (!smtpTransporter) {
-    console.warn('[notify] SMTP no configurado · email no enviado');
+  if (!RESEND_API_KEY) {
+    console.warn('[notify] RESEND_API_KEY no configurada · email no enviado');
     return;
   }
 
@@ -316,13 +309,28 @@ ${prdMarkdown.replace(/\n/g, '<br>')}
   `;
 
   try {
-    await smtpTransporter.sendMail({
-      from: `"Tu Solución · MASESORA" <${process.env.FROM_EMAIL || process.env.SMTP_USER}>`,
-      to: NOTIFY_EMAIL,
-      subject: `📋 Nueva Tu Solución · ${client.name || 'cliente'} · ${PIECES[diagnosis.piece || 'P4']?.name} · código ${code}`,
-      html
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${RESEND_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        from: `Tu Solución · MASESORA <${FROM_EMAIL}>`,
+        to: [NOTIFY_EMAIL],
+        subject: `📋 Nueva Tu Solución · ${client.name || 'cliente'} · ${PIECES[diagnosis.piece || 'P4']?.name} · código ${code}`,
+        html
+      })
     });
-    console.log(`[notify] Email enviado a ${NOTIFY_EMAIL} · código ${code}`);
+
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error('[notify] Resend API error:', response.status, errText);
+      return;
+    }
+
+    const data = await response.json();
+    console.log(`[notify] Email enviado a ${NOTIFY_EMAIL} · código ${code} · resend id ${data.id}`);
   } catch (err) {
     console.error('[notify] Error enviando email:', err.message);
   }
@@ -403,7 +411,8 @@ app.get('/api/health', (req, res) => {
     discount_pct: DISCOUNT_PCT,
     discount_hours: DISCOUNT_HOURS,
     has_anthropic_key: Boolean(process.env.ANTHROPIC_API_KEY),
-    has_smtp: Boolean(smtpTransporter),
+    has_resend: Boolean(RESEND_API_KEY),
+    from_email: FROM_EMAIL,
     notify_email: NOTIFY_EMAIL,
     pieces: Object.keys(PIECES).length
   });
@@ -431,6 +440,6 @@ app.listen(PORT, () => {
   console.log(`[MASESORA] generate-prd corriendo en puerto ${PORT}`);
   console.log(`[MASESORA] Modelo: ${MODEL}`);
   console.log(`[MASESORA] Descuento: ${DISCOUNT_PCT}% válido ${DISCOUNT_HOURS}h`);
-  console.log(`[MASESORA] Email notificación: ${NOTIFY_EMAIL} · SMTP ${smtpTransporter ? 'activo' : '⚠ NO configurado'}`);
+  console.log(`[MASESORA] Email notificación: ${NOTIFY_EMAIL} · Resend ${RESEND_API_KEY ? 'activo' : '⚠ NO configurado'} · From: ${FROM_EMAIL}`);
   if (!process.env.ANTHROPIC_API_KEY) console.warn('[MASESORA] ⚠ ANTHROPIC_API_KEY no configurada');
 });
