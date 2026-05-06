@@ -13,19 +13,30 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-62L9S89H53');
+</script>
 
-  // Tracking de clicks delegados a CTAs principales
+<!-- Meta Pixel -->
+<script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init','4359415267704371');
+  fbq('track','PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=4359415267704371&ev=PageView&noscript=1"/></noscript>
+
+<!-- Tracking unificado · clicks a GA4 + Meta Pixel -->
+<script>
   document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(e) {
       var a = e.target.closest('a');
       if (!a || !a.href) return;
       var href = a.href;
       var from = location.pathname || '/';
-      var label = (a.textContent || '').trim().slice(0,40);
       if (href.indexOf('cal.com') !== -1) {
-        gtag('event','clic_agendar_reunion',{from:from});
+        if (typeof gtag==='function') gtag('event','clic_agendar_reunion',{from:from});
+        if (typeof fbq==='function') fbq('track','Schedule',{content_name:'Cal.com',from:from});
       } else if (href.indexOf('wa.me') !== -1) {
-        gtag('event','clic_whatsapp_avatar',{from:from});
+        if (typeof gtag==='function') gtag('event','clic_whatsapp_avatar',{from:from});
+        if (typeof fbq==='function') fbq('track','Contact',{content_name:'WhatsApp Avatar',from:from});
       }
     });
   });
@@ -938,6 +949,18 @@ async function generatePRD() {
         volume: state.volume || 'unknown',
         intensity: state.intensity || 0,
         has_email: !!state.email
+      });
+    }
+    // Meta Pixel · Lead estándar (compatible con audiencias Lookalike)
+    if (typeof fbq === 'function') {
+      fbq('track', 'Lead', {
+        content_name: 'cuestionario_completado',
+        content_category: state.piece || 'unknown',
+        custom_data: {
+          size: state.size || 'unknown',
+          volume: state.volume || 'unknown',
+          intensity: state.intensity || 0
+        }
       });
     }
 
