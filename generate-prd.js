@@ -435,6 +435,103 @@ app.post('/api/calculate-price', (req, res) => {
   });
 });
 
+// ============================================================
+// Guardar lead / reserva · POST /api/save-lead
+// - Formulario "Te lo enviamos por email": exige consentimiento. Envía la propuesta
+//   a la persona (con su código) y una copia a NOTIFY_EMAIL.
+// - Reserva (source:'booking'): solo copia a NOTIFY_EMAIL, sin email al visitante.
+// No se guarda nada en base de datos: el registro es el correo a info@.
+// ============================================================
+app.set('trust proxy', 1);
+const escHtml = t => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const EMAIL_RE = /^[^\s@<>"]{1,64}@[^\s@<>"]{1,190}\.[^\s@<>"]{2,}$/;
+const hitsByIp = new Map();      // ip -> [timestamps]
+const lastToEmail = new Map();   // email -> timestamp del último envío
+function tooManyRequests(ip) {
+  const now = Date.now(), hour = 3600 * 1000;
+  const arr = (hitsByIp.get(ip) || []).filter(t => now - t < hour);
+  arr.push(now); hitsByIp.set(ip, arr);
+  return arr.length > 20;
+}
+async function sendEmail({ to, subject, html, replyTo }) {
+  if (!RESEND_API_KEY) return { ok: false, error: 'RESEND_API_KEY no configurada' };
+  try {
+    const r = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ from: `Tu Solución · MASESORA <${FROM_EMAIL}>`, to: [to], subject, html, ...(replyTo ? { reply_to: replyTo } : {}) })
+    });
+    if (!r.ok) return { ok: false, error: `Resend ${r.status}` };
+    return { ok: true };
+  } catch (e) { return { ok: false, error: e.message }; }
+}
+
+app.post('/api/save-lead', async (req, res) => {
+  const b = req.body || {};
+  const isBooking = b.source === 'booking';
+  const name  = String(b.leadName || b.diagnosis?.name || '').slice(0, 120);
+  const email = String(b.leadEmail || '').trim().slice(0, 254);
+  const phone = String(b.leadPhone || '').slice(0, 40);
+  const code  = String(b.discountCode || '').slice(0, 40);
+  const prd   = String(b.prdMarkdown || '').slice(0, 20000);
+
+  if (tooManyRequests(req.ip)) return res.status(429).json({ ok: false, error: 'Demasiadas solicitudes' });
+  if (!isBooking) {
+    if (b.consent !== true) return res.status(400).json({ ok: false, error: 'Falta el consentimiento' });
+    if (!EMAIL_RE.test(email)) return res.status(400).json({ ok: false, error: 'Email no válido' });
+  }
+
+  const d = b.diagnosis || {};
+  const resumen = [
+    ['Actividad', d.activity], ['Sector', d.sector], ['Tamaño', d.size], ['Volumen', d.volume],
+    ['Pieza', d.piece], ['Situación', d.branchAnswer], ['Visión', d.vision], ['Intensidad (1-5)', d.intensity]
+  ].filter(([, v]) => v !== undefined && v !== null && v !== '').map(([k, v]) => `<li><strong>${escHtml(k)}:</strong> ${escHtml(v)}</li>`).join('');
+
+  const copiaInterna = `<!DOCTYPE html><html><body style="font-family:system-ui,sans-serif;color:#1A1A1A;line-height:1.6">
+  <h2 style="color:#0F1A35">${isBooking ? '📅 Reserva iniciada' : '✉️ Solicitud de Tu Solución por email'}</h2>
+  <ul>
+    <li><strong>Nombre:</strong> ${escHtml(name) || '—'}</li>
+    ${isBooking ? '' : `<li><strong>Email:</strong> ${escHtml(email)}</li><li><strong>Teléfono:</strong> ${escHtml(phone) || '—'}</li>
+    <li><strong>Consentimiento (obligatorio):</strong> sí · versión ${escHtml(b.consentVersion || '—')}</li>
+    <li><strong>Contacto comercial (opcional):</strong> ${b.consentComercial === true ? 'SÍ' : 'no'}</li>`}
+    <li><strong>Código:</strong> ${escHtml(code) || '—'}</li>
+    ${isBooking ? `<li><strong>Opción:</strong> ${escHtml(b.option)} · ${escHtml(b.price)} €</li>` : ''}
+  </ul>
+  <h3 style="color:#0F1A35">Diagnóstico</h3><ul>${resumen || '<li>—</li>'}</ul>
+  <h3 style="color:#0F1A35">Propuesta generada</h3>
+  <div style="background:#FAF7F2;padding:16px;border-left:4px solid #B89D52">${escHtml(prd).replace(/\n/g, '<br>') || '—'}</div>
+  </body></html>`;
+
+  const interno = await sendEmail({
+    to: NOTIFY_EMAIL,
+    subject: `${isBooking ? '📅 Reserva' : '✉️ Lead'} Tu Solución · ${name || 'sin nombre'}${code ? ' · ' + code : ''}`,
+    html: copiaInterna,
+    replyTo: !isBooking ? email : undefined
+  });
+  if (!interno.ok) console.error('[save-lead] copia interna:', interno.error);
+
+  if (isBooking) return res.json({ ok: true });   // no bloquea la reserva
+
+  // Envío a la persona (solo con consentimiento). Un envío por destinatario cada 10 min.
+  const key = email.toLowerCase(), now = Date.now();
+  if (now - (lastToEmail.get(key) || 0) < 10 * 60 * 1000) return res.json({ ok: true, repeated: true });
+  const aLaPersona = `<!DOCTYPE html><html><body style="font-family:system-ui,sans-serif;color:#1A1A1A;line-height:1.6;max-width:640px;margin:auto">
+  <h2 style="color:#0F1A35">Tu Solución, tal como la viste en pantalla</h2>
+  <p>Hola${name ? ' ' + escHtml(name) : ''}, aquí tienes la propuesta que pediste.</p>
+  ${code ? `<p>Tu código de descuento: <strong style="font-family:monospace;font-size:1.2rem">${escHtml(code)}</strong> (${DISCOUNT_PCT} %, válido ${DISCOUNT_HOURS} h desde que se generó la propuesta).</p>` : ''}
+  <div style="background:#FAF7F2;padding:16px;border-left:4px solid #B89D52">${escHtml(prd).replace(/\n/g, '<br>') || 'No hemos podido adjuntar la propuesta. Respóndenos a este correo y te la enviamos.'}</div>
+  <hr style="margin:24px 0;border:none;border-top:1px solid #E5DFD3">
+  <p style="font-size:.8rem;color:#777">Recibes este correo porque lo solicitaste en Tu Solución. Responsable: María Teresa Cabezuelos Morcillo (info@masesora.com). Puedes ejercer tus derechos escribiendo a esa dirección. Más información: https://www.masesora.com/legal/privacidad.html</p>
+  </body></html>`;
+  const envio = await sendEmail({ to: email, subject: 'Tu Solución · MASESORA', html: aLaPersona, replyTo: NOTIFY_EMAIL });
+  if (!envio.ok) {
+    console.error('[save-lead] envío a la persona:', envio.error);
+    return res.status(502).json({ ok: false, error: 'No se pudo enviar el correo' });
+  }
+  lastToEmail.set(key, now);
+  res.json({ ok: true });
+});
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`[MASESORA] generate-prd corriendo en puerto ${PORT}`);

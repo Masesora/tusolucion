@@ -374,6 +374,7 @@ h1 em, h2 em, h3 em{font-family:var(--font-italic);font-style:italic;font-weight
         <div><span class="dot"></span>Sistema personalizado para tu negocio</div>
         <div><span class="dot"></span>Presupuesto en 5 minutos</div>
       </div>
+      <p class="privacy-note" style="font-size:.78rem;color:var(--muted);margin:.9rem 0 0;line-height:1.5">Este diagnóstico es gratuito y no requiere registro. Para redactar tu propuesta enviamos tu nombre y tus respuestas a un proveedor tecnológico (Anthropic, en EE. UU.); no le enviamos tu email. Solo te pediremos el email al final, y solo si quieres recibir tu solución. Más información en la <a href="https://www.masesora.com/legal/privacidad.html" target="_blank" rel="noopener" style="color:var(--gold)">Política de Privacidad</a>.</p>
 
       <div class="emilia-anchor">
         <div class="emilia-badge">Costuras Emilia · Taller de confección, Altea</div>
@@ -624,7 +625,11 @@ h1 em, h2 em, h3 em{font-family:var(--font-italic);font-style:italic;font-weight
         <input type="tel" name="leadPhone" placeholder="WhatsApp (opcional · con prefijo)" autocomplete="tel">
         <label class="lead-consent">
           <input type="checkbox" id="leadConsent">
-          <span>He leído y acepto la <a href="https://www.masesora.com/legal/privacidad.html" target="_blank">Política de Privacidad</a>. Consiento recibir el PRD por email/WhatsApp.</span>
+          <span>He leído y acepto la <a href="https://www.masesora.com/legal/privacidad.html" target="_blank" rel="noopener">Política de Privacidad</a> y el <a href="https://www.masesora.com/legal/aviso-legal.html" target="_blank" rel="noopener">Aviso Legal</a> de Masesora. Consiento que María Teresa Cabezuelos Morcillo trate mi nombre, mi email y, si lo indico, mi teléfono para enviarme mi solución por email. Puedo retirar este consentimiento y ejercer mis derechos escribiendo a info@masesora.com.</span>
+        </label>
+        <label class="lead-consent">
+          <input type="checkbox" id="leadConsentComercial">
+          <span>Acepto que Masesora se ponga en contacto conmigo después para explorar la implementación de la herramienta derivada u otras soluciones que puedan interesarme. Puedo retirar este consentimiento en cualquier momento escribiendo a info@masesora.com. <em>(Opcional: no marcarla no cambia nada del servicio.)</em></span>
         </label>
         <button class="btn btn-primary" id="leadSubmit" onclick="submitLead()" disabled>Enviármelo →</button>
       </div>
@@ -1230,7 +1235,7 @@ function connectAltButtons() {
             source: 'booking',
             option, price,
             discountCode: code,
-            diagnosis: { ...state },
+            diagnosis: (({ prdMarkdown, ...d }) => d)(state),
             prdMarkdown: state.prdMarkdown || ''
           })
         }).catch(() => {});
@@ -1319,27 +1324,47 @@ document.addEventListener('input', e => {
 document.addEventListener('change', e => { if (e.target.id === 'leadConsent') checkLeadForm(); });
 
 async function submitLead() {
+  const { prdMarkdown, ...diag } = state;
   const data = {
     leadName: document.querySelector('input[name="leadName"]').value.trim(),
     leadEmail: document.querySelector('input[name="leadEmail"]').value.trim(),
     leadPhone: document.querySelector('input[name="leadPhone"]').value.trim(),
     consent: document.getElementById('leadConsent').checked,
+    consentComercial: document.getElementById('leadConsentComercial').checked,
+    consentVersion: '2026-11-10',
     discountCode: state.discountCode,
-    diagnosis: { ...state }
+    diagnosis: diag,
+    prdMarkdown: prdMarkdown || ''
   };
-  // Endpoint opcional · si no existe, el cliente igualmente recibe confirmación
+  const btn = document.getElementById('leadSubmit');
+  btn.disabled = true; btn.textContent = 'Enviando…';
+  let ok = false;
   try {
-    await fetch(`${API_BASE}/api/save-lead`, {
+    const res = await fetch(`${API_BASE}/api/save-lead`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
-  } catch (e) { /* no bloqueante */ }
+    ok = res.ok;
+  } catch (e) { ok = false; }
+  if (!ok) {
+    btn.disabled = false; btn.textContent = 'Enviármelo →';
+    let err = document.getElementById('leadError');
+    if (!err) {
+      err = document.createElement('p');
+      err.id = 'leadError';
+      err.style.cssText = 'color:#D7263D;font-size:.85rem;margin:.6rem 0 0;line-height:1.5';
+      btn.insertAdjacentElement('afterend', err);
+    }
+    err.textContent = 'No hemos podido enviártelo ahora. Tus respuestas siguen aquí: inténtalo de nuevo en unos segundos o escríbenos a info@masesora.com.';
+    return;
+  }
+  const esc = t => String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   document.getElementById('leadForm').innerHTML = `
     <div style="text-align:center;padding:1rem">
       <div style="font-size:2rem;margin-bottom:.5rem">✓</div>
       <strong style="color:var(--ok);font-size:1.05rem">Tu solución va en camino</strong>
-      <p style="color:var(--muted);font-size:.9rem;margin-top:.5rem">Te llegará a <strong>${data.leadEmail}</strong> en menos de 24h, con tu código <strong>${state.discountCode || ''}</strong>.</p>
+      <p style="color:var(--muted);font-size:.9rem;margin-top:.5rem">Te llegará a <strong>${esc(data.leadEmail)}</strong> en unos minutos, con tu código de descuento. Si no la ves, mira en spam o escríbenos a info@masesora.com.</p>
     </div>
   `;
 }
