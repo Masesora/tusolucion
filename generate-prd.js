@@ -339,7 +339,20 @@ ${prdMarkdown.replace(/\n/g, '<br>')}
 // ============================================================
 // Endpoint principal · streaming SSE con Claude
 // ============================================================
+// Limite por IP en la generacion de propuestas (cada llamada cuesta dinero en la API de Anthropic).
+// Una persona hace 1 diagnostico; 10 por hora y por IP deja margen a una oficina compartida.
+app.set('trust proxy', 1);
+const genHits = new Map();
+function generacionAbusiva(ip) {
+  const now = Date.now(), hour = 3600 * 1000;
+  const arr = (genHits.get(ip) || []).filter(t => now - t < hour);
+  arr.push(now); genHits.set(ip, arr);
+  if (genHits.size > 5000) { for (const [k, v] of genHits) if (!v.some(t => now - t < hour)) genHits.delete(k); }
+  return arr.length > 10;
+}
+
 app.post('/api/generate-prd', async (req, res) => {
+  if (generacionAbusiva(req.ip)) return res.status(429).json({ error: 'Demasiadas solicitudes. Prueba de nuevo mas tarde.' });
   res.writeHead(200, {
     'Content-Type': 'text/event-stream',
     'Cache-Control': 'no-cache',
